@@ -1,0 +1,118 @@
+
+.Signup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+  }
+  
+  .wrapper {
+    width: 100%;
+    max-width: 470px;
+    background: #fff;
+    padding: 50px 60px;
+    text-align: center;
+    border: 2px solid rgba(255, 229, 229, 0.8); /* Border Color */
+    border-radius: 10px; /* Rounded Corners */
+  }
+  
+  .wrapper h1 {
+    font-size: 30px;
+    color: black; /* Heading Color */
+    margin-bottom: 40px;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-box {
+    background: rgba(229, 243, 255, 0.8); /* Light Gray Background */
+    margin: 15px 0;
+    border-radius: 3px; /* Rounded Corners */
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }
+  
+  .input-box input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    padding: 10px;
+  }
+  
+  .input-box i {
+    font-size: 20px;
+    color: rgba(255, 229, 255, 0.8);
+    margin-left: 10px;
+  }
+  
+  form p {
+    font-size: 13px;
+  }
+  
+  form p a {
+    text-decoration: none;
+    color: black; /* Link Color */
+  }
+  
+  .signupButton {
+    width: 100%;
+    height: 45px;
+    background:  rgba(229, 255, 229, 0.8); /* Button Background */
+    border: 2px solid  rgba(229, 243, 255, 0.8); /* Button Border */
+    border-radius: 40px; /* Rounded Corners */
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .signupButton:hover {
+    background: black; /* Darker Background on Hover */
+    color: white;
+    border-color: black; /* Darker Border on Hover */
+  }
+  
+  .already-have-account {
+    margin-top: 20px;
+  }
+  
+  .already-have-account p {
+    margin-bottom: 10px;
+  }
+  
+  .already-have-account .signupButton {
+    width: 100%;
+    height: 45px;
+    background:  rgba(229, 255, 229, 0.8); /* Button Background */
+    border: 2px solid  rgba(229, 243, 255, 0.8); /* Button Border */
+    border-radius: 40px; /* Rounded Corners */
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .already-have-account .signupButton:hover {
+    width: 100%;
+    height: 45px;
+    background:  rgba(255, 229, 229, 0.8); /* Button Background */
+    border: 2px solid  rgba(229, 243, 255, 0.8); /* Button Border */
+    border-radius: 40px; /* Rounded Corners */
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-decoration: none; /* Remove underline */
+  }
+  
