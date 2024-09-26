@@ -31,7 +31,7 @@ import Create_Sport from './shoppingFolder/components/sports/Create_Sport.jsx';
 import Show_Sport from './shoppingFolder/components/sports/Show_Sport.jsx';
 import Page from './shoppingFolder/components/restaurant/Page.jsx';
 import FAQ from './shoppingFolder/components/FAQ.jsx';
-
+import SportDashboard2 from './shoppingFolder/components/sports/SportDashboard2.jsx';
 // Component to check if user is authenticated
 const ProtectedRoute = ({ element }) => {
   const token = sessionStorage.getItem('token');
@@ -96,7 +96,7 @@ function App() {
           <Route path="/shopowner/view-shop-details" element={<ViewShopDetails />}/>
           <Route path="/shopowner/update-deals" element={<UpdateDeals/>}/>
           <Route path='/sport/owner' element={<ProtectedRoutesports element={
-            <><Sport_TopBar isOwner = {true}/><Show_Sport isOwner = {true}/>
+            <><Sport_TopBar isOwner = {true}/><SportDashboard2 isOwner = {true}/><Show_Sport isOwner = {true}/>
             </>}/>}
             />
 
