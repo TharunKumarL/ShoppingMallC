@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const Shop = require('./models/Shop');
-// const Deal = require('./models/Deal');
+const Deal = require('./models/Deal');
 const Event = require('./models/Event');
 const ShopOwner=require('./models/ShopOwner')
 const Reservation=require('./models/reservation.js')
@@ -145,16 +145,15 @@ app.get('/api/shopowners', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch shops' });
   }
 });
-
-app.get('/api/getdeals', async (req, res) => {
+app.get('/api/deals', async (req, res) => {
   try {
     const deals = await Deal.find();
     res.json(deals);
   } catch (error) {
-    console.error('Error fetching deals:', error);
-    res.status(500).json({ error: 'Failed to fetch deals' });
+    res.status(500).json({ message: error.message });
   }
 });
+
 
 app.get('/api/events', async (req, res) => {
   try {
@@ -360,26 +359,35 @@ app.post('/shopownerlogin', async (req, res) => {
       token: token, // Send token if you are using it
       shopOwner: { id: shopOwner._id, email: shopOwner.email }, // Or other required details
     });
-    sessionStorage.setItem('shopOwnerId', shopOwner._id);
+    // sessionStorage.setItem('shopOwnerId', shopOwner._id);
   } catch (error) {
     console.error('Error during shop owner login:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 //deals
-app.get('/api/shopowner/deals', async (req, res) => {
+app.put('/api/deals/:id', async (req, res) => {
   try {
-    const deals = await Deal.find({}); // You can add filters if necessary for shop owners
-    res.json(deals);
+    const { store, description, expiration, image } = req.body;
+    const deal = await Deal.findByIdAndUpdate(
+      req.params.id,
+      { store, description, expiration, image },
+      { new: true }  // Return the updated deal
+    );
+
+    if (!deal) {
+      return res.status(404).json({ message: 'Deal not found' });
+    }
+    res.json(deal);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching deals', error });
+    res.status(500).json({ message: error.message });
   }
 });
 //adddeals
-app.post('/api/shopowner/add-deal', async (req, res) => {
-  try {
-    const { store, description, expiration, image } = req.body;
+app.post('/api/add-deal', async (req, res) => {
+  const { store, description, expiration, image } = req.body;
 
+  try {
     const newDeal = new Deal({
       store,
       description,
@@ -387,11 +395,31 @@ app.post('/api/shopowner/add-deal', async (req, res) => {
       image,
     });
 
-    await newDeal.save();
-    res.status(201).json({ message: 'Deal added successfully', deal: newDeal });
+    const savedDeal = await newDeal.save();
+    res.status(201).json(savedDeal);
   } catch (error) {
     console.error('Error adding deal:', error);
-    res.status(500).json({ message: 'Error adding deal' });
+    res.status(500).json({ message: 'Failed to add deal' });
+  }
+});
+//stats
+app.get('api/deals-expiration-stats', async (req, res) => {
+  try {
+    const deals = await Deal.find({}); // Fetch all deals
+
+    const expirationStats = deals.reduce((acc, deal) => {
+      const expirationDate = deal.expiration.toISOString().split('T')[0]; // Format date
+      if (!acc[expirationDate]) {
+        acc[expirationDate] = 0;
+      }
+      acc[expirationDate]++;
+      return acc;
+    }, {});
+
+    res.status(200).json(expirationStats);
+  } catch (error) {
+    console.error('Error fetching deal stats:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

@@ -25,6 +25,7 @@ import Viewdeals from './shoppingFolder/components/shopowner/viewdeals.jsx';
 import AddDeals from './shoppingFolder/components/shopowner/AddDeals.jsx';
 import ViewShopDetails from './shoppingFolder/components/shopowner/ViewShopDetails.jsx';
 import UpdateDeals from './shoppingFolder/components/shopowner/UpdateDeals.jsx';
+import UpdateDealDetail from './shoppingFolder/components/shopowner/UpdateDealDetail.jsx';
 //Sports Section
 import Sport_TopBar from './shoppingFolder/components/sports/Sport_TopBar.jsx';
 import Create_Sport from './shoppingFolder/components/sports/Create_Sport.jsx';
@@ -91,10 +92,11 @@ function App() {
           <Route path="/admin/view-shopowners" element={<ProtectedRouteAdmin element={<ViewShopOwners />} />} />
           <Route path="/shopownerlogin" element={<ShopOwnerLogin />}/>
           <Route path="/shopowner/dashboard" element={<ShopOwnerDashboard />}/>
-          <Route path="/shopowner/view-deals" element={<Viewdeals />}/>
+          <Route path="/shopowner/view-deals" element={<Deals />}/>
           <Route path="/shopowner/add-deals" element={<AddDeals />}/>
           <Route path="/shopowner/view-shop-details" element={<ViewShopDetails />}/>
           <Route path="/shopowner/update-deals" element={<UpdateDeals/>}/>
+          <Route path="/shopowner/update-deals:id" element={<UpdateDealDetail/>}/>
           <Route path='/sport/owner' element={<ProtectedRoutesports element={
             <><Sport_TopBar isOwner = {true}/><SportDashboard2 isOwner = {true}/><Show_Sport isOwner = {true}/>
             </>}/>}

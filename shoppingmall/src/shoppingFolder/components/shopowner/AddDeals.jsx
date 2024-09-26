@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/AddDeals.css'
+import '../css/AddDeals.css';
 
 const AddDeals = () => {
   const [dealData, setDealData] = useState({
@@ -16,20 +16,15 @@ const AddDeals = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:5000/api/shopowner/add-deal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`, // Include token if necessary
-        },
-        body: JSON.stringify(dealData),
-      });
+    const response = await fetch('http://localhost:5000/api/add-deal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dealData),
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to add deal');
-      }
-
+    if (response.ok) {
       const result = await response.json();
       console.log('Deal added:', result);
       // Reset form or show success message here
@@ -39,8 +34,8 @@ const AddDeals = () => {
         expiration: '',
         image: '',
       });
-    } catch (error) {
-      console.error('Error adding deal:', error);
+    } else {
+      console.error('Failed to add deal');
     }
   };
 
@@ -67,7 +62,6 @@ const AddDeals = () => {
         <input
           type="date"
           name="expiration"
-          placeholder="Expiration Date"
           value={dealData.expiration}
           onChange={handleChange}
           required
