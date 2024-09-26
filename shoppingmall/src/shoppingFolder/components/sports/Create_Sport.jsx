@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../../../App.css";
-import "../css/Create_Sport.css"
+import "../css/Create_Sport.css";
 import { Link } from 'react-router-dom';
 
-
 const Create_Sport = () => {
-
     const submit_url = 'http://localhost:5000/sport/owner/create';
     const navigate = useNavigate();
 
@@ -14,10 +12,14 @@ const Create_Sport = () => {
         label: '',
         body: '',
         cost: '',
-        slot_timings: ['']
+        address: '', // Added for the address
+        contact_mail: '', // Added for contact email
+        slot_timings: [''],
+        date: '' // Added for the date of booking
     });
 
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [error, setError] = useState(null); // State for error messages
 
     const handleChange = (e, index) => {
         const { name, value } = e.target;
@@ -30,8 +32,6 @@ const Create_Sport = () => {
             setFormData({ ...formData, [name]: value });
         }
     };
-
-
 
     const addSlot = () => {
         setFormData({ ...formData, slot_timings: [...formData.slot_timings, ''] });
@@ -56,24 +56,25 @@ const Create_Sport = () => {
 
             if (response.ok) {
                 setIsSubmitted(true);
+                navigate("/sport/owner");
             } else {
-                console.error('Failed to submit');
+                const errorData = await response.json();
+                setError(errorData.message || 'Failed to submit');
             }
-            navigate("/sport/owner");
         } catch (error) {
             console.error('Error:', error);
+            setError('An error occurred while submitting the form');
         }
     };
 
     if (isSubmitted) {
-        navigate('/sport/owner');
         return null; // Ensure no further rendering after navigation
     }
 
     return (
         <div className='Create_Sport'>
             <div className='Back'>
-                    <Link to="/sport/owner"> Back </Link>
+                <Link to="/sport/owner"> Back </Link>
             </div>
             <div className="create_sport">
 
@@ -106,6 +107,33 @@ const Create_Sport = () => {
                         required
                     />
 
+                    <label>Address</label> {/* Added Address Field */}
+                    <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <label>Contact Email</label> {/* Added Contact Email Field */}
+                    <input
+                        type="email"
+                        name="contact_mail"
+                        value={formData.contact_mail}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <label>Date</label> {/* Added Date Field */}
+                    <input
+                        type="date"
+                        name="date"
+                        value={formData.date}
+                        onChange={handleChange}
+                        required
+                    />
+
                     <label>Timing Slots</label>
                     {formData.slot_timings.map((slot, index) => (
                         <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -128,6 +156,7 @@ const Create_Sport = () => {
 
                     <button type="submit">Submit</button>
                 </form>
+                {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display Error Message */}
             </div>
         </div>
     );

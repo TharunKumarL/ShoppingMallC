@@ -1,6 +1,7 @@
 const mongoose=require("mongoose"); 
 
-const sportDescription = new mongoose.Schema(
+
+const sportSchema = new mongoose.Schema(
     {
         label: {
             type: String, 
@@ -14,17 +15,15 @@ const sportDescription = new mongoose.Schema(
             type: Number, 
             required: true,
         }, 
-        slot_timings: {
-            type: [String], 
-            required: true,
-            validate: {
-                validator: function(v) {
-                    return v.length > 0; // Ensure there is at least one slot
-                },
-                message: props => `${props.value} must contain at least one slot!`
-            }
-        }, 
+        address: {
+            type: String, 
+            required: true
+        },
+        contact_mail: {
+            type: String, 
+            required: true
+        }
     }
 );
 
-module.exports = mongoose.model('sports', sportDescription);
+module.exports = mongoose.model('sports', sportSchema);

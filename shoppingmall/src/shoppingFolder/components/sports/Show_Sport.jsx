@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "../../../App.css";
 import "../css/Show_Sport.css"
@@ -6,7 +5,7 @@ import BookSlot from "./Booking_Sport"; // Import the BookSlot component
 
 
 
-const Show_Sport = () => {
+const Show_Sport = ({isOwner}) => {
     const get_data_url = "http://localhost:5000/sport/owner/get";
     const delete_data_url = "http://localhost:5000/sport/owner/delete/";
 
@@ -59,11 +58,14 @@ const Show_Sport = () => {
                         <p>{item["label"]}</p>
                         <hr className="centered-hr" />
                         <p>Price: {item.cost}</p>
-                        <button onClick={() => handleDelete(item._id)}>
-                            <span className="material-symbols-outlined">
-                                delete
-                            </span>
-                        </button>
+                        {isOwner && (
+                                <button onClick={() => handleDelete(item._id)}>
+                                <span className="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </button>
+                        )}
+                        
                         <button onClick={() => handleBookingClick(item._id)}>
                             Book Slot
                         </button>

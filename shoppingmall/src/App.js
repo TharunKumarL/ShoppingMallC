@@ -28,9 +28,7 @@ import UpdateDeals from './shoppingFolder/components/shopowner/UpdateDeals.jsx';
 import Sport_TopBar from './shoppingFolder/components/sports/Sport_TopBar.jsx';
 import Create_Sport from './shoppingFolder/components/sports/Create_Sport.jsx';
 import Show_Sport from './shoppingFolder/components/sports/Show_Sport.jsx';
-import BookSlot from './shoppingFolder/components/sports/Booking_Sport.jsx';
 import Page from './shoppingFolder/components/restaurant/Page.jsx';
-import BookSlo from './shoppingFolder/components/sports/Booking_Sport.jsx';
 
 // Component to check if user is authenticated
 const ProtectedRoute = ({ element }) => {
@@ -94,7 +92,15 @@ function App() {
           <Route path="/shopowner/add-deals" element={<AddDeals />}/>
           <Route path="/shopowner/view-shop-details" element={<ViewShopDetails />}/>
           <Route path="/shopowner/update-deals" element={<UpdateDeals/>}/>
-          <Route path='/sport/owner' element={<ProtectedRoutesports element={<><Sport_TopBar/><Show_Sport /></>}/>}/>
+          <Route path='/sport/owner' element={<ProtectedRoutesports element={
+            <><Sport_TopBar isOwner = {true}/><Show_Sport isOwner = {true}/>
+            </>}/>}
+            />
+
+          <Route path='/sport/user'  element={<ProtectedRoute element={
+            <><Sport_TopBar isOwner = {false}/><Show_Sport isOwner = {false}/>
+            </>}/>}
+            />
           <Route path='/sport/owner/create' element={<ProtectedRoutesports element={<Create_Sport />} />} />
         </Routes>
         <Footer />

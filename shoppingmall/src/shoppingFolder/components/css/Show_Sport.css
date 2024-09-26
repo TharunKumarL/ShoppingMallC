@@ -36,19 +36,20 @@ button {
     border: none;
     border-radius: 5px;
     background-color: #007bff; /* Bootstrap primary color */
-    color: white; /* White text color */
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Font size for buttons */
     transition: background-color 0.3s; /* Smooth background color transition */
+    color: black;
 }
+
 
 button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
 
 button:focus {
-    outline: none; /* Remove default focus outline */
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Custom focus outline */
+    /* outline: none; Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(41, 221, 125, 0.5); /* Custom focus outline */
 }
 
 /* Additional styling for the delete button */

@@ -7,15 +7,14 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const Shop = require('./models/Shop');
-const Deal = require('./models/Deal');
+// const Deal = require('./models/Deal');
 const Event = require('./models/Event');
 const ShopOwner=require('./models/ShopOwner')
 const Reservation=require('./models/reservation.js')
 const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
-const SportRoute=require('./Routes/SportRoute.js')
-// const availabilityRoute=require('./Routes/availabilityRoute.js')
-// const reservationRoute=require('./Routes/reservationRoute.js')
+const SportRoute=require('./Routes/SportRoute.js');
+const SportRouteUser = require("./Routes/SportRouteUser.js");
 require('dotenv').config();
 
 const app = express();
@@ -32,11 +31,8 @@ app.use(bodyParser.json());
 app.use('/api/admin', adminAuth,verifyAdmin);
 //Routes //Sport
 app.use("/sport", SportRoute);
-// //Routes //availabilityRoute
-// app.use("/availabilty",availabilityRoute);
-// //Routes //reservationRoute
-// app.use("/reservation",reservationRoute);
-// Connect to MongoDB
+app.use("/sport", SportRouteUser);
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

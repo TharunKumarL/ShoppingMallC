@@ -2,15 +2,18 @@ import "../../../App.css";
 import "../../components/css/Sport_TopBar.css"
 import { Link } from "react-router-dom";
 
-const Sport_TopBar = () => {
+const Sport_TopBar = ({isOwner}) => {
     return ( 
         <div>
         <div className="TopBar">
             <h3 className="home-name"> Home</h3> 
             <div className="navbar-things"></div>
+            {isOwner && (
                 <Link to="/sport/owner/create">
                 <h3> Create </h3>
-                </Link>        
+                </Link> 
+            )}
+                       
         </div>
         <hr></hr>
         </div>

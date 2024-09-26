@@ -1,23 +1,29 @@
+const user = require("./User");
+const sports = require("./sportSchema");
+
 const mongoose=require('mongoose')
 const bookingSchema = new mongoose.Schema({
-    sport: {
+    sport_foreignkey: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "sports",
-        required: true
+        ref: sports,
     },
-    
+    date: {
+        type: Date, 
+        required: true
+    }, 
     slot: {
         type: String,
-        required: true,
-    },
-    user: {
-        type: String,
         required: true
+    }, 
+    booked_user_details: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: user
+    }, 
+    is_booked: {
+        type: Boolean, 
+        default: false
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    
 });
 
-module.exports = mongoose.model('bookings', bookingSchema);
+module.exports = mongoose.model('sportbookings', bookingSchema);
