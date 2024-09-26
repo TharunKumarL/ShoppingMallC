@@ -16,6 +16,7 @@ import UpdateShopOwner from './shoppingFolder/components/Admin/UpdateShopOwner.j
 import UpdateShopDetail from './shoppingFolder/components/Admin/UpdateShopDetail.jsx';
 import UpdateShop from './shoppingFolder/components/Admin/UpdateShop.jsx';
 import ViewShopOwners from './shoppingFolder/components/Admin/ViewShopOwners.jsx';
+import AdminDashboard2 from './shoppingFolder/components/AdminDashBoard2.jsx';
 import SomeShops from './shoppingFolder/components/SomeShops.jsx';
 // import ViewShops from './shoppingFolder/components/Admin/ViewShops.jsx';
 import ShopOwnerLogin from './shoppingFolder/components/shopowner.jsx';
@@ -79,6 +80,7 @@ function App() {
           <Route path="/booksports" element={<ProtectedRoute element={<Show_Sport/>}/>}/>
           <Route path="/bookrestaurant" element={<ProtectedRoute element={<Page/>}/>}/>
           <Route path="/admin/dashboard" element={<ProtectedRouteAdmin element={<AdminDashboard />} />} /> 
+          <Route path="/admin/dashboard2" element={<ProtectedRouteAdmin element={<AdminDashboard2 />} />} /> 
           <Route path="/admin/add-shop" element={<ProtectedRouteAdmin element={<AddShops />} />} />
           <Route path="/admin/update-shop" element={<ProtectedRouteAdmin element={<UpdateShop />} />} />
           <Route path="/admin/add-shopowners" element={<ProtectedRouteAdmin element={<AddShopOwner />} />} />

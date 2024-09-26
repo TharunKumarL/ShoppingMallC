@@ -1,71 +1,44 @@
-.Admindashboard{
-    padding:0;
-    padding-left:100px;
+.admin-container {
+  display: flex; /* Use flexbox for layout */
+  padding-top: 100px;
 }
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  
-  /* Admin management section */
-  .admin-management {
-    padding: 100px;
-    padding-left: 400px;
-    width: 80%;
-    margin-top: 0px;
-    text-align: center;
-  }
-  
-  .management-heading {
-    font-size: 2.2rem;
-    margin-bottom: 20px;
-    color: #2E8B57;
-  }
-  
-  .management-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  
-  .management-box {
-    flex: 1 1 45%;
-    margin: 10px;
-    padding: 20px;
-    background-color: #fff;
-    border: 2px solid #f0f0f0;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .management-box h3 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-    color: #2E8B57;
-  }
-  
-  .management-box p {
-    margin-bottom: 20px;
-    color: #666;
-  }
-  
-  .manage-now-btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: white;
-    background-color: #2E8B57;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .manage-now-btn:hover {
-    background-color: #1e6d40;
-  }
-  
+
+.admin-dashboard2 {
+  flex: 2; /* Takes more space on the left */
+  padding: 20px; /* Add padding as needed */
+}
+
+.admin-management {
+  flex: 1; /* Takes less space on the right */
+  padding: 20px; /* Add padding as needed */
+}
+
+.management-options {
+  display: flex;
+  flex-direction: column; /* Arrange options vertically */
+  gap: 20px; /* Space between options */
+}
+
+.management-box {
+  border: 1px solid #ccc; /* Example border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 15px; /* Padding inside the box */
+  transition: box-shadow 0.3s; /* Transition for hover effect */
+}
+
+.management-box:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+}
+
+.manage-now-btn {
+  background-color: #007bff; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  padding: 10px 15px; /* Padding for button */
+  border-radius: 5px; /* Rounded button */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.manage-now-btn:hover {
+  background-color: #0056b3; /* Darken on hover */
+}

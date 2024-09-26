@@ -11,6 +11,7 @@ const Shop = require('./models/Shop');
 const Event = require('./models/Event');
 const ShopOwner=require('./models/ShopOwner')
 const Reservation=require('./models/reservation.js')
+const bookingSchema=require("./models/bookingSchema.js");
 const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute=require('./Routes/SportRoute.js');
@@ -212,6 +213,30 @@ app.post('/api/admin/shops', async (req, res) => {
     res.status(500).json({ error: 'Failed to add shop: ' + error.message });
   }
 });
+app.get('/stats', async (req, res) => {
+  try {
+    // Get the count of users, shop owners, and shops
+    const usersCount = await User.countDocuments({});
+    const shopOwnersCount = await ShopOwner.countDocuments({});
+    const shopsCount = await Shop.countDocuments({});
+    const SportbookingTrue = await bookingSchema.countDocuments({ is_booked: true });
+    const SportbookingFalse = await bookingSchema.countDocuments({ is_booked: false });
+
+
+    // Return the counts as JSON
+    res.json({
+      usersCount,
+      shopOwnersCount,
+      shopsCount,
+      SportbookingTrue,
+      SportbookingFalse
+    });
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Route to add a shop owner
 app.post('/add-shopowners/:shopId', async (req, res) => {
   const { name, email, contact } = req.body;
