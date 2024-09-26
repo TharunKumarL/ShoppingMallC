@@ -30,6 +30,7 @@ import Sport_TopBar from './shoppingFolder/components/sports/Sport_TopBar.jsx';
 import Create_Sport from './shoppingFolder/components/sports/Create_Sport.jsx';
 import Show_Sport from './shoppingFolder/components/sports/Show_Sport.jsx';
 import Page from './shoppingFolder/components/restaurant/Page.jsx';
+import FAQ from './shoppingFolder/components/FAQ.jsx';
 
 // Component to check if user is authenticated
 const ProtectedRoute = ({ element }) => {
@@ -104,6 +105,7 @@ function App() {
             </>}/>}
             />
           <Route path='/sport/owner/create' element={<ProtectedRoutesports element={<Create_Sport />} />} />
+          <Route path="/FAQ" element={<ProtectedRoute element={<FAQ />} />} />
         </Routes>
         <Footer />
       </div>
