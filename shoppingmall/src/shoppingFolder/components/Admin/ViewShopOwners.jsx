@@ -6,6 +6,7 @@ const ViewShopOwners = () => {
   const [shopOwners, setShopOwners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,41 @@ const ViewShopOwners = () => {
       console.error('Error fetching shop owners:', error);
       setError('Failed to load shop owners. Please try again later.');
       setLoading(false);
+    }
+  };
+
+  const handleEdit = async (ownerId) => {
+    const newName = window.prompt('Enter new name:');
+    const newEmail = window.prompt('Enter new email:');
+
+    if (!newName || !newEmail) {
+      alert('Both name and email are required to update.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/shopowners/${ownerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newName, email: newEmail }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update shop owner');
+      }
+
+      alert('Shop owner updated successfully!');
+      // Update the local state after a successful update
+      setShopOwners((prevOwners) =>
+        prevOwners.map((owner) =>
+          owner._id === ownerId ? { ...owner, name: newName, email: newEmail } : owner
+        )
+      );
+    } catch (error) {
+      console.error('Error updating shop owner:', error);
+      alert('Failed to update shop owner. Please try again later.');
     }
   };
 
@@ -81,10 +117,7 @@ const ViewShopOwners = () => {
                 <td>{owner.contact}</td>
                 <td>{owner.shop.name}</td>
                 <td>
-                  <button
-                    onClick={() => navigate(`/admin/edit-shopowner/${owner._id}`)}
-                    className="edit-btn"
-                  >
+                  <button onClick={() => handleEdit(owner._id)} className="edit-btn">
                     Edit
                   </button>
                   <button onClick={() => handleDelete(owner._id)} className="delete-btn">

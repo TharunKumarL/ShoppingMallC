@@ -284,21 +284,52 @@ app.post('/add-shopowners/:shopId', async (req, res) => {
     res.status(500).json({ error: 'Failed to add shop owner' });
   }
 });
-app.delete('/api/shopowners/:id', async (req, res) => {
+// PUT route to update shop owner details
+app.put('/api/shopowners/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
+
+  // Validate input
+  // if (!name || !email) {
+  //   return res.status(400).json({ message: 'Name and email are required.' });
+  // }
+
   try {
-    const shopOwner = await ShopOwner.findById(req.params.id);
-    if (!shopOwner) {
-      return res.status(404).json({ error: 'Shop owner not found' });
+    // Find shop owner by ID and update details
+    const updatedOwner = await ShopOwner.findByIdAndUpdate(
+      id,
+      { name, email },
+      { new: true } // Return the updated document and validate changes
+    );
+
+    if (!updatedOwner) {
+      return res.status(404).json({ message: 'Shop owner not found.' });
     }
-    
-    await shopOwner.remove();
-    res.json({ message: 'Shop owner deleted successfully' });
+
+    res.status(200).json(updatedOwner);
   } catch (error) {
-    console.error('Error deleting shop owner:', error);
-    res.status(500).json({ error: 'Failed to delete shop owner' });
+    console.error('Error updating shop owner:', error);
+    res.status(500).json({ message: 'Server error. Could not update shop owner.' });
   }
 });
 
+// DELETE route to delete a shop owner by ID
+app.delete('/api/shopowners/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedOwner = await ShopOwner.findByIdAndDelete(id);
+
+    if (!deletedOwner) {
+      return res.status(404).json({ message: 'Shop owner not found.' });
+    }
+
+    res.status(200).json({ message: 'Shop owner deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting shop owner:', error);
+    res.status(500).json({ message: 'Server error. Could not delete shop owner.' });
+  }
+});
 //shopOwner
 app.post('/shopownerlogin', async (req, res) => {
   const { email, password } = req.body;
