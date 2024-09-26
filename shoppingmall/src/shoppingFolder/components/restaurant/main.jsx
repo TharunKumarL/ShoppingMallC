@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col, Button } from "reactstrap";
+import './Page.css'
 
 export default props => {
   return (
@@ -17,7 +18,7 @@ export default props => {
               props.setPage(1);
             }}
           >
-            Book a Table
+            Book Table
           </Button>
         </Col>
       </Row>

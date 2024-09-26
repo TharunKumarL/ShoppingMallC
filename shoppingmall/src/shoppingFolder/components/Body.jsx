@@ -32,7 +32,7 @@ const Body = () => {
             <button 
               className="book-now-btn" 
               onClick={() => navigate('/bookrestaurant')}
-            ></button>
+            >Book Now</button>
           </div>
           <div className="movie-booking">
             <h3>Book a Movie</h3>
