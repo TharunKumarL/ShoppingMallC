@@ -1,6 +1,6 @@
 .show-sport {
-    display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     background-color: #f8f9fa; /* Light background color */
     border-radius: 8px; /* Rounded corners for the container */
     padding: 12px;
@@ -11,6 +11,7 @@
     padding-top: 100px;
     display: flex;
     flex-direction: column;
+    /* flex-direction: column; */
     padding: 12px;
 }
 

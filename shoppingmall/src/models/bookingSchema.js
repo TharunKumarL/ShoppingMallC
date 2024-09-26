@@ -15,11 +15,6 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     }, 
-    booked_user_email: {
-        type: String, 
-        required: true,
-        default: "none"
-    },  
     is_booked: {
         type: Boolean, 
         default: false

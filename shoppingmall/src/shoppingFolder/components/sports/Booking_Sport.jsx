@@ -38,8 +38,6 @@ const BookSlot = ({ sportId }) => {
 
     const handleBooking = async () => {
         if (!selectedSlot) return;
-        const user_email = window.prompt("Enter your email to continue your booking: ");
-        if (!user_email) return;
     
         try {
             const response = await fetch(`http://localhost:${PORT}/sport/booking/${selectedSlot}`, {
@@ -47,7 +45,7 @@ const BookSlot = ({ sportId }) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ is_booked: true, booked_user_email: user_email })
+                body: JSON.stringify({ is_booked: true })
             });
             
             if (!response.ok) {
@@ -58,7 +56,7 @@ const BookSlot = ({ sportId }) => {
             setAvailableSlots(prevSlots =>
                 prevSlots.map(slot =>
                     slot.id === selectedSlot
-                        ? { ...slot, isBooked: true, booked_user_email: user_email } // Update email
+                        ? { ...slot, isBooked: true} // Update email
                         : slot
                 )
             );
