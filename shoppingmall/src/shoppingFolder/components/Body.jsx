@@ -45,8 +45,8 @@ const Body = () => {
             </Link>
           </div>
           <div className="restaurant-booking">
-            <h3>Box Cricket</h3>
-            <p>Find and reserve a Court to Play Cricket.</p>
+            <h3>Book a game</h3>
+            <p>Find and enjoy your game to the fullest.</p>
             <button 
               className="book-now-btn" 
               onClick={() => navigate('/booksports')}
