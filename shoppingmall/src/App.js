@@ -33,6 +33,13 @@ import Show_Sport from './shoppingFolder/components/sports/Show_Sport.jsx';
 import Page from './shoppingFolder/components/restaurant/Page.jsx';
 import FAQ from './shoppingFolder/components/FAQ.jsx';
 import SportDashboard2 from './shoppingFolder/components/sports/SportDashboard2.jsx';
+import AboutUs from './shoppingFolder/components/AboutUs.jsx';
+import StickyHeader from "./shoppingFolder/components/Feedback/header.js";
+import FeedbackForm from './shoppingFolder/components/Feedback/form.js';
+import Submissions from './shoppingFolder/components/Feedback/submissions.js'
+
+import './App.css';
+
 // Component to check if user is authenticated
 const ProtectedRoute = ({ element }) => {
   const token = sessionStorage.getItem('token');
@@ -72,6 +79,7 @@ function App() {
         <Header />
         <SomeShops/>
         <Routes>
+       
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           {/* Protect the home page ("/") and other pages that require authentication */}
@@ -108,8 +116,16 @@ function App() {
             />
           <Route path='/sport/owner/create' element={<ProtectedRoutesports element={<Create_Sport />} />} />
           <Route path="/FAQ" element={<ProtectedRoute element={<FAQ />} />} />
+          <Route path='/AboutUs' element = {<ProtectedRoute element={<AboutUs/>}/>}/>
+
+          <Route path="/feedback" element={<FeedbackForm/>}/>
+          <Route path="/submissions" element={<Submissions />} />
+          <Route path="/submission/:id" element={<Submissions />} />
+    
         </Routes>
-        <Footer />
+
+        
+        <Footer/>
       </div>
     </Router>
   );

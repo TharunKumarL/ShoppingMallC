@@ -1,17 +1,22 @@
 .show-sport {
-    padding: 100px;
+    display: flex;
+    flex-direction: row;
     background-color: #f8f9fa; /* Light background color */
     border-radius: 8px; /* Rounded corners for the container */
+    padding: 12px;
+    padding-top: 100px;
 }
 
 .sport-items-container {
+    padding-top: 100px;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Space between items */
+    padding: 12px;
 }
 
 .sport-item-box {
     padding: 15px;
+    margin: 30px;
     border: 1px solid #dee2e6; /* Light border around each item */
     border-radius: 5px; /* Rounded corners for items */
     background-color: white; /* White background for items */

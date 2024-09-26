@@ -15,15 +15,18 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     }, 
-    booked_user_details: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: user
-    }, 
+    booked_user_email: {
+        type: String, 
+        required: true,
+        default: "none"
+    },  
     is_booked: {
         type: Boolean, 
         default: false
-    },
-    
-});
+    },  
+},  {
+    timeseries: true
+}
+);
 
 module.exports = mongoose.model('sportbookings', bookingSchema);

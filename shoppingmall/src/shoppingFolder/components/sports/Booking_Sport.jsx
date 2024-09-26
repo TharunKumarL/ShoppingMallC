@@ -38,32 +38,38 @@ const BookSlot = ({ sportId }) => {
 
     const handleBooking = async () => {
         if (!selectedSlot) return;
-
+        const user_email = window.prompt("Enter your email to continue your booking: ");
+        if (!user_email) return;
+    
         try {
             const response = await fetch(`http://localhost:${PORT}/sport/booking/${selectedSlot}`, {
                 method: "PUT", // Assuming you want to update the booking status
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ is_booked: true })
+                body: JSON.stringify({ is_booked: true, booked_user_email: user_email })
             });
-
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
-            // Update the available slots state to reflect the booked status
+    
+            // Update the available slots state to reflect the booked status and email
             setAvailableSlots(prevSlots =>
                 prevSlots.map(slot =>
-                    slot.id === selectedSlot ? { ...slot, isBooked: true } : slot
+                    slot.id === selectedSlot
+                        ? { ...slot, isBooked: true, booked_user_email: user_email } // Update email
+                        : slot
                 )
             );
+    
             alert("Slot booked successfully!");
             setSelectedSlot(null); // Clear the selected slot
         } catch (error) {
             console.error("Error booking slot:", error);
         }
     };
+    
 
     return (
         <div className="bookslot">

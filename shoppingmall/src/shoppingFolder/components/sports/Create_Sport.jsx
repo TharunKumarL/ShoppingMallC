@@ -131,6 +131,7 @@ const Create_Sport = () => {
                         name="date"
                         value={formData.date}
                         onChange={handleChange}
+                        min={new Date().toISOString().split('T')[0]}
                         required
                     />
 

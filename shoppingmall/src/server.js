@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const Shop = require('./models/Shop');
-const Deal = require('./models/Deal');
+const Deal = require('./models/deal');
 const Event = require('./models/Event');
 const ShopOwner=require('./models/ShopOwner')
 const Reservation=require('./models/reservation.js')
@@ -16,6 +16,7 @@ const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute=require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
+
 require('dotenv').config();
 
 const app = express();
@@ -32,7 +33,10 @@ app.use(bodyParser.json());
 app.use('/api/admin', adminAuth,verifyAdmin);
 //Routes //Sport
 app.use("/sport", SportRoute);
-app.use("/sport", SportRouteUser);
+app.use("/sport", SportRouteUser); 
+
+// Feedback form 
+
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -424,40 +428,6 @@ app.get('api/deals-expiration-stats', async (req, res) => {
 });
 
 
-
-// app.get('/api/shopowner/:id/shop-id', async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const shopOwner = await ShopOwner.findById(id).populate('shop'); // Populate the shop field
-//     if (!shopOwner || !shopOwner.shop) {
-//       return res.status(404).json({ message: 'Shop owner or shop not found' });
-//     }
-//     res.json({ shopId: shopOwner.shop._id });
-//   } catch (error) {
-//     console.error('Error fetching shop ID:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-
-
-// app.get('/api/shopowner/shop-details/:ownerId', async (req, res) => {
-//   const { ownerId } = req.params;
-
-//   try {
-//     const shopDetails = await Shop.findOne({ ownerId }); // Assuming 'ownerId' is the field in Shop model
-//     if (!shopDetails) {
-//       return res.status(404).json({ message: 'Shop not found' });
-//     }
-//     res.json(shopDetails);
-//   } catch (error) {
-//     console.error('Error fetching shop details:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-//Routes //Sport
-app.use("/sport", SportRoute);
 
  const availableTables = [
     { _id: 1, name: "Table 1", capacity: 4, location: "Patio", isAvailable: true },

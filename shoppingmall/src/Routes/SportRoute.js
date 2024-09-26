@@ -122,12 +122,13 @@ router.get('/slots/:id', async (req, res) => {
 
 router.put('/booking/:id', async (req, res) => {
     const { id } = req.params;
-    const { is_booked } = req.body;
+    const { is_booked, booked_user_email } = req.body;
     
     try {
         const updatedBooking = await bookingSchema.findByIdAndUpdate(
             id,
             { is_booked: is_booked },
+            { booked_user_email: booked_user_email },
             { new: true }
         );
         res.status(200).json(updatedBooking);
