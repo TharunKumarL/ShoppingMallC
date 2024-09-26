@@ -379,11 +379,7 @@ app.post('/api/shopowner/add-deal', async (req, res) => {
 //Routes //Sport
 app.use("/sport", SportRoute);
 
-
-app.post('/availability', (req, res) => {
-  const { date } = req.body;
-  // Fetch the available tables based on the date from MongoDB or other database
-  const availableTables = [
+ const availableTables = [
     { _id: 1, name: "Table 1", capacity: 4, location: "Patio", isAvailable: true },
     { _id: 2, name: "Table 2", capacity: 2, location: "Inside", isAvailable: false },
     { _id: 3, name: "Table 3", capacity: 6, location: "Bar", isAvailable: true },
@@ -397,55 +393,64 @@ app.post('/availability', (req, res) => {
     { _id: 11, name: "Table 11", capacity: 2, location: "Inside", isAvailable: true },
     { _id: 12, name: "Table 12", capacity: 6, location: "Bar", isAvailable: false }
   ];
+app.post('/availability', (req, res) => {
+  const { date } = req.body;
+  // Fetch the available tables based on the date from MongoDB or other database
+ 
   res.json({ tables: availableTables });
 });
 app.post("/reservation", function(req, res, next) {
+  const currentDate = new Date().toISOString().split('T')[0]; 
+
   // Ensure required fields are provided
   const { date, table, name, phone, email } = req.body;
   if (!date || !table || !name || !phone || !email) {
     return res.status(400).send("All fields are required.");
   }
 
-  Day.findOne({ date: date }, (err, day) => {
+  console.log("Processing reservation...");
+
+  const selectedTable = availableTables.find(t => t._id == table);
+  if (!selectedTable) {
+    return res.status(404).send("Table not found.");
+  }
+
+  // Check if the table is available
+  if (!selectedTable.isAvailable) {
+    return res.status(400).send("Table is already reserved.");
+  }
+
+  // Mark the table as unavailable
+  selectedTable.isAvailable = false;
+  // Configure Nodemailer
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'tharunkumarlagisetty@gmail.com', // Your email
+      pass: 'bjbt ovza dnuf ayyp', // Your email password
+    },
+  });
+
+  // Email options
+  const mailOptions = {
+    from: 'tharunkumarlagisetty22@gmail.com',
+    to: email,
+    subject: 'Reservation Confirmation',
+    text: `Hello ${name},\n\nYou have successfully booked table ${table} for today, ${currentDate}. Thank you for choosing our restaurant!`,
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      console.error(err);
-      return res.status(500).send("Internal Server Error");
+      console.error("Error sending email:", err);
+      return res.status(500).send("Failed to send confirmation email");
+    } else {
+      console.log("Email sent:", info.response);
+      return res.status(200).send("Reservation confirmed and email sent");
     }
-    if (!day) {
-      console.log("Day not found");
-      return res.status(404).send("Day not found");
-    }
-
-    const selectedTable = day.tables.find(t => t._id == table);
-    if (!selectedTable) {
-      console.log("Table not found");
-      return res.status(404).send("Table not found");
-    }
-
-    if (!selectedTable.isAvailable) {
-      console.log("Table is already reserved");
-      return res.status(400).send("Table is already reserved");
-    }
-
-    // Create a new reservation and update the table status
-    selectedTable.reservation = new Reservation({
-      name: name,
-      phone: phone,
-      email: email
-    });
-    selectedTable.isAvailable = false;
-
-    day.save(err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send("Failed to save reservation");
-      } else {
-        console.log("Reserved");
-        return res.status(200).send("Added Reservation");
-      }
-    });
   });
 });
+
 
 
 // Start server

@@ -1,18 +1,10 @@
-var mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const reservationSchema = require("./reservation").schema;
-
-var tableSchema = new mongoose.Schema({
-  name: String,
-  capacity: Number,
-  isAvailable: Boolean,
-  location: String,
-  reservation: {
-    required: false,
-    type: reservationSchema
-  }
+const tableSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  capacity: { type: Number, required: true, min: 1 }, // Ensure capacity is at least 1
+  location: { type: String, required: true },
+  isAvailable: { type: Boolean, default: true }
 });
-var Table = mongoose.model("Table", tableSchema);
 
-module.exports.model = Table;
-module.exports.schema = tableSchema;
+const Table = mongoose.model('Table', tableSchema);
