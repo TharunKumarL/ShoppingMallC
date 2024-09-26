@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import '../components/css/Body.css';
 
 const Body = () => {
@@ -37,7 +37,12 @@ const Body = () => {
           <div className="movie-booking">
             <h3>Book a Movie</h3>
             <p>Watch the latest movies in our state-of-the-art cinema.</p>
-            <button className="book-now-btn">Book Now</button>
+            <Link 
+              className="book-now-btn" 
+              to = 'http://localhost:3001'
+            >
+              Book Now
+            </Link>
           </div>
           <div className="restaurant-booking">
             <h3>Box Cricket</h3>
