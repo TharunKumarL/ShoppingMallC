@@ -9,7 +9,6 @@ export default props => {
         <Col>
           <p className="looking-for-pizza">
             If you're looking for a great food experience.
-            {/* <i className="fas fa-pizza-slice pizza-slice"></i> */}
           </p>
           <Button
             color="none"

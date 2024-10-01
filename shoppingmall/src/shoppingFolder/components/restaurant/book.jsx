@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {Row,Col,
+import {
+  Row, Col,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -95,7 +96,7 @@ export default props => {
             date: datetime
           })
         });
-  
+
         if (!res.ok) {
           console.error(`Server returned an error: ${res.status}`);
         } else {
@@ -113,12 +114,12 @@ export default props => {
         console.error("Failed to fetch availability:", error);
       }
     };
-  
+
     if (selection.time && selection.date) {
       fetchTables();
     }
   }, [selection.time, selection.date, selection.size, selection.location]);
-  
+
   const reserve = async _ => {
     if (
       (booking.name.length === 0) |
