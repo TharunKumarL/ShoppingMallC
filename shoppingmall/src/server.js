@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 app.use('/api/admin', adminAuth, verifyAdmin);
 //Routes //Sport
 app.use("/sport", SportRoute);
-app.use("/sport", SportRouteUser); 
+app.use("/sport", SportRouteUser);
 
 // Feedback form 
 
@@ -427,57 +427,8 @@ app.get('api/deals-expiration-stats', async (req, res) => {
   }
 });
 
-
-
-<<<<<<< Updated upstream
- const availableTables = [
-    { _id: 1, name: "Table 1", capacity: 4, location: "Patio", isAvailable: true },
-    { _id: 2, name: "Table 2", capacity: 2, location: "Inside", isAvailable: false },
-    { _id: 3, name: "Table 3", capacity: 6, location: "Bar", isAvailable: true },
-    { _id: 4, name: "Table 4", capacity: 8, location: "Patio", isAvailable: true },
-    { _id: 5, name: "Table 5", capacity: 4, location: "Inside", isAvailable: false },
-    { _id: 6, name: "Table 6", capacity: 2, location: "Bar", isAvailable: true },
-    { _id: 7, name: "Table 7", capacity: 10, location: "Patio", isAvailable: true },
-    { _id: 8, name: "Table 8", capacity: 6, location: "Inside", isAvailable: false },
-    { _id: 9, name: "Table 9", capacity: 4, location: "Bar", isAvailable: true },
-    { _id: 10, name: "Table 10", capacity: 8, location: "Patio", isAvailable: true },
-    { _id: 11, name: "Table 11", capacity: 2, location: "Inside", isAvailable: true },
-    { _id: 12, name: "Table 12", capacity: 6, location: "Bar", isAvailable: false }
-  ];
-=======
-// app.get('/api/shopowner/:id/shop-id', async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const shopOwner = await ShopOwner.findById(id).populate('shop'); // Populate the shop field
-//     if (!shopOwner || !shopOwner.shop) {
-//       return res.status(404).json({ message: 'Shop owner or shop not found' });
-//     }
-//     res.json({ shopId: shopOwner.shop._id });
-//   } catch (error) {
-//     console.error('Error fetching shop ID:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-
-
-// app.get('/api/shopowner/shop-details/:ownerId', async (req, res) => {
-//   const { ownerId } = req.params;
-
-//   try {
-//     const shopDetails = await Shop.findOne({ ownerId }); // Assuming 'ownerId' is the field in Shop model
-//     if (!shopDetails) {
-//       return res.status(404).json({ message: 'Shop not found' });
-//     }
-//     res.json(shopDetails);
-//   } catch (error) {
-//     console.error('Error fetching shop details:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-//Routes //Sport
 app.use("/sport", SportRoute);
+
 
 const availableTables = [
   { _id: 1, name: "Table 1", capacity: 4, location: "Patio", isAvailable: true },
@@ -493,7 +444,7 @@ const availableTables = [
   { _id: 11, name: "Table 11", capacity: 2, location: "Inside", isAvailable: true },
   { _id: 12, name: "Table 12", capacity: 6, location: "Bar", isAvailable: false }
 ];
->>>>>>> Stashed changes
+
 app.post('/availability', (req, res) => {
   const { date } = req.body;
   // Fetch the available tables based on the date from MongoDB or other database

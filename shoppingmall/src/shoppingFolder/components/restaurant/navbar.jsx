@@ -1,18 +1,18 @@
-import React from "react";
-import { Navbar, NavbarBrand } from "reactstrap";
+import React from 'react';
+import { Navbar } from 'react-bootstrap';
 
 export default props => {
   return (
     <div>
-      <Navbar color="light" light expand="md">
-        <NavbarBrand
+      <Navbar bg="light" variant="light" expand="md">
+        <Navbar.Brand
           className="nav-brand"
-          onClick={_ => {
+          onClick={() => {
             props.setPage(0);
           }}
         >
           Food Cabin
-        </NavbarBrand>
+        </Navbar.Brand>
       </Navbar>
     </div>
   );

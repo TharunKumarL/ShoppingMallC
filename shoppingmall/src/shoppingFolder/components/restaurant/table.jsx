@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from "reactstrap";
+import { Row, Col } from "react-bootstrap";
 
 export default (props) => {
   const getRow1 = _ => {
@@ -49,3 +49,4 @@ export default (props) => {
     </div>
   );
 };
+

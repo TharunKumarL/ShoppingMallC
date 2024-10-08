@@ -1,56 +1,61 @@
-General Styles
-.text-center {
-    text-align: center;
-  }
-  .error-message {
-    color: red;
-  }
-  .form-row {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  .form-row input,
-  .form-row select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 0 10px;
-  }
-  .available-tables {
-    margin-bottom: 20px;
-    font-size: 18px;
-    color: green;
-  }
-  .table-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  /* Confirmation Page */
-  .reservation-inputs input {
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
-    width: 80%;
-    max-width: 300px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  .book-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  .book-btn:hover {
-    background-color: #218838;
-  }
-  
+General Styles .text-center {
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.form-row input,
+.form-row select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0 10px;
+}
+
+.available-tables {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: green;
+}
+
+.table-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Confirmation Page */
+.reservation-inputs input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 80%;
+  max-width: 300px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.book-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.book-btn:hover {
+  background-color: #218838;
+}

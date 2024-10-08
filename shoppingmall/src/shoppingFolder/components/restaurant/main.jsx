@@ -1,19 +1,19 @@
 import React from "react";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import './Page.css'
 
 export default props => {
   return (
     <div>
-      <Row noGutters className="text-center align-items-center pizza-cta">
+      <Row className="text-center align-items-center pizza-cta">
         <Col>
           <p className="looking-for-pizza">
             If you're looking for a great food experience.
           </p>
           <Button
-            color="none"
+            variant="primary"
             className="book-table-btn"
-            onClick={_ => {
+            onClick={() => {
               props.setPage(1);
             }}
           >
@@ -21,7 +21,7 @@ export default props => {
           </Button>
         </Col>
       </Row>
-      <Row noGutters className="text-center big-img-container">
+      <Row className="text-center big-img-container">
         <Col>
           <img
             src={require("../images/cafe.jpg")}
