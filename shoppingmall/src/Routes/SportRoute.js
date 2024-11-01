@@ -5,7 +5,7 @@ const bookingSchema=require("../models/bookingSchema.js");
 const router = Router();  
 const port = 5000;
 
-// owner routes
+// MARK:owner routes
 
 // ->For creation
 router.post("/owner/create", async (req, res) => {
@@ -113,6 +113,7 @@ router.get('/slots/:id', async (req, res) => {
     try {
         // Fetch the bookings associated with the sport ID
         const slots = await bookingSchema.find({ sport_foreignkey: id }); // Changed to find by foreign key
+        
         res.status(200).json(slots); // Ensure you're sending back the slots
     } catch (error) {
         console.error("Error fetching slots:", error);
