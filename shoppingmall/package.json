@@ -29,10 +29,11 @@
     "react-bootstrap": "^2.5.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1",
     "react-phone-number-input": "^3.2.11",
+    "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
     "recharts": "^2.12.7",
+    "regex": "^4.3.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

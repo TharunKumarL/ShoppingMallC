@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import "../../../App.css";
 import "../css/Create_Sport.css";
 import { Link } from 'react-router-dom';
-import regex from "regex";
 
 const Create_Sport = () => {
     const submit_url = 'http://localhost:5000/sport/owner/create';
@@ -34,8 +33,6 @@ const Create_Sport = () => {
         }
     }; 
 
-
-
     const addSlot = () => {
         setFormData({ ...formData, slot_timings: [...formData.slot_timings, ''] });
     };
@@ -48,11 +45,7 @@ const Create_Sport = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dataValidation = formData 
-        console.log(dataValidation)  
-
-
-
+        console.log(formData); // Logging formData for debugging
 
         try {
             const response = await fetch(submit_url, {
@@ -116,7 +109,7 @@ const Create_Sport = () => {
                         required
                     />
 
-                    <label>Address</label> {/* Added Address Field */}
+                    <label>Address</label>
                     <input
                         type="text"
                         name="address"
@@ -125,7 +118,7 @@ const Create_Sport = () => {
                         required
                     />
 
-                    <label>Contact Email</label> {/* Added Contact Email Field */}
+                    <label>Contact Email</label>
                     <input
                         type="email"
                         name="contact_mail"
@@ -134,7 +127,7 @@ const Create_Sport = () => {
                         required
                     />
 
-                    <label>Date</label> {/* Added Date Field */}
+                    <label>Date</label>
                     <input
                         type="date"
                         name="date"
@@ -166,7 +159,7 @@ const Create_Sport = () => {
 
                     <button type="submit">Submit</button>
                 </form>
-                {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display Error Message */}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </div>
         </div>
     );
