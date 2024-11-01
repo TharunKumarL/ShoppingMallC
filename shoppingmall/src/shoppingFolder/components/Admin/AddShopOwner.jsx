@@ -9,6 +9,7 @@ const AddShopOwner = () => {
   const [contact, setContact] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,8 +34,42 @@ const AddShopOwner = () => {
     }
   };
 
+  const validateForm = () => {
+    const errors = {};
+
+    // Shop selection validation
+    if (!shopId) {
+      errors.shopId = 'Please select a shop.';
+    }
+
+    // Name validation
+    if (name.trim().length < 3) {
+      errors.name = 'Name must be at least 3 characters long.';
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      errors.email = 'Please enter a valid email address.';
+    }
+
+    // Contact validation
+    const contactRegex = /^\d{10,}$/;
+    if (!contactRegex.test(contact)) {
+      errors.contact = 'Contact number must be at least 10 digits.';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleAddShopOwner = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -85,6 +120,7 @@ const AddShopOwner = () => {
               </option>
             ))}
           </select>
+          {formErrors.shopId && <p className="error">{formErrors.shopId}</p>}
         </div>
         <div>
           <label htmlFor="name-input">Name:</label>
@@ -95,6 +131,7 @@ const AddShopOwner = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
+          {formErrors.name && <p className="error">{formErrors.name}</p>}
         </div>
         <div>
           <label htmlFor="email-input">Email:</label>
@@ -105,6 +142,7 @@ const AddShopOwner = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          {formErrors.email && <p className="error">{formErrors.email}</p>}
         </div>
         <div>
           <label htmlFor="contact-input">Contact:</label>
@@ -115,6 +153,7 @@ const AddShopOwner = () => {
             onChange={(e) => setContact(e.target.value)}
             required
           />
+          {formErrors.contact && <p className="error">{formErrors.contact}</p>}
         </div>
         <button type="submit" disabled={loading}>
           {loading ? 'Adding...' : 'Add Shop Owner'}

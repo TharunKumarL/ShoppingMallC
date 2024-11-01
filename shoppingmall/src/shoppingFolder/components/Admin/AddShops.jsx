@@ -7,10 +7,44 @@ const AddShops = () => {
   const [location, setLocation] = useState('');
   const [contact, setContact] = useState('');
   const [image, setImage] = useState('');
+  const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Name validation
+    if (name.trim().length < 3) {
+      errors.name = 'Shop name must be at least 3 characters long.';
+    }
+
+    // Location validation
+    if (location.trim().length < 3) {
+      errors.location = 'Location must be at least 3 characters long.';
+    }
+
+    // Contact validation (10-digit number)
+    const contactRegex = /^\d{10}$/;
+    if (!contactRegex.test(contact)) {
+      errors.contact = 'Contact number must be a valid 10-digit number.';
+    }
+
+    // Image URL validation (optional, check for URL format if provided)
+    const urlRegex = /^(https?:\/\/[^\s]+)$/;
+    if (image && !urlRegex.test(image)) {
+      errors.image = 'Please enter a valid URL for the image.';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleAddShop = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const token = sessionStorage.getItem('token'); // Get the JWT token
@@ -51,6 +85,7 @@ const AddShops = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
+          {formErrors.name && <p className="error">{formErrors.name}</p>}
         </div>
         <div>
           <label>Location:</label>
@@ -60,6 +95,7 @@ const AddShops = () => {
             onChange={(e) => setLocation(e.target.value)}
             required
           />
+          {formErrors.location && <p className="error">{formErrors.location}</p>}
         </div>
         <div>
           <label>Contact:</label>
@@ -69,6 +105,7 @@ const AddShops = () => {
             onChange={(e) => setContact(e.target.value)}
             required
           />
+          {formErrors.contact && <p className="error">{formErrors.contact}</p>}
         </div>
         <div>
           <label>Image URL:</label>
@@ -77,6 +114,7 @@ const AddShops = () => {
             value={image}
             onChange={(e) => setImage(e.target.value)}
           />
+          {formErrors.image && <p className="error">{formErrors.image}</p>}
         </div>
         <button type="submit" className="add-shop-btn">Add Shop</button>
       </form>

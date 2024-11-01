@@ -12,10 +12,10 @@ const Create_Sport = () => {
         label: '',
         body: '',
         cost: '',
-        address: '', // Added for the address
-        contact_mail: '', // Added for contact email
+        address: '', 
+        contact_mail: '', 
         slot_timings: [''],
-        date: '' // Added for the date of booking
+        date: ''
     }); 
 
     const [isSubmitted, setIsSubmitted] = useState(false);
