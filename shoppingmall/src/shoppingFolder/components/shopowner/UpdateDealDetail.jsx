@@ -11,6 +11,7 @@ const UpdateDealDetail = () => {
     expiration: '',
     image: '',
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchDeal = async () => {
@@ -34,8 +35,32 @@ const UpdateDealDetail = () => {
     }));
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+
+    if (deal.store.trim().length < 3) {
+      newErrors.store = "Store name must be at least 3 characters long.";
+    }
+    if (deal.description.trim().length < 10) {
+      newErrors.description = "Description must be at least 10 characters long.";
+    }
+    if (deal.expiration && deal.expiration < today) {
+      newErrors.expiration = "Expiration date must be in the future.";
+    }
+    if (deal.image && !/^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(deal.image)) {
+      newErrors.image = "Please enter a valid image URL ending in .jpg, .png, etc.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) return; // Stop if validation fails
+
     try {
       const response = await fetch(`/api/deals/${id}`, {
         method: 'PUT',
@@ -65,6 +90,7 @@ const UpdateDealDetail = () => {
             onChange={handleChange}
             required
           />
+          {errors.store && <p className="error">{errors.store}</p>}
         </div>
         <div>
           <label>Description:</label>
@@ -75,6 +101,7 @@ const UpdateDealDetail = () => {
             onChange={handleChange}
             required
           />
+          {errors.description && <p className="error">{errors.description}</p>}
         </div>
         <div>
           <label>Expiration:</label>
@@ -85,6 +112,7 @@ const UpdateDealDetail = () => {
             onChange={handleChange}
             required
           />
+          {errors.expiration && <p className="error">{errors.expiration}</p>}
         </div>
         <div>
           <label>Image URL:</label>
@@ -95,6 +123,7 @@ const UpdateDealDetail = () => {
             onChange={handleChange}
             required
           />
+          {errors.image && <p className="error">{errors.image}</p>}
         </div>
         <button type="submit">Update Deal</button>
       </form>
