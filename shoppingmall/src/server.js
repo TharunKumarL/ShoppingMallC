@@ -17,6 +17,7 @@ const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
 
+
 require('dotenv').config();
 
 const app = express();
@@ -31,6 +32,7 @@ app.use(cors({
 app.use(bodyParser.json());
 // Admin routes
 app.use('/api/admin', adminAuth, verifyAdmin);
+
 //Routes //Sport
 app.use("/sport", SportRoute);
 app.use("/sport", SportRouteUser);
@@ -444,6 +446,8 @@ const availableTables = [
   { _id: 11, name: "Table 11", capacity: 2, location: "Inside", isAvailable: true },
   { _id: 12, name: "Table 12", capacity: 6, location: "Bar", isAvailable: false }
 ];
+
+
 
 app.post('/availability', (req, res) => {
   const { date } = req.body;

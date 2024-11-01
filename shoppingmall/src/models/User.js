@@ -1,3 +1,5 @@
+const bookingSchema = require("./bookingSchema");
+
 // models/User.js
 const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
@@ -15,7 +17,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   bookings:{
-    type:String,
+    sport_bookings: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: bookingSchema
+    }
   },
   role: {  type: String,  enum: ['user', 'admin'] ,default:'user'}
 });
