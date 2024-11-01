@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../../../App.css";
 import "../css/Create_Sport.css";
 import { Link } from 'react-router-dom';
+import regex from "regex";
 
 const Create_Sport = () => {
     const submit_url = 'http://localhost:5000/sport/owner/create';
@@ -16,7 +17,7 @@ const Create_Sport = () => {
         contact_mail: '', // Added for contact email
         slot_timings: [''],
         date: '' // Added for the date of booking
-    });
+    }); 
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState(null); // State for error messages
@@ -31,7 +32,9 @@ const Create_Sport = () => {
         } else {
             setFormData({ ...formData, [name]: value });
         }
-    };
+    }; 
+
+
 
     const addSlot = () => {
         setFormData({ ...formData, slot_timings: [...formData.slot_timings, ''] });
@@ -44,6 +47,12 @@ const Create_Sport = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        dataValidation = formData 
+        console.log(dataValidation)  
+
+
+
 
         try {
             const response = await fetch(submit_url, {
