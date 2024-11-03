@@ -71,22 +71,33 @@ const ProtectedRoutesports = ({ element }) => {
     return <Navigate to="/login" replace />;
   }
   return element;
+
 };
 function App() {
   return (
     <Router>
       <div>
-        <Header />
+      <Header /> 
+      
         <SomeShops/>
         <Routes>
        
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />} />
           {/* Protect the home page ("/") and other pages that require authentication */}
           <Route path="/shoplist" element={<ProtectedRoute element={<ShopsList />} />} />
           <Route path="/deals" element={<ProtectedRoute element={<Deals />} />} />
           <Route path="/event" element={<ProtectedRoute element={<Event />} />} />
-          <Route path="/" element={<ProtectedRoute element={<Body />} />} />
+          <Route 
+  path="/" 
+  element={
+    <ProtectedRoute element={
+
+       <Body />
+
+    } 
+  />} 
+/>
           <Route path="/booksports" element={<ProtectedRoute element={<Show_Sport/>}/>}/>
           <Route path="/bookrestaurant" element={<ProtectedRoute element={<Page/>}/>}/>
           <Route path="/admin/dashboard" element={<ProtectedRouteAdmin element={<AdminDashboard />} />} /> 

@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const User = require('./models/User');
+const User = require('./models/UserSchema.js');
 const Shop = require('./models/Shop');
 const Deal = require('./models/deal');
 const Event = require('./models/Event');
@@ -16,7 +16,7 @@ const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
-
+const authenticateToken = require("../src/middleware/authenticationToken.js");
 
 require('dotenv').config();
 
@@ -71,7 +71,7 @@ app.post('/api/signup', async (req, res) => {
 });
 
 // Login endpoint
-app.post('/api/login', async (req, res) => {
+app.post('/api/login',  async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -116,12 +116,22 @@ app.post('/api/login', async (req, res) => {
       { expiresIn: '1h' }
     );
 
+    console.log(`Token details: ${token}`);
+
     res.status(200).json({ token });
 
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+// For getting user-details
+// Rout
+
+
+
+
 // Utility function to generate a random password
 const generatePassword = () => {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

@@ -1,5 +1,7 @@
 import React from 'react';
 import '../components/css/Header.css';  // Import the CSS file
+import LogoutButton from './Logout/Logout';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -12,6 +14,9 @@ const Header = () => {
         <a href="/event">Events</a>
         <a href="/signup">Sign Up</a>
         <a href="/mybookings">My Bookings</a>
+        <div className='logout-button'>
+          <LogoutButton/>
+        </div>
 
       </nav>
       <div className="search-bar">

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import '../components/css/Body.css';
 
+
 const Body = () => {
   const navigate = useNavigate();
   return (
@@ -20,6 +21,7 @@ const Body = () => {
         <div className="section-link events">
           <a href="event">Events</a>
         </div>
+
       </div>
 
       {/* Booking section for restaurant and movie */}

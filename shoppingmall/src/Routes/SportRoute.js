@@ -1,6 +1,9 @@
 const Router=require('express')
 const sportSchema=require("../models/sportSchema.js");
 const bookingSchema=require("../models/bookingSchema.js");
+const UserSchema = require("../models/UserSchema.js");
+const fetchUserDetails = require('../shoppingFolder/components/UserDetails/fetchUserDetails.jsx');
+
 
 const router = Router();  
 const port = 5000;
@@ -123,21 +126,37 @@ router.get('/slots/:id', async (req, res) => {
 
 router.put('/booking/:id', async (req, res) => {
     const { id } = req.params;
-    const { is_booked, booked_user_email } = req.body;
-    
+    const { is_booked } = req.body;
+
     try {
         const updatedBooking = await bookingSchema.findByIdAndUpdate(
             id,
             { is_booked: is_booked },
-            { booked_user_email: booked_user_email },
             { new: true }
         );
-        res.status(200).json(updatedBooking);
+
+        const userId = fetchUserDetails(req);   
+        const updatedUser = await UserSchema.findByIdAndUpdate(
+            userId,
+            { $push: { sport_bookings: id } },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            console.log('User not found');
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ updatedBooking, updatedUser });
+
     } catch (error) {
         console.error("Error updating booking:", error);
         res.status(500).send("Server Error");
     }
 });
+
+
+
 
 
 

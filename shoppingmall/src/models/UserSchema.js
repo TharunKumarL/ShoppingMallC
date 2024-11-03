@@ -16,13 +16,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  bookings:{
-    sport_bookings: {
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: bookingSchema
-    }
+  sport_bookings: {
+    type: [mongoose.Schema.Types.ObjectId], 
+    ref: bookingSchema
   },
   role: {  type: String,  enum: ['user', 'admin'] ,default:'user'}
 });
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = mongoose.model('users', UserSchema);

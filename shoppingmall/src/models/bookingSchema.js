@@ -1,4 +1,4 @@
-const user = require("./User");
+const user = require("./UserSchema");
 const sports = require("./sportSchema");
 
 

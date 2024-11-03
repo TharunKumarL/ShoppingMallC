@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import '../css/BookSlot.css';
+import fetchUserDetails from "../UserDetails/fetchUserDetails";
+
 
 const PORT = 5000;
 
@@ -32,44 +34,49 @@ const BookSlot = ({ sportId }) => {
                 console.error("Error fetching available slots:", error);
             }
         };
-
         fetchAvailableSlots();
     }, [sportId]);
+
+
 
     const handleBooking = async () => {
         if (!selectedSlot) return;
     
         try {
+            const token = sessionStorage.getItem("token");
+    
             const response = await fetch(`http://localhost:${PORT}/sport/booking/${selectedSlot}`, {
-                method: "PUT", // Assuming you want to update the booking status
+                method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`, // Include token in headers
                 },
                 body: JSON.stringify({ is_booked: true })
             });
-            
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
     
-            // Update the available slots state to reflect the booked status and email
             setAvailableSlots(prevSlots =>
                 prevSlots.map(slot =>
                     slot.id === selectedSlot
-                        ? { ...slot, isBooked: true} // Update email
+                        ? { ...slot, isBooked: true }
                         : slot
                 )
             );
     
             alert("Slot booked successfully!");
-            setSelectedSlot(null); // Clear the selected slot
+            setSelectedSlot(null);
         } catch (error) {
             console.error("Error booking slot:", error);
         }
     };
     
+    
 
     return (
+        <div>
         <div className="bookslot">
             <h2>Available Slots</h2>
             <ul>
@@ -91,6 +98,11 @@ const BookSlot = ({ sportId }) => {
             <button onClick={handleBooking} disabled={!selectedSlot}>
                 Book Slot
             </button>
+
+            {/* <button onClick={get_details}> Give me User Details</button> */}
+            
+        </div>
+        
         </div>
     );
 };
