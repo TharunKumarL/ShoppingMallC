@@ -1,5 +1,8 @@
 const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mongoose = require('mongoose');
+const session = require('express-session');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -17,6 +20,9 @@ const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
 const authenticateToken = require("../src/middleware/authenticationToken.js");
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+
 
 require('dotenv').config();
 
@@ -33,12 +39,75 @@ app.use(bodyParser.json());
 // Admin routes
 app.use('/api/admin', adminAuth, verifyAdmin);
 
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
+
+
 //Routes //Sport
 app.use("/sport", SportRoute);
 app.use("/sport", SportRouteUser);
 
 // Feedback form 
+passport.use(new GoogleStrategy({
+  clientID: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: 'http://localhost:5000/auth/google/callback'
+},
+async (accessToken, refreshToken, profile, done) => {
+  try {
+    const existingUser = await User.findOne({ googleId: profile.id });
+    if (existingUser) {
+      return done(null, existingUser);
+    }
+    
+    // If the user does not exist, create a new one
+    const newUser = new User({
+      name: profile.displayName,
+      email: profile.emails[0].value,
+      googleId: profile.id
+    });
+    await newUser.save();
+    return done(null, newUser);
+  } catch (error) {
+    return done(error, false);
+  }
+}
+));
 
+// Routes
+app.get('/auth/google',
+passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+passport.authenticate('google', { failureRedirect: '/login' }),
+(req, res) => {
+  const token = jwt.sign({ userId: req.user._id, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  res.redirect(`http://localhost:3000?token=${token}`); // Redirect to frontend with token
+}
+);
+
+// Login endpoint for regular login
+app.post('/api/login', async (req, res) => {
+const { email, password } = req.body;
+if (!email || !password) {
+  return res.status(400).json({ error: 'Email and password are required' });
+}
+
+try {
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  // Implement your password comparison logic here for non-Google users (e.g., bcrypt)
+  
+  const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  res.status(200).json({ token });
+} catch (error) {
+  res.status(500).json({ error: 'Internal Server Error' });
+}
+});
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -69,7 +138,46 @@ app.post('/api/signup', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+app.post('/api/google-signup', async (req, res) => {
+  const { token } = req.body; // This is the Google token received on the frontend
 
+  try {
+    // Verify the Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID, // Replace with your Google Client ID
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload.email;
+
+    // Check if user already exists
+    let user = await User.findOne({ email });
+    if (user) {
+      // User already exists, send a token
+      const authToken = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      return res.status(200).json({ token: authToken });
+    }
+
+    // If user doesn't exist, create a new user
+    const newUser = new User({
+      name: payload.name,
+      email: email,
+      googleId: payload.sub,
+      role: 'user', // Assign default role (can be customized)
+    });
+
+    await newUser.save();
+
+    // Generate a token for the new user
+    const authToken = jwt.sign({ userId: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+    res.status(201).json({ token: authToken });
+  } catch (error) {
+    console.error('Error during Google signup:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 // Login endpoint
 app.post('/api/login',  async (req, res) => {
   const { email, password } = req.body;

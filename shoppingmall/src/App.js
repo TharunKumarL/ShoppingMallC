@@ -1,5 +1,6 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate,useLocation } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+
 import './App.css';
 import Header from './shoppingFolder/components/Header';
 import Login from './shoppingFolder/components/Login/Login';
@@ -37,7 +38,7 @@ import AboutUs from './shoppingFolder/components/AboutUs.jsx';
 import StickyHeader from "./shoppingFolder/components/Feedback/header.js";
 import FeedbackForm from './shoppingFolder/components/Feedback/form.js';
 import Submissions from './shoppingFolder/components/Feedback/submissions.js'
-
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './App.css';
 
 // Component to check if user is authenticated
@@ -75,6 +76,7 @@ const ProtectedRoutesports = ({ element }) => {
 };
 function App() {
   return (
+    <GoogleOAuthProvider clientId="788124072442-ljpciau2bbh6spf8os3fbvq05t040guc.apps.googleusercontent.com">
     <Router>
       <div>
       <Header /> 
@@ -138,7 +140,9 @@ function App() {
         
         <Footer/>
       </div>
+      
     </Router>
+    </GoogleOAuthProvider>
   );
 }
 

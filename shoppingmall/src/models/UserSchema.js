@@ -1,26 +1,13 @@
-const bookingSchema = require("./bookingSchema");
-
-// models/User.js
 const mongoose = require('mongoose');
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  sport_bookings: {
-    type: [mongoose.Schema.Types.ObjectId], 
-    ref: bookingSchema
-  },
-  role: {  type: String,  enum: ['user', 'admin'] ,default:'user'}
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  googleId: { type: String, required: true, unique: true },
+  password: { type: String, required: function() { return !this.googleId; } },  // Only required if Google ID is not present
+  role: { type: String, default: 'user' },
 });
 
-module.exports = mongoose.model('users', UserSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;  // Export the model directly

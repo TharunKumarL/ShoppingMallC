@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import './Signup.css';
 
 const Signup = () => {
@@ -8,6 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [isGoogleSignup, setIsGoogleSignup] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -71,63 +73,105 @@ const Signup = () => {
     }
   };
 
+  const handleGoogleSignup = (credentialResponse) => {
+    console.log('Google credential response:', credentialResponse);
+
+    // Pass the response to the backend
+    fetch('http://localhost:5000/api/google-signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: credentialResponse.credential }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Google Signup response:', data);
+        alert('Signup with Google successful!');
+        navigate('/dashboard'); // Adjust this based on your app's flow
+      })
+      .catch((error) => {
+        console.error('Google Signup error:', error);
+        alert('Signup with Google failed.');
+      });
+  };
+
   return (
     <div className="Signup">
       <div className="wrapper">
         <h1>Signup</h1>
-        <form onSubmit={handleSignup}>
-          <div className="input-group">
-            <div className="input-box">
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-              <i className='bx bxs-user'></i>
-              {errors.name && <p className="error">{errors.name}</p>}
+
+        {!isGoogleSignup ? (
+          <form onSubmit={handleSignup}>
+            <div className="input-group">
+              <div className="input-box">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+                <i className="bx bxs-user"></i>
+                {errors.name && <p className="error">{errors.name}</p>}
+              </div>
+
+              <div className="input-box">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <i className="bx bxs-envelope"></i>
+                {errors.email && <p className="error">{errors.email}</p>}
+              </div>
+
+              <div className="input-box">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <i className="bx bxs-lock-alt"></i>
+                {errors.password && <p className="error">{errors.password}</p>}
+              </div>
+
+              <div className="input-box">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <i className="bx bxs-lock-alt"></i>
+                {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+              </div>
+              <button type="submit" className="signupButton">Sign Up</button>
             </div>
-            <div className="input-box">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <i className='bx bxs-envelope'></i>
-              {errors.email && <p className="error">{errors.email}</p>}
-            </div>
-            <div className="input-box">
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <i className='bx bxs-lock-alt'></i>
-              {errors.password && <p className="error">{errors.password}</p>}
-            </div>
-            <div className="input-box">
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              <i className='bx bxs-lock-alt'></i>
-              {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-            </div>
-            <button type="submit" className="signupButton">Sign Up</button>
+          </form>
+        ) : (
+          <div className="google-signup">
+            <GoogleLogin
+              onSuccess={handleGoogleSignup}
+              onError={() => alert('Google Signup failed')}
+            />
           </div>
-        </form>
+        )}
+
+        <div className="toggle-auth">
+          <button onClick={() => setIsGoogleSignup(!isGoogleSignup)}>
+            {isGoogleSignup ? 'Sign up with Email' : 'Sign up with Google'}
+          </button>
+        </div>
       </div>
     </div>
   );

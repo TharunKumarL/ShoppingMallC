@@ -81,10 +81,6 @@ const Login = () => {
               />
               <i className='bx bxs-lock-alt'></i>
             </div>
-            <div className="remember">
-              <label><input type="checkbox" /> Remember me</label>
-              <a href="/forgotpassword">Forgot password?</a>
-            </div>
             <button type="submit" className="loginButton">Login Now</button>
           </div>
         </form>

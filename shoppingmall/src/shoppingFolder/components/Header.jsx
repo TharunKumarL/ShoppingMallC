@@ -20,8 +20,6 @@ const Header = () => {
 
       </nav>
       <div className="search-bar">
-        <input type="text" placeholder="Search..." />
-        <button>Search</button>
       </div>
     </header>
   );
