@@ -44,7 +44,7 @@ const ViewShopOwners = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: newName, email: newEmail }),
+        body: JSON.stringify({ name: newName, email: newEmail}),
       });
 
       if (!response.ok) {
@@ -55,7 +55,7 @@ const ViewShopOwners = () => {
       // Update the local state after a successful update
       setShopOwners((prevOwners) =>
         prevOwners.map((owner) =>
-          owner._id === ownerId ? { ...owner, name: newName, email: newEmail } : owner
+          owner._id === ownerId ? { ...owner, name: newName, email: newEmail} : owner
         )
       );
     } catch (error) {
@@ -115,7 +115,7 @@ const ViewShopOwners = () => {
                 <td>{owner.name}</td>
                 <td>{owner.email}</td>
                 <td>{owner.contact}</td>
-                <td>{owner.shop.name}</td>
+                <td>{owner.shop}</td>
                 <td>
                   <button onClick={() => handleEdit(owner._id)} className="edit-btn">
                     Edit
