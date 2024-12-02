@@ -308,34 +308,169 @@ app.put('/api/shops/:id', async (req, res) => {
 app.get('/api/admin/dashboard', (req, res) => {
   res.json({ message: 'Welcome to the Admin Dashboard' });
 });
-app.get('/api/admin/shops', async (req, res) => {
+app.get('/api/a/shops', async (req, res) => {
   try {
-    const shops = await Shop.find();
+    const { page = 1, limit = 10 } = req.query; // Pagination parameters
+    const shops = await Shop.find()
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .sort({ name: 1 }); // Sort by name alphabetically
+
     console.log('Fetched shops from DB:', shops); // Log fetched shops
-    res.json(shops);
+    res.status(200).json(shops); // Explicitly send status 200
   } catch (error) {
-    console.error('Error fetching shops:', error);
+    console.error('Error fetching shops:', error.message, error.stack); // Improved error logs
     res.status(500).json({ error: 'Failed to fetch shops' });
   }
 });
-// Add a new shop
-// Add a new shop
-app.post('/api/admin/shops', async (req, res) => {
-  const { name, location, contact, image } = req.body;
-
-  if (!name || !location || !contact) {
-    return res.status(400).json({ error: 'Name, location, and contact are required' });
-  }
+app.get('/api/a/shops/:id', async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const newShop = new Shop({ name, location, contact, image });
+    const shop = await Shop.findById(id);
+
+    if (!shop) {
+      return res.status(404).json({ message: 'Shop not found.' });
+    }
+
+    res.status(200).json(shop);
+  } catch (error) {
+    console.error('Error fetching shop details:', error.message);
+
+    // Handle invalid ObjectId errors
+    if (error.name === 'CastError') {
+      return res.status(400).json({ message: 'Invalid shop ID.' });
+    }
+
+    res.status(500).json({ message: 'Server error. Could not fetch shop details.' });
+  }
+});
+
+app.put('/api/a/shops/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, location, contact, workingHours, image } = req.body;
+
+  try {
+    // Fetch the existing shop details
+    const existingShop = await Shop.findById(id);
+
+    if (!existingShop) {
+      return res.status(404).json({ message: 'Shop not found.' });
+    }
+
+    // Update only the provided fields
+    const updatedData = {
+      name: name || existingShop.name,
+      location: location || existingShop.location,
+      contact: contact || existingShop.contact,
+      workingHours: workingHours || existingShop.workingHours,
+      image: image || existingShop.image,
+    };
+
+    const updatedShop = await Shop.findByIdAndUpdate(id, updatedData, {
+      new: true, // Return the updated document
+      runValidators: true, // Validate the update against the schema
+    });
+
+    res.status(200).json(updatedShop);
+  } catch (error) {
+    console.error('Error updating shop:', error.message);
+
+    // Handle validation or server errors
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: error.message });
+    }
+
+    res.status(500).json({ message: 'Server error. Could not update shop.' });
+  }
+});
+
+// Add a new shop
+app.post('/api/admin/shops', async (req, res) => {
+  const { name, location, contact, image, workingHours, owner } = req.body;
+
+  if (!name || !location || !contact || !owner || !owner.name || !owner.email || !owner.contact) {
+    return res.status(400).json({ 
+      error: 'Name, location, contact, and complete owner details are required' 
+    });
+  }
+
+  // Ensure that workingHours are provided, if not default to closed for all days
+  const defaultWorkingHours = {
+    monday: 'Closed',
+    tuesday: 'Closed',
+    wednesday: 'Closed',
+    thursday: 'Closed',
+    friday: 'Closed',
+    saturday: 'Closed',
+    sunday: 'Closed',
+  };
+
+  const finalWorkingHours = { ...defaultWorkingHours, ...workingHours };
+
+  try {
+    const password = generatePassword();
+    console.log(password)
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create the ShopOwner if it doesn't already exist
+    let shopOwner = await ShopOwner.findOne({ email: owner.email });
+
+    // If owner doesn't exist, create a new ShopOwner
+    if (!shopOwner) {
+      shopOwner = new ShopOwner({
+        name: owner.name,
+        email: owner.email,
+        contact: owner.contact,
+        password: hashedPassword, // Make sure to hash the password before saving
+        shop: name, // Store shop name in ShopOwner
+      });
+      await shopOwner.save();
+    }
+        // Send the password to the shop owner's email
+        const transporter = nodemailer.createTransport({
+          service: 'Gmail', // You can use any email service like Gmail, Outlook, etc.
+          auth: {
+            user: 'tharunkumarlagisetty@gmail.com', // Your email
+            pass: 'bjbt ovza dnuf ayyp',  // Your email password
+          },
+        });
+    
+        const mailOptions = {
+          from: 'tharunkumarlagisetty22@gmail.com',
+          to: owner.email,
+          subject: 'Your Shop Owner Account Password',
+          text: `Hello ${name},\n\nYour account has been created successfully. Here is your password: ${password}\nPlease log in and change your password immediately.\n\nBest regards,\nShopping Mall Admin`,
+        };
+    
+        await transporter.sendMail(mailOptions);
+
+    // Create the shop
+    const newShop = new Shop({
+      name,
+      location,
+      contact,
+      image,
+      workingHours: finalWorkingHours,
+      owner
+    });
+
     await newShop.save();
+
+    // Update ShopOwner with the shop ID and name
+    shopOwner.shopId = newShop.__id;
+    shopOwner.shopName = newShop.name; // Add shop name to ShopOwner
+    await shopOwner.save();
+
+    // Respond with the created shop
     res.status(201).json(newShop);
   } catch (error) {
     console.error('Error adding shop:', error);
     res.status(500).json({ error: 'Failed to add shop: ' + error.message });
   }
 });
+
+
+
 app.get('/stats', async (req, res) => {
   try {
     // Get the count of users, shop owners, and shops

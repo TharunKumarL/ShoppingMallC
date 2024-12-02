@@ -7,23 +7,33 @@ const UpdateShopDetail = () => {
   const [shop, setShop] = useState(null);
   const [location, setLocation] = useState('');
   const [contact, setContact] = useState('');
-  const [errors, setErrors] = useState({ location: '', contact: '' });
+  const [ownerName, setOwnerName] = useState('');
+  const [ownerEmail, setOwnerEmail] = useState('');
+  const [ownerContact, setOwnerContact] = useState('');
+  const [errors, setErrors] = useState({ location: '', contact: '', ownerContact: '' });
   const [isFormValid, setIsFormValid] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/admin/shops/${id}`)
-      .then(response => response.json())
+    // Fetch shop details
+    fetch(`http://localhost:5000/api/a/shops/${id}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch shop details');
+        return response.json();
+      })
       .then(data => {
         setShop(data);
         setLocation(data.location || '');
         setContact(data.contact || '');
+        setOwnerName(data.owner?.name || '');
+        setOwnerEmail(data.owner?.email || '');
+        setOwnerContact(data.owner?.contact || '');
       })
       .catch(error => console.error('Error fetching shop:', error));
   }, [id]);
 
   const validateForm = () => {
-    const newErrors = { location: '', contact: '' };
+    const newErrors = { location: '', contact: '', ownerContact: '' };
     let formIsValid = true;
 
     if (!location || location.length < 3) {
@@ -37,13 +47,18 @@ const UpdateShopDetail = () => {
       formIsValid = false;
     }
 
+    if (ownerContact && !phonePattern.test(ownerContact)) {
+      newErrors.ownerContact = 'Owner contact must be a valid phone number.';
+      formIsValid = false;
+    }
+
     setErrors(newErrors);
     setIsFormValid(formIsValid);
   };
 
   useEffect(() => {
     validateForm();
-  }, [location, contact]);
+  }, [location, contact, ownerContact]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -51,12 +66,20 @@ const UpdateShopDetail = () => {
     if (!isFormValid) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/shops/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/a/shops/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ location, contact }),
+        body: JSON.stringify({
+          location,
+          contact,
+          owner: {
+            name: ownerName,
+            email: ownerEmail,
+            contact: ownerContact,
+          },
+        }),
       });
 
       if (response.ok) {
@@ -96,6 +119,32 @@ const UpdateShopDetail = () => {
             onChange={(e) => setContact(e.target.value)}
           />
           {errors.contact && <p className="error">{errors.contact}</p>}
+        </div>
+        <h2>Owner Details</h2>
+        <div>
+          <label>Owner Name:</label>
+          <input
+            type="text"
+            value={ownerName}
+            onChange={(e) => setOwnerName(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Owner Email:</label>
+          <input
+            type="email"
+            value={ownerEmail}
+            onChange={(e) => setOwnerEmail(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Owner Contact:</label>
+          <input
+            type="text"
+            value={ownerContact}
+            onChange={(e) => setOwnerContact(e.target.value)}
+          />
+          {errors.ownerContact && <p className="error">{errors.ownerContact}</p>}
         </div>
         <button type="submit" disabled={!isFormValid}>Update Shop</button>
       </form>
