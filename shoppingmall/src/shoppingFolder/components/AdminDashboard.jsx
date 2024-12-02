@@ -131,18 +131,6 @@ return (
             </button>
           </div>
 
-          {/* Add ShopOwners */}
-          <div className="management-box add-shopowners">
-            <h3>Add ShopOwners</h3>
-            <p>Add new shop owners to the mall management system.</p>
-            <button
-              className="manage-now-btn"
-              onClick={() => navigate('/admin/add-shopowners')}
-            >
-              Manage Now
-            </button>
-          </div>
-
           {/* View Shops */}
           <div className="management-box view-shops">
             <h3>View Shops</h3>
