@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 import './Signup.css';
 
 const Signup = () => {
@@ -9,7 +8,6 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const [isGoogleSignup, setIsGoogleSignup] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -73,35 +71,10 @@ const Signup = () => {
     }
   };
 
-  const handleGoogleSignup = (credentialResponse) => {
-    console.log('Google credential response:', credentialResponse);
-
-    // Pass the response to the backend
-    fetch('http://localhost:5000/api/google-signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token: credentialResponse.credential }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Google Signup response:', data);
-        alert('Signup with Google successful!');
-        navigate('/dashboard'); // Adjust this based on your app's flow
-      })
-      .catch((error) => {
-        console.error('Google Signup error:', error);
-        alert('Signup with Google failed.');
-      });
-  };
-
   return (
     <div className="Signup">
       <div className="wrapper">
         <h1>Signup</h1>
-
-        {!isGoogleSignup ? (
           <form onSubmit={handleSignup}>
             <div className="input-group">
               <div className="input-box">
@@ -158,20 +131,6 @@ const Signup = () => {
               <button type="submit" className="signupButton">Sign Up</button>
             </div>
           </form>
-        ) : (
-          <div className="google-signup">
-            <GoogleLogin
-              onSuccess={handleGoogleSignup}
-              onError={() => alert('Google Signup failed')}
-            />
-          </div>
-        )}
-
-        <div className="toggle-auth">
-          <button onClick={() => setIsGoogleSignup(!isGoogleSignup)}>
-            {isGoogleSignup ? 'Sign up with Email' : 'Sign up with Google'}
-          </button>
-        </div>
       </div>
     </div>
   );
