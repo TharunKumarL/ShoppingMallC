@@ -32,7 +32,8 @@
 
 /* Popup Content */
 .popup-content {
-    position: relative; /* This makes positioning child elements like the button easier */
+    position: fixed;
+    margin-left: 40%; /* This makes positioning child elements like the button easier */
     padding: 20px;
     background-color: whitesmoke;
     border-radius: 13px;
