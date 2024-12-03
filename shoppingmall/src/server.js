@@ -770,7 +770,7 @@ app.get('api/deals-expiration-stats', async (req, res) => {
   }
 });
 
-app.use("/sport", SportRoute);
+
 
 app.post('/api/feedback', async (req, res) => {
   const { username, rating, message } = req.body;

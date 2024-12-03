@@ -1,67 +1,67 @@
 .show-sport {
-    flex-direction: column;
-    justify-content: center;
-    background-color: #f8f9fa; /* Light background color */
-    border-radius: 8px; /* Rounded corners for the container */
-    padding: 12px;
-    padding-top: 100px;
-} 
-
-.sport-items-container {
-    max-width: 50px;
-    width: fit-content;
+    padding-bottom:60vh;
 }
-
 
 
 /* Popup Box */
 .popup-box {
-    position: relative;
-    margin-left: 50%;
+    position: fixed; /* Fixed positioning to stay centered on the viewport */
     top: 0;
     left: 0;
-    width: 50px;
+    width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 2; /* Ensure it stays above other elements */
 }
-
-
-
 /* Popup Content */
 .popup-content {
-    position: fixed;
-    margin-left: 40%; /* This makes positioning child elements like the button easier */ 
-    width: fit-content;
+    position: relative;
+    width: 40%; /* Adjust the size as needed */
+    max-width: 500px; /* Optional: Set a max width for larger screens */
     padding: 20px;
     background-color: whitesmoke;
     border-radius: 13px;
-  }
- 
-
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); /* Optional: Add shadow for better visibility */
+    z-index: 301; /* Higher than the backdrop */
+}
 
 /* Close Button */
-
-  
 .close-popup-btn {
-    position: top right; /* Positioning the button */
-    background-color: whitesmoke;
-    color: black;
-    border-radius: 13px; 
-    margin-left: 5px;
-} 
-.close-popup-btn:hover {
-    background-color:lightgrey; 
+    position: absolute; /* Position within the popup */
+    top: 10px;
+    right: 10px;
+    background-color: transparent; /* Default background */
+    border: none; /* No border by default */
+    color: rgb(78, 67, 67); /* Default text color */
+    font-size: 30px; /* Font size for the button */
+    padding: 5px; /* Small padding for clickability */
+    border-radius: 5px; /* Slight rounding for better visuals */
+    display: inline-block; /* Keep the size tight to content */
+    line-height: 1; /* Prevent extra height due to line spacing */
+    box-sizing: border-box; /* Include padding in size calculations */
+    width: auto; /* Ensure width wraps content */
+    height: auto; /* Ensure height wraps content */
+    transition: background-color 0.2s, color 0.3s; /* Smooth hover transitions */
+}
 
+/* Hover Effect */
+.close-popup-btn:hover {
+    color: red; /* Change text/icon color */
+    background-color: whitesmoke; /* Wrap background tightly around the button */
+    padding: 5px; /* Ensure hover padding matches the original padding */
+    border-radius: 5px; /* Keep the same rounding */
 }
 
 
+
+/* Additional Matter Details Section */
 .matter-details {
- display: flex; 
- flex-direction: row;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between elements */
 }
 
 /* Price and Matter Section */
@@ -74,31 +74,4 @@
 .price {
     font-size: 16px;
     font-weight: bold;
-}
-
-.matter-box {
-    background-color: green;
-    max-width: fit-content;
-    color: white;
-    justify-content: space-between;
-    border-radius: 5px;
-    font-size: 12px;
-}
-
-/* Image Section */
-.sport-item-image {
-    height: 70%;
-    background-size: cover;
-    background-position: center;
-    border-radius: 8px 8px 0 0;
-}
-
-.sport-item-info {
-    height: fit-content;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    max-width: fit-content;
-    
 }

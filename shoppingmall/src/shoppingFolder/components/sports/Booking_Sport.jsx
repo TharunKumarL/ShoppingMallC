@@ -38,10 +38,12 @@ const BookSlot = ({ sportId }) => {
 
     const handleBooking = async () => {
         if (!selectedSlot) return;
-
+    
         try {
             const token = sessionStorage.getItem("token");
-            const response = await fetch(`http://localhost:${PORT}/sport/booking/${selectedSlot}`, {
+    
+            // Book the slot
+            const bookingResponse = await fetch(`http://localhost:${PORT}/sport/booking/${selectedSlot}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -49,11 +51,30 @@ const BookSlot = ({ sportId }) => {
                 },
                 body: JSON.stringify({ is_booked: true }),
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+    
+            if (!bookingResponse.ok) {
+                throw new Error(`HTTP error! status: ${bookingResponse.status}`);
             }
-
+    
+            // After successful booking, trigger wallet creation/update
+            const email = sessionStorage.getItem("email"); // Assuming email is stored in sessionStorage
+            const walletResponse = await fetch(`http://localhost:${PORT}/create_user_wallet`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email: email,
+                    wallet_money: 100, // Example value to update/add wallet money
+                    sports_bookings: [selectedSlot], // Add the booked slot to wallet
+                }),
+            });
+    
+            if (!walletResponse.ok) {
+                throw new Error(`HTTP error! status: ${walletResponse.status}`);
+            }
+    
             // Update slots after booking
             setSlotsByDate((prev) =>
                 Object.fromEntries(
@@ -65,13 +86,14 @@ const BookSlot = ({ sportId }) => {
                     ])
                 )
             );
-
-            alert("Slot booked successfully!");
+    
+            alert("Slot booked and wallet updated successfully!");
             setSelectedSlot(null);
         } catch (error) {
-            console.error("Error booking slot:", error);
+            console.error("Error during slot booking or wallet update:", error);
         }
     };
+    
 
     return (
         <div className="bookslot-container">
@@ -87,8 +109,6 @@ const BookSlot = ({ sportId }) => {
                                 setExpandedDate((prev) => (prev === date ? null : date))
                             }
                         >
-
-
                             
                             {date}
                         </button>

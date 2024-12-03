@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect }from "react";
 import "../css/UserWallet.css"; 
 
 const UserWallet = () => {
@@ -48,7 +48,11 @@ const UserWallet = () => {
     return (
         <div>
             <div className="user-wallet-container">
-                <h2>Hello User, how are you?</h2>
+            {details ? (
+                        <h2>Hello {details.name}, look at your profile</h2> // Safely access `details.name`
+                    ) : (
+                        <p>Loading user details...</p>
+                    )}
                 <div className="user-wallet-box">
                     <div className="wallet-details">
                         <p className="wallet-details-heading">Your details</p>

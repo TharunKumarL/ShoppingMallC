@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../../App.css";
+// import "../../../App.css";
 import "../css/Show_Sport.css";
 import BookSlot from "./Booking_Sport"; // Import the BookSlot component
 
@@ -148,7 +148,7 @@ const Show_Sport = ({ isOwner }) => {
                                         {/* Close Button */}
                                 
                                         <button
-                                            className="close-popup-btn"
+                                            className="close-popup-btn material-symbols-outlined"
                                             onClick={() => setSelectedSport(null)}
                                         >
                                             Close

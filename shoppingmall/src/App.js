@@ -94,7 +94,7 @@ const ProtectedRouteTheatre=({element})=>{
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   return (
-    <GoogleOAuthProvider clientId="788124072442-ljpciau2bbh6spf8os3fbvq05t040guc.apps.googleusercontent.com">
+    // <GoogleOAuthProvider clientId="788124072442-ljpciau2bbh6spf8os3fbvq05t040guc.apps.googleusercontent.com">
     <Router>
       <div>
       <Header /> 
@@ -174,7 +174,7 @@ function App() {
       </div>
       
     </Router>
-    </GoogleOAuthProvider>
+    // </GoogleOAuthProvider>
   );
 }
 

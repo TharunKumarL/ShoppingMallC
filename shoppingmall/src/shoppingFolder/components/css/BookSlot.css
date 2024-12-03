@@ -1,9 +1,8 @@
 /* Container styles */
 .bookslot-container {
     padding: 20px;
-    margin-left: 50vw;
-    margin: auto;
     font-family: Arial, sans-serif;
+    max-height: 100%;
 }
 
 /* Header */
