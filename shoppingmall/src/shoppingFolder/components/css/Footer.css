@@ -4,7 +4,7 @@
   background-color: #111;
   color: #fff;
   padding: 20px 0;
-  margin-top:0px; /* This ensures the footer stays at the bottom */
+  margin-top:0%; /* This ensures the footer stays at the bottom */
   text-align: center;
   width: 100%;
 }
