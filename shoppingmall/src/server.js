@@ -543,7 +543,7 @@ app.post('/add-shopowners/:shopId', async (req, res) => {
       from: 'tharunkumarlagisetty22@gmail.com',
       to: email,
       subject: 'Your Shop Owner Account Password',
-      text: `Hello ${name},\n\nYour account has been created successfully. Here is your password: ${password}\nPlease log in and change your password immediately.\n\nBest regards,\nShopping Mall Admin`,
+      text: `Hello ${name},\n\nYour account has been created successfully. Here is your password: ${password}\nPlease log in \n\nBest regards,\nShopping Mall Admin`,
     };
 
     await transporter.sendMail(mailOptions);
