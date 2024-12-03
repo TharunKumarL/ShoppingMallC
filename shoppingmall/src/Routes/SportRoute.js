@@ -176,40 +176,6 @@ router.get('/slots/:id', async (req, res) => {
  
 
 // MARK: Transaction
-// router.put('/booking/:id', async (req, res) => {
-//     const { id } = req.params;
-//     const { is_booked } = req.body; 
-
-//     const session = mongoose.startSession();
-
-//     try { 
-//         (await session).startTransaction();
-//         const updatedBooking = await bookingSchema.findByIdAndUpdate(
-//             id,
-//             { is_booked: is_booked },
-//             { new: true }
-//         );
-
-//         const userId = fetchUserDetails(req);   
-//         const updatedUser = await UserSchema.findByIdAndUpdate(
-//             userId,
-//             { $push: { sport_bookings: id } },
-//             { new: true }
-//         );
-
-//         if (!updatedUser) {
-//             console.log('User not found');
-//             return res.status(404).json({ message: 'User not found' });
-//         }
-
-//         res.status(200).json({ updatedBooking, updatedUser }); 
-//         (await session).endSession();
-
-//     } catch (error) {
-//         console.error("Error updating booking:", error);
-//         res.status(500).send("Server Error");
-//     }
-// });
 
 
 router.put('/booking/:id', async (req, res) => {
@@ -254,8 +220,7 @@ router.put('/booking/:id', async (req, res) => {
         if (!userWallet) {
             // If no userwallet, create a new one
             userWallet = new userwallet({
-                Uid: userId,  // Link to the user
-                wallet_money: 10000,  // Initial wallet balance (you can change this if needed)
+                Uid: userId,  // Link to the user 
                 sports_bookings: []  // Start with an empty sports_bookings array
             });
 
@@ -264,7 +229,6 @@ router.put('/booking/:id', async (req, res) => {
 
         // Now update the userwallet
         userWallet.sports_bookings.push(id); // Add the booking ID to the sports_bookings array
-        userWallet.wallet_money += 1000; // You can change this based on your business logic (e.g., increment wallet money)
         await userWallet.save({ session });
 
         // Commit the transaction

@@ -1,5 +1,6 @@
 import { useState, useEffect }from "react";
 import "../css/UserWallet.css"; 
+import BookingDetails from "../Userwallet/UserBookedDetails";
 
 const UserWallet = () => {
     const [email, setEmail] = useState(null); // Store email
@@ -56,7 +57,6 @@ const UserWallet = () => {
                 <div className="user-wallet-box">
                     <div className="wallet-details">
                         <p className="wallet-details-heading">Your details</p>
-                        <p className="wallet-amount">Wallet amount: ₹1000</p>
                     </div>
                     <hr /> 
                     
@@ -67,7 +67,7 @@ const UserWallet = () => {
                     Bookings
                     <hr /> 
                     {details ? (
-                        <h2>{details.name}</h2> // Safely access `details.name`
+                        <h2><BookingDetails/></h2> // Safely access `details.name`
                     ) : (
                         <p>Loading user details...</p>
                     )}

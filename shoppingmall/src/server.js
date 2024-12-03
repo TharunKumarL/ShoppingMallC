@@ -20,7 +20,8 @@ const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
 const authenticateToken = require("../src/middleware/authenticationToken.js"); 
 const UserDetails = require("./Routes/UserDetails.js"); 
-const UserSchema = require("./models/UserSchema.js"); 
+const UserSchema = require("./models/UserSchema.js");  
+
 
 
 require('dotenv').config();

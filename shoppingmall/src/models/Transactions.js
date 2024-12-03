@@ -9,12 +9,6 @@ const bookingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: User,
     },
-    spent: {
-        type: Number, 
-        required:true, 
-        default: 0,
-        min: 0, 
-    },
     sports_bookings: {
         type: [mongoose.Schema.Types.ObjectId], 
         ref: sports,
