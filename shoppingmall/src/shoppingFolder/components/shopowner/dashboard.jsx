@@ -9,6 +9,11 @@ const ShopOwnerDashboard = () => {
     <div className="shop-owner-dashboard">
       <h1>Shop Owner Dashboard</h1>
       <div className="dashboard-grid">
+      <div className="dashboard-card">
+          <h2>Shop Owner Profile</h2>
+          <p>View your profile details.</p>
+          <button onClick={() => navigate('/shopowner/profile')}>Manage Profile</button>
+        </div>
         <div className="dashboard-card">
           <h2>View Deals</h2>
           <p>See the current deals for your shop.</p>

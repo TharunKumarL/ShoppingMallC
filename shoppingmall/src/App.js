@@ -5,6 +5,8 @@ import './App.css';
 import Header from './shoppingFolder/components/Header';
 import Login from './shoppingFolder/components/Login/Login';
 import Signup from './shoppingFolder/components/Signup/Signup';
+import ManagerLogin from './shoppingFolder/components/Login/ManagerLogin.jsx';
+import ShopOwnerLogin from './shoppingFolder/components/Login/ShopOwnerLogin.jsx';
 import Body from './shoppingFolder/components/Body';
 import ShopsList from './shoppingFolder/components/Sholist';
 import Deals from './shoppingFolder/components/Deals';
@@ -17,10 +19,10 @@ import UpdateShopOwner from './shoppingFolder/components/Admin/UpdateShopOwner.j
 import UpdateShopDetail from './shoppingFolder/components/Admin/UpdateShopDetail.jsx';
 import UpdateShop from './shoppingFolder/components/Admin/UpdateShop.jsx';
 import ViewShopOwners from './shoppingFolder/components/Admin/ViewShopOwners.jsx';
+import AddManagers from './shoppingFolder/components/Admin/AddManagers.jsx';
 import AdminDashboard2 from './shoppingFolder/components/AdminDashBoard2.jsx';
 import SomeShops from './shoppingFolder/components/SomeShops.jsx';
 // import ViewShops from './shoppingFolder/components/Admin/ViewShops.jsx';
-import ShopOwnerLogin from './shoppingFolder/components/shopowner.jsx';
 import ShopOwnerDashboard from './shoppingFolder/components/shopowner/dashboard.jsx';
 import Viewdeals from './shoppingFolder/components/shopowner/viewdeals.jsx';
 import AddDeals from './shoppingFolder/components/shopowner/AddDeals.jsx';
@@ -28,6 +30,7 @@ import ViewShopDetails from './shoppingFolder/components/shopowner/ViewShopDetai
 import UpdateDeals from './shoppingFolder/components/shopowner/UpdateDeals.jsx';
 import UpdateDealDetail from './shoppingFolder/components/shopowner/UpdateDealDetail.jsx';
 import ViewShops from './shoppingFolder/components/Admin/ViewShops.jsx';
+import ShopOwnerProfile from './shoppingFolder/components/shopowner/ShopOwnerProfile.jsx';
 //Sports Section
 import Sport_TopBar from './shoppingFolder/components/sports/Sport_TopBar.jsx';
 import Create_Sport from './shoppingFolder/components/sports/Create_Sport.jsx';
@@ -62,16 +65,13 @@ const ProtectedRouteshopowner = ({ element }) => {
   const token = sessionStorage.getItem('token');
   const userRole = JSON.parse(localStorage.getItem('user'))?.role; // Assuming user data is stored in localStorage
   if (!token || userRole !== 'shopowner') {
-    return <Navigate to="/shopownerlogin" replace />;
+    return <Navigate to="/shopowner-login" replace />;
   }
   return element;
 };
 const ProtectedRoutesports = ({ element }) => {
   const token = sessionStorage.getItem('token');
   const userRole = JSON.parse(localStorage.getItem('user'))?.role; // Assuming user data is stored in localStorage
-  if (!token || userRole !== 'sportsmanager') {
-    return <Navigate to="/login" replace />;
-  }
   return element;
 
 };
@@ -87,6 +87,8 @@ function App() {
        
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />} />
+          <Route path="/manager-login" element={<ManagerLogin />} />
+          <Route path="/shopowner-login" element={<ShopOwnerLogin/>}/>
           {/* Protect the home page ("/") and other pages that require authentication */}
           <Route path="/shoplist" element={<ProtectedRoute element={<ShopsList />} />} />
           <Route path="/deals" element={<ProtectedRoute element={<Deals />} />} />
@@ -112,13 +114,14 @@ function App() {
           <Route path="admin/update-shop/:id" element={<ProtectedRouteAdmin element={<UpdateShopDetail />} />} />
           <Route path="/admin/view-shops" element={<ProtectedRouteAdmin element={<ViewShops/>} />} />
           <Route path="/admin/view-shopowners" element={<ProtectedRouteAdmin element={<ViewShopOwners />} />} />
-          <Route path="/shopownerlogin" element={<ShopOwnerLogin />}/>
+          <Route path="/admin/add-manager" element={<ProtectedRouteAdmin element={<AddManagers/>}/>} />
           <Route path="/shopowner/dashboard" element={<ShopOwnerDashboard />}/>
           <Route path="/shopowner/view-deals" element={<Deals />}/>
           <Route path="/shopowner/add-deals" element={<AddDeals />}/>
           <Route path="/shopowner/view-shop-details" element={<ViewShopDetails />}/>
           <Route path="/shopowner/update-deals" element={<UpdateDeals/>}/>
           <Route path="/shopowner/update-deals:id" element={<UpdateDealDetail/>}/>
+          <Route path="/shopowner/profile" element={<ShopOwnerProfile/>}/>
           <Route path='/sport/owner' element={<ProtectedRoutesports element={
             <><Sport_TopBar isOwner = {true}/><SportDashboard2 isOwner = {true}/><Show_Sport isOwner = {true}/>
             </>}/>}

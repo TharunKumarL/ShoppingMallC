@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode }from 'jwt-decode';
 
 import './Login.css';
 
@@ -25,22 +25,19 @@ const Login = () => {
       if (response.ok && data.token) {
         // Save the token in sessionStorage (or localStorage if you prefer)
         sessionStorage.setItem('token', data.token);
-        
+
         // Decode the token to get user role
         const decodedToken = jwtDecode(data.token);
         const userRole = decodedToken.role; // Assuming the role is included in the token
         localStorage.setItem('user', JSON.stringify(decodedToken));
 
         // Redirect the user based on role
-        console.log('userrole'+userRole)
-        if (userRole == 'admin') {
+        console.log('userrole', userRole);
+        if (userRole === 'admin') {
           navigate('/admin/dashboard'); // Redirect admin to the dashboard
-
-        }
-        else if(userRole=='sportsmanager'){
-          navigate('/sport/owner')
-        } 
-        else {
+        } else if (userRole === 'sportsmanager') {
+          navigate('/sport/owner');
+        } else {
           navigate('/'); // Redirect regular users to home
         }
       } else {
@@ -68,7 +65,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)} // Update state on input change
                 required
               />
-              <i className='bx bxs-envelope'></i>
+              <i className="bx bxs-envelope"></i>
             </div>
             <div className="input-box">
               <input
@@ -79,7 +76,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)} // Update state on input change
                 required
               />
-              <i className='bx bxs-lock-alt'></i>
+              <i className="bx bxs-lock-alt"></i>
             </div>
             <button type="submit" className="loginButton">Login Now</button>
           </div>
@@ -87,6 +84,13 @@ const Login = () => {
         <div className="registration">
           <p>Don't have an account?</p>
           <Link to="/signup" className="loginButton">Register Now</Link>
+        </div>
+        <div className="role-selection">
+          <p>Are you a manager or shop owner?</p>
+          <div className="role-links">
+            <Link to="/manager-login" className="loginButton">Manager Login</Link>
+            <Link to="/shopowner-login" className="loginButton">Shop Owner Login</Link>
+          </div>
         </div>
       </div>
     </div>

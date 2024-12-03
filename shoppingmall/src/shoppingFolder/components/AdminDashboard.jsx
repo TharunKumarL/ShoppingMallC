@@ -30,76 +30,6 @@ const AdminDashboard = () => {
     });
   }, [navigate]);
 
-//   return (
-//     <div className="admin-body">
-//       <AdminDashboard2/>
-//       {/* Admin management section */}
-//       <div className="admin-management">
-//         <h2 className="management-heading">Admin Management</h2>
-//         <div className="management-options">
-//           {/* Add Shops */}
-//           <div className="management-box add-shops">
-//             <h3>Add Shops</h3>
-//             <p>Manage and add new shops to the mall directory.</p>
-//             <button
-//               className="manage-now-btn"
-//               onClick={() => navigate('/admin/add-shop')}
-//             >
-//               Manage Now
-//             </button>
-//           </div>
-
-//           {/* Update Shops */}
-//           <div className="management-box update-shops">
-//             <h3>Update Shops</h3>
-//             <p>Update the details of existing shops in the mall directory.</p>
-//             <button
-//               className="manage-now-btn"
-//               onClick={() => navigate('/admin/update-shop')}
-//             >
-//               Manage Now
-//             </button>
-//           </div>
-
-//           {/* Add ShopOwners */}
-//           <div className="management-box add-shopowners">
-//             <h3>Add ShopOwners</h3>
-//             <p>Add new shop owners to the mall management system.</p>
-//             <button
-//               className="manage-now-btn"
-//               onClick={() => navigate('/admin/add-shopowners')}
-//             >
-//               Manage Now
-//             </button>
-//           </div>
-
-//           {/* View Shops */}
-//           <div className="management-box view-shops">
-//             <h3>View Shops</h3>
-//             <p>View the list of all shops in the mall directory.</p>
-//             <button
-//               className="manage-now-btn"
-//               onClick={() => navigate('/admin/view-shops')}
-//             >
-//               View Now
-//             </button>
-//           </div>
-
-//           {/* View ShopOwners */}
-//           <div className="management-box view-shopowners">
-//             <h3>View ShopOwners</h3>
-//             <p>View the list of all shop owners in the mall management system.</p>
-//             <button
-//               className="manage-now-btn"
-//               onClick={() => navigate('/admin/view-shopowners')}
-//             >
-//               View Now
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
 return (
   <div className="admin-body">
     <div className="admin-container">
@@ -153,6 +83,12 @@ return (
             >
               View Now
             </button>
+            </div>
+            {/* Add Managers */}
+           <div className="management-box add-manager">
+              <h3>Add Managers</h3>
+                <p>View the list of all sections in the mall management system.</p>
+              <button className="manage-now-btn" onClick={() => navigate('/admin/add-manager')}> Manage Now </button>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ const Event = require('./models/Event');
 const ShopOwner = require('./models/ShopOwner')
 const Reservation = require('./models/reservation.js')
 const bookingSchema = require("./models/bookingSchema.js");
+const Manager=require("./models/manager.js")
 const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
@@ -96,15 +97,6 @@ app.post('/api/login',  async (req, res) => {
       );
       return res.status(200).json({ token });
     }
-    if (email === 'sportssection@gmail.com' && password === '1') {
-      console.log("Sports Section Login successfully")
-      const token = jwt.sign(
-        { userId: 'sportsmanager', role: 'sportsmanager' }, // Use a special identifier for admin
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );
-      return res.status(200).json({ token });
-    }
 
     // Check for regular user credentials
     const user = await User.findOne({ email });
@@ -132,6 +124,82 @@ app.post('/api/login',  async (req, res) => {
   }
 });
 
+app.post('/api/manager-login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if the manager exists in the database
+    const manager = await Manager.findOne({ email });
+
+    if (!manager) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Compare the hashed password with the input password
+    const isMatch = await bcrypt.compare(password, manager.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token with the manager's role and section information
+    const payload = {
+      id: manager._id,
+      email: manager.email,
+      role: 'manager',
+      section: manager.section, // Store section (sports, restaurant, etc.)
+    };
+
+    const token = jwt.sign(payload, 'your_jwt_secret', { expiresIn: '1h' });
+
+    // Respond with the token
+    res.status(200).json({ token });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+x=''
+app.post('/api/shopowner-login', async (req, res) => {
+  const { email, password } = req.body;
+  x=email
+  console.log(x)
+  try {
+    // Check if the shop owner exists in the database
+    const shopOwner = await ShopOwner.findOne({ email });
+
+    if (!shopOwner) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Compare the hashed password with the input password
+    const isMatch = await bcrypt.compare(password, shopOwner.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token with the shop owner's info
+    const payload = {
+      id: shopOwner._id,
+      email: shopOwner.email,
+      name: shopOwner.name,
+      shop: shopOwner.shop, // Include shop information if needed
+      contact: shopOwner.contact, // Include contact info if needed
+      role: 'shopOwner', // Set the role as 'shopOwner' to differentiate
+    };
+
+    const token = jwt.sign(payload, 'your_jwt_secret', { expiresIn: '1h' });
+
+    // Respond with the token
+    res.status(200).json({ token });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // For getting user-details
 // Rout
@@ -206,6 +274,52 @@ app.put('/api/shops/:id', async (req, res) => {
 //admin routes
 app.get('/api/admin/dashboard', (req, res) => {
   res.json({ message: 'Welcome to the Admin Dashboard' });
+});
+app.post("/api/managers", async (req, res) => {
+  try {
+    const { name, email, section } = req.body;
+
+    // Generate a random password
+    const password = Math.random().toString(36).slice(-8);
+
+    // Hash the password before saving it
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create the manager
+    const manager = new Manager({
+      name,
+      email,
+      password: hashedPassword,
+      section,
+    });
+
+    await manager.save();
+
+    // Configure Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Or another provider
+      auth: {
+        user: 'tharunkumarlagisetty@gmail.com', // Replace with your email
+        pass: 'bjbt ovza dnuf ayyp',   // Replace with your email password or app password
+      },
+    });
+
+    // Email content
+    const mailOptions = {
+      from: 'your-email@example.com',
+      to: email,
+      subject: 'Your Manager Account Credentials',
+      text: `Dear ${name},\n\nYour manager account has been created successfully.\n\nHere are your credentials:\nEmail: ${email}\nPassword: ${password}\n\nPlease log in and change your password immediately.\n\nThank you!`,
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+
+    res.status(201).send({ message: "Manager created successfully and email sent!" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(400).send({ message: error.message });
+  }
 });
 app.get('/api/a/shops', async (req, res) => {
   try {
@@ -490,10 +604,12 @@ app.delete('/api/shopowners/:id', async (req, res) => {
 //shopOwner
 app.post('/shopownerlogin', async (req, res) => {
   const { email, password } = req.body;
-
+  x=email
+  console.log(x)
   try {
     // Find the shop owner by email
     const shopOwner = await ShopOwner.findOne({ email });
+
 
     if (!shopOwner) {
       return res.status(400).json({ error: 'Invalid email or password' });
@@ -516,6 +632,7 @@ app.post('/shopownerlogin', async (req, res) => {
       message: 'Login successful',
       token: token, // Send token if you are using it
       shopOwner: { id: shopOwner._id, email: shopOwner.email }, // Or other required details
+      
     });
     // sessionStorage.setItem('shopOwnerId', shopOwner._id);
   } catch (error) {
@@ -523,6 +640,55 @@ app.post('/shopownerlogin', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+app.get('/api/shopowner/profile', async (req, res) => {
+  console.log(x)
+  try {
+    console.log( x);
+    
+    // Find the shop owner by email
+    const shopOwner = await ShopOwner.findOne({ email: x }).select('-password'); // Exclude the password field
+    
+    if (!shopOwner) {
+      return res.status(404).json({ message: 'Shop Owner not found' });
+    }
+
+    // Respond with the shop owner's profile
+    res.json({
+      name: shopOwner.name,
+      email: shopOwner.email,
+      contact: shopOwner.contact,
+      shop: shopOwner.shop,
+    });
+  } catch (error) {
+    console.error('Error fetching shop owner profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+app.put('/api/shopowner/profile', async (req, res) => {
+  try {
+    // Update the shop owner profile by email
+    const shopOwner = await ShopOwner.findOneAndUpdate(
+      { email: x }, // Query by email
+      req.body, // Update with the request body
+      { new: true } // Return the updated document
+    );
+
+    if (!shopOwner) {
+      return res.status(404).json({ message: 'Shop Owner not found' });
+    }
+
+    res.json({
+      message: 'Profile updated successfully!',
+      shopOwner,
+    });
+  } catch (error) {
+    console.error('Error updating shop owner profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 //deals
 app.put('/api/deals/:id', async (req, res) => {
   try {
