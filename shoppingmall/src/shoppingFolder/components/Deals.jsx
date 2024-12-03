@@ -24,7 +24,7 @@ const Deals = () => {
         deals.map((deal) => (
           <div key={deal._id} className="deal-card">
             <div className="deal-details">
-              <h3>{deal.store}</h3>
+              <h3>{deal.shop}</h3>
               <p>{deal.description}</p>
               <p>Expires: {new Date(deal.expiration).toLocaleDateString()}</p>
             </div>

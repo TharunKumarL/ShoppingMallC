@@ -23,6 +23,7 @@ const authenticateToken = require("../src/middleware/authenticationToken.js");
 require('dotenv').config();
 
 const app = express();
+const app2=express();
 
 const port = 5000;
 
@@ -707,24 +708,31 @@ app.put('/api/deals/:id', async (req, res) => {
   }
 });
 //adddeals
+
 app.post('/api/add-deal', async (req, res) => {
-  const { store, description, expiration, image } = req.body;
+  const { shop, description, expiration } = req.body;
+
+  if (!shop || !description || !expiration) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
 
   try {
+    // Create a new deal
     const newDeal = new Deal({
-      store,
+      shop,
       description,
       expiration,
-      image,
     });
 
-    const savedDeal = await newDeal.save();
-    res.status(201).json(savedDeal);
+    await newDeal.save();
+    res.status(201).json({ message: 'Deal added successfully!', deal: newDeal });
   } catch (error) {
     console.error('Error adding deal:', error);
-    res.status(500).json({ message: 'Failed to add deal' });
+    res.status(500).json({ error: 'Failed to add deal.' });
   }
 });
+
+
 //stats
 app.get('api/deals-expiration-stats', async (req, res) => {
   try {

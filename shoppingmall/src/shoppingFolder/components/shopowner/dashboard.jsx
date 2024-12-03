@@ -20,11 +20,6 @@ const ShopOwnerDashboard = () => {
           <button onClick={() => navigate('/shopowner/view-deals')}>View Now</button>
         </div>
         <div className="dashboard-card">
-          <h2>Update Deals</h2>
-          <p>Update the deals available for your shop.</p>
-          <button onClick={() => navigate('/shopowner/update-deals')}>Manage Now</button>
-        </div>
-        <div className="dashboard-card">
           <h2>Add Deals</h2>
           <p>Add new deals to your shop's offerings.</p>
           <button onClick={() => navigate('/shopowner/add-deals')}>Manage Now</button>

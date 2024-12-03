@@ -144,7 +144,7 @@ function App() {
           <Route path="/submission/:id" element={<Submissions />} />
           <Route
   path="/theatre/manager"
-  element={<div><h1>Welcome Theatre Manager</h1><Link to="http://localhost:3001/admin">Go to DashBoard</Link></div>}
+  element={ <div><h1>Welcome Theatre Manager</h1><Link to="http://localhost:3001/admin">Go to DashBoard</Link></div>}
 />
     
         </Routes>

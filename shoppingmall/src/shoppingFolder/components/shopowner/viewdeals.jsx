@@ -34,8 +34,7 @@ const ViewDeals = () => {
         ) : (
           deals.map((deal) => (
             <div className="deal-card" key={deal._id}>
-              <img src={deal.image} alt={deal.store} className="deal-image" />
-              <h2>{deal.store}</h2>
+              <h2>{deal.shop}</h2>
               <p>{deal.description}</p>
               <p className="deal-expiration">
                 Expires on: {new Date(deal.expiration).toLocaleDateString()}
