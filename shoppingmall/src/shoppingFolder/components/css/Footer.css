@@ -3,7 +3,7 @@
 .footer {
   background-color: #111;
   color: #fff;
-  padding: 20px 0;
+  padding: 2% 0;
   margin-top:0%; /* This ensures the footer stays at the bottom */
   text-align: center;
   width: 100%;
@@ -37,7 +37,7 @@
 }
 
 .footer-bottom {
-  margin-top: 20px;
+  margin-top: 2%;
   font-size: 14px;
 }
 
