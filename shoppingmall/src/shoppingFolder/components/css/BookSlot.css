@@ -1,7 +1,7 @@
 /* Container styles */
 .bookslot-container {
     padding: 20px;
-    max-width: 600px;
+    width: 100px;
     margin: auto;
     font-family: Arial, sans-serif;
 }
@@ -51,6 +51,7 @@
 .slots-container {
     margin-top: 10px;
     padding: 10px;
+    width: 50px;
     border-left: 3px solid #007bff;
     background-color: #f9f9f9;
 }

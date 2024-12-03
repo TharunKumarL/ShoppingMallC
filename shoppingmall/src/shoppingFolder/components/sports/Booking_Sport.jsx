@@ -107,8 +107,7 @@ const BookSlot = ({ sportId }) => {
                                                     !slot.isBooked &&
                                                     setSelectedSlot(slot.id)
                                                 }
-                                                disabled={slot.isBooked}
-                                            >
+                                                disabled={slot.isBooked} >
                                                 {slot.slot}{" "}
                                                 {slot.isBooked ? "(Booked)" : ""}
                                             </button>
