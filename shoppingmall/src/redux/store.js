@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import shopsReducer from './reducers/shopReducer';
+import dealsReducer from './reducers/dealsReducer';
+import shopsReducer from './reducers/shopReducer'; // Assuming you have this from earlier.
 
 const store = configureStore({
   reducer: {
-    shops: shopsReducer,
+    deals: dealsReducer,
+    shops: shopsReducer, // Add other reducers here.
   },
 });
 

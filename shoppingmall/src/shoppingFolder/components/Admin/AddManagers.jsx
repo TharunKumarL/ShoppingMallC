@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./AddManagers.css";
 
 const AddManagers = () => {
   const [formData, setFormData] = useState({
@@ -45,39 +46,42 @@ const AddManagers = () => {
   };
 
   return (
-    <div>
-      <h1>Add Manager</h1>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="add-managers">
+      <h1 className="form-title">Add Manager</h1>
+      {message && <p className="message">{message}</p>}
+      <form className="manager-form" onSubmit={handleSubmit}>
+        <div className="form-group">
           <label>
             Name:
             <input
               type="text"
               name="name"
+              className="form-input"
               value={formData.name}
               onChange={handleChange}
               required
             />
           </label>
         </div>
-        <div>
+        <div className="form-group">
           <label>
             Email:
             <input
               type="email"
               name="email"
+              className="form-input"
               value={formData.email}
               onChange={handleChange}
               required
             />
           </label>
         </div>
-        <div>
+        <div className="form-group">
           <label>
             Section:
             <select
               name="section"
+              className="form-select"
               value={formData.section}
               onChange={handleChange}
               required
@@ -89,7 +93,9 @@ const AddManagers = () => {
             </select>
           </label>
         </div>
-        <button type="submit">Add Manager</button>
+        <button type="submit" className="form-button">
+          Add Manager
+        </button>
       </form>
     </div>
   );
