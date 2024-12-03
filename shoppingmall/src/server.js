@@ -795,6 +795,211 @@ app.post('/api/feedback', async (req, res) => {
 });
 
 
+// Table Schema
+const tableSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  capacity: { type: Number, required: true, min: 1, max: 10 },
+  location: { type: String, required: true },
+  isAvailable: { type: Boolean, default: true },
+  bookingDetails: {
+      name: { 
+          type: String, 
+          required: function () { return !this.isAvailable; } // Required if table is unavailable
+      },
+      phone: { 
+          type: String, 
+          required: function () { return !this.isAvailable; } // Required if table is unavailable
+      },
+      email: { 
+          type: String, 
+          required: function () { return !this.isAvailable; } // Required if table is unavailable
+      },
+  },
+});
+
+// Hotel Schema
+const hotelSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  category: { type: String, required: true },
+  cuisine: { type: String, required: true },
+  dietary: { type: String, required: true },
+  seating: { type: String, required: true },
+  tables: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Table', default: [] }],
+});
+
+
+// Models
+const Table = mongoose.model('Table', tableSchema);
+const Hotel = mongoose.model('Hotel', hotelSchema);
+
+// Routes for Tables
+// GET: Fetch all tables
+// GET: Fetch details of a specific table
+app.get('/api/get-table/:tableId', async (req, res) => {
+  const { tableId } = req.params;
+
+  try {
+      // Find the table by its ID
+      const table = await Table.findById(tableId);
+      if (!table) {
+          return res.status(404).json({ message: 'Table not found' });
+      }
+
+      res.json(table);
+  } catch (err) {
+      console.error('Error fetching table details:', err);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST: Add a new table
+// POST: Add a new table and associate it with a hotel
+app.post('/api/tables/admin', async (req, res) => {
+    try {
+      const { name, capacity, location, isAvailable, hotelId } = req.body;
+  
+      // Check if the hotel exists
+      const hotel = await Hotel.findById(hotelId);
+      if (!hotel) {
+        return res.status(404).json({ error: 'Hotel not found' });
+      }
+  
+      // Create a new table
+      const newTable = new Table({ name, capacity, location, isAvailable });
+      const savedTable = await newTable.save();
+  
+      // Add the table's ID to the hotel's tables array
+      hotel.tables.push(savedTable._id);
+      await hotel.save();
+  
+      res.status(201).json({ message: 'Table created and linked to hotel', table: savedTable });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+  
+
+// Routes for Hotels
+// GET: Fetch all hotels
+app.get('/api/hotels', async (req, res) => {
+  try {
+    const hotels = await Hotel.find().populate('tables');
+    res.json(hotels);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST: Add a new hotel
+app.post('/api/hotels/admin', async (req, res) => {
+  try {
+    const { name, category, cuisine, dietary, seating, image, tables } = req.body;
+    const newHotel = new Hotel({ name, category, cuisine, dietary, seating, image, tables });
+    const savedHotel = await newHotel.save();
+    res.status(201).json(savedHotel);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/hotels/:hotelId', async (req, res) => {
+  const { hotelId } = req.params;
+  try {
+    // Populate the tables field to include full table details
+    const hotel = await Hotel.findById(hotelId).populate('tables');
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+    res.json(hotel);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST: Book a table
+app.post('/api/book-table', async (req, res) => {
+  const { tableId, name, phone, email } = req.body;
+
+  try {
+    const table = await Table.findById(tableId);
+    if (!table) {
+      return res.status(404).json({ message: 'Table not found' });
+    }
+
+    if (!table.isAvailable) {
+      return res.status(400).json({ message: 'Table is already booked.' });
+    }
+
+    table.isAvailable = false;
+    table.bookingDetails = { name, phone, email };
+    await table.save();
+
+    const bookingId = Date.now().toString() + Math.random().toString().slice(2);
+
+    const bookingDetails = {
+      name,
+      tableNumber: table.tableNumber,
+      capacity: table.capacity,
+      location: table.location,
+      bookingDate: new Date().toISOString(),
+      bookingTime: new Date().toLocaleTimeString(),
+      bookingId,
+    };
+
+    sendBookingConfirmationEmail(email, bookingDetails);
+
+    res.status(200).json({
+      message: 'Table booked successfully.',
+      bookingId,
+      ...bookingDetails,
+    });
+  } catch (err) {
+    console.error('Error booking table:', err);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+async function sendBookingConfirmationEmail(to, bookingDetails) {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // or 'STARTTLS'
+    auth: {
+      user: 'your-email@gmail.com',
+      pass: 'your-password'
+    }
+  });
+
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: to,
+    subject: 'Booking Confirmation at Kula',
+    html: `
+      <h2>Booking Confirmation</h2>
+      <p>Dear ${bookingDetails.name},</p>
+      <p>We are pleased to confirm your booking at Kula:</p>
+      <ul>
+        <li><strong>Table Number:</strong> ${bookingDetails.tableNumber}</li>
+        <li><strong>Capacity:</strong> ${bookingDetails.capacity}</li>
+        <li><strong>Location:</strong> ${bookingDetails.location}</li>
+        <li><strong>Date:</strong> ${bookingDetails.bookingDate}</li>
+        <li><strong>Time:</strong> ${bookingDetails.bookingTime}</li>
+        <li><strong>Booking ID:</strong> ${bookingDetails.bookingId}</li>
+      </ul>
+
+      <p>We look forward to serving you!</p>
+      <p>Best regards,<br>The Kula Team</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
 
 
 

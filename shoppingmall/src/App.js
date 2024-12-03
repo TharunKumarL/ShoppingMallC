@@ -43,6 +43,15 @@ import Feedback from './shoppingFolder/components/Feedback.jsx';
 import Submissions from './shoppingFolder/components/Feedback/submissions.js'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import './App.css'; 
+import ResAdminDashboard from './components/Dashboard/Restaurant_AdminDashboard';
+import ResOwnerDashboard from './components/Dashboard/Restaurant_OwnerDashboard';
+import ResCustomerDashboard from './components/Dashboard/Restaurant_CustomerDashboard';
+import ResHome from './pages/Home';
+import Restaurants from './pages/Restaurants';
+// import ResAuthProvider from './context/AuthContext';
+import ResTableList from './components/TablesList';
+import ResBookingPage from './components/BookingPage';
+import ResBookingConfirmation from './components/BookingConfirmation';
 
 //User wallet 
 import UserWallet from './shoppingFolder/components/Userwallet/UserWallet.jsx';
@@ -83,6 +92,7 @@ const ProtectedRouteTheatre=({element})=>{
   return element;
 }
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
   return (
     <GoogleOAuthProvider clientId="788124072442-ljpciau2bbh6spf8os3fbvq05t040guc.apps.googleusercontent.com">
     <Router>
@@ -91,7 +101,14 @@ function App() {
       
         <SomeShops/>
         <Routes>
-       
+        <Route path="/bookrestaurant/" element={<ResHome />} />
+          <Route path="/bookrestaurant/admin-dashboard" element={<ResAdminDashboard />} />
+          <Route path="/bookrestaurant/owner-dashboard" element={<ResOwnerDashboard />} />
+          <Route path="/bookrestaurant/customer-dashboard" element={<ResCustomerDashboard />} />
+          <Route path="/bookrestaurant/restaurants" element={<Restaurants darkMode={darkMode} />} />
+          <Route path="/bookrestaurant/restaurants/:hotelId" element={<ResTableList />} />
+          <Route path="/bookrestaurant/restaurants/:hotelId/tables/:tableId" element={<ResBookingPage />} />
+          <Route path="/bookrestaurant/confirmation" element={<ResBookingConfirmation />} />
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />} />
           <Route path="/manager-login" element={<ManagerLogin />} />
