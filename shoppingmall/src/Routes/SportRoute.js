@@ -5,6 +5,8 @@ const UserSchema = require("../models/UserSchema.js");
 const fetchUserDetails = require('../shoppingFolder/components/UserDetails/fetchUserDetails.jsx');
 
 
+
+
 const router = Router();  
 const port = 5000;
 
@@ -58,7 +60,53 @@ router.post("/owner/create", async (req, res) => {
         console.error("Error creating sport and slots:", error);
         res.status(500).json({ message: "Failed to create sport and slots", error: error.message });
     }
-});
+}); 
+
+
+router.put("/owner/update/:id", async (req,res) => {
+    const {label, body, cost, address, contact_mail,slot_timings, date} = req.body; 
+    const slot = slot_timings;  
+
+    const {id} = req.params;
+
+    console.log(`The request body: ${req.body}`); 
+
+    if (!label||!body||!cost||!address||!contact_mail||!slot||!data||!Array.isArray(slot)||slot.length == 0 || !date) {
+        return res.status(400).json({message:"All fields are required even in case of updating the cases"});
+    }
+
+    try {
+        const updatedSport = await sportSchema.findByIdAndUpdate(id ,
+        {label, body, cost, address, contact_mail},
+        {new: true, runValidators: true} //It will check the validation and new refers to it is an updated product
+    );
+
+    if (!updatedSport) {
+        res.status(404).json({message:"Sport not found"});
+    } 
+
+
+
+    // updating the slots 
+
+    const bookings = slot.map((slot) => ({
+        sport_foreignkey:updatedSport._id, 
+        date: new Date(date), 
+        slot,
+        is_booked:false,
+    })); 
+
+    await bookingSchema.insertMany(bookings);
+
+    } 
+
+    catch(error) {
+        console.log("An error has occured while updating the sports section"); 
+        res.status(404).json({message:"Unable to update the sports booking", error});
+    }
+
+
+})
 
 
 

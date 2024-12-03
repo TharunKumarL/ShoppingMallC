@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import '../css/BookSlot.css';
-import fetchUserDetails from "../UserDetails/fetchUserDetails";
-
+import "../css/BookSlot.css";
 
 const PORT = 5000;
 
 const BookSlot = ({ sportId }) => {
-    const [availableSlots, setAvailableSlots] = useState([]);
+    const [slotsByDate, setSlotsByDate] = useState({});
+    const [expandedDate, setExpandedDate] = useState(null); // Tracks the expanded date
     const [selectedSlot, setSelectedSlot] = useState(null);
 
     useEffect(() => {
@@ -17,19 +16,19 @@ const BookSlot = ({ sportId }) => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                
-                // Ensure the response contains the expected structure
-                if (Array.isArray(data)) {
-                    const slotsToDisplay = data.map(slot => ({
+
+                // Group slots by date
+                const groupedSlots = data.reduce((acc, slot) => {
+                    const formattedDate = new Date(slot.date).toLocaleDateString();
+                    if (!acc[formattedDate]) acc[formattedDate] = [];
+                    acc[formattedDate].push({
                         id: slot._id,
                         slot: slot.slot,
-                        date: new Date(slot.date).toLocaleDateString(), // Format the date
-                        isBooked: slot.is_booked
-                    }));
-                    setAvailableSlots(slotsToDisplay);
-                } else {
-                    console.error("Expected an array for available slots, got:", data);
-                }
+                        isBooked: slot.is_booked,
+                    });
+                    return acc;
+                }, {});
+                setSlotsByDate(groupedSlots);
             } catch (error) {
                 console.error("Error fetching available slots:", error);
             }
@@ -37,72 +36,98 @@ const BookSlot = ({ sportId }) => {
         fetchAvailableSlots();
     }, [sportId]);
 
-
-
     const handleBooking = async () => {
         if (!selectedSlot) return;
-    
+
         try {
             const token = sessionStorage.getItem("token");
-    
             const response = await fetch(`http://localhost:${PORT}/sport/booking/${selectedSlot}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`, // Include token in headers
+                    "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ is_booked: true })
+                body: JSON.stringify({ is_booked: true }),
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
-            setAvailableSlots(prevSlots =>
-                prevSlots.map(slot =>
-                    slot.id === selectedSlot
-                        ? { ...slot, isBooked: true }
-                        : slot
+
+            // Update slots after booking
+            setSlotsByDate((prev) =>
+                Object.fromEntries(
+                    Object.entries(prev).map(([date, slots]) => [
+                        date,
+                        slots.map((slot) =>
+                            slot.id === selectedSlot ? { ...slot, isBooked: true } : slot
+                        ),
+                    ])
                 )
             );
-    
+
             alert("Slot booked successfully!");
             setSelectedSlot(null);
         } catch (error) {
             console.error("Error booking slot:", error);
         }
     };
-    
-    
 
     return (
-        <div>
-        <div className="bookslot">
-            <h2>Available Slots</h2>
-            <ul>
-                {availableSlots.map((slotInfo) => (
-                    <li key={slotInfo.id}>
+        <div className="bookslot-container">
+            <h2 className="bookslot-header">Available Slots</h2>
+            <ul className="date-list">
+                {Object.entries(slotsByDate).map(([date, slots]) => (
+                    <li key={date} className="date-item">
                         <button
-                            style={{
-                                backgroundColor: slotInfo.isBooked ? "lightgray" : selectedSlot === slotInfo.id ? "lightblue" : "white",
-                                cursor: slotInfo.isBooked ? "not-allowed" : "pointer",
-                                pointerEvents: slotInfo.isBooked ? "none" : "auto"
-                            }}
-                            onClick={() => !slotInfo.isBooked && setSelectedSlot(slotInfo.id)} // Only set selectedSlot if not booked
+                            className={`date-button ${
+                                expandedDate === date ? "expanded" : ""
+                            }`}
+                            onClick={() =>
+                                setExpandedDate((prev) => (prev === date ? null : date))
+                            }
                         >
-                            {slotInfo.slot} on {slotInfo.date} {slotInfo.isBooked ? "(Booked)" : ""}
+
+
+                            
+                            {date}
                         </button>
+                        {expandedDate === date && (
+                            <div className="slots-container">
+                                <ul className="slots-list">
+                                    {slots.map((slot) => (
+                                        <li key={slot.id} className="slot-item">
+                                            <button
+                                                className={`slot-button ${
+                                                    selectedSlot === slot.id
+                                                        ? "selected"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    !slot.isBooked &&
+                                                    setSelectedSlot(slot.id)
+                                                }
+                                                disabled={slot.isBooked}
+                                            >
+                                                {slot.slot}{" "}
+                                                {slot.isBooked ? "(Booked)" : ""}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                                {selectedSlot && (
+                                    <button
+                                        className="book-slot-button"
+                                        onClick={handleBooking}
+                                    >
+                                        Book Slot
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </li>
                 ))}
             </ul>
-            <button onClick={handleBooking} disabled={!selectedSlot}>
-                Book Slot
-            </button>
-
-            {/* <button onClick={get_details}> Give me User Details</button> */}
-            
-        </div>
-        
         </div>
     );
 };

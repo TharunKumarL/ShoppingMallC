@@ -1,3 +1,112 @@
-.bookslot{
-    padding-top: 100px;
+/* Container styles */
+.bookslot-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.bookslot-header {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Date list and button */
+.date-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.date-item {
+    margin-bottom: 10px;
+}
+
+.date-button {
+    width: fit-content;
+    text-align: left;
+    padding: 10px;
+    color: black;
+    font-size: 18px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.date-button.expanded {
+    background-color: #007bff;
+    color: white;
+}
+
+.date-button:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Slots container */
+.slots-container {
+    margin-top: 10px;
+    padding: 10px;
+    border-left: 3px solid #007bff;
+    background-color: #f9f9f9;
+}
+
+/* Slot list and buttons */
+.slots-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.slot-item {
+    margin-bottom: 5px;
+}
+
+.slot-button {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;.bookslot{
+        padding-top: 100px;
+    }
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.slot-button:hover {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.05);
+}
+
+.slot-button.selected {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Book Slot Button */
+.book-slot-button {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.book-slot-button:hover {
+    background-color: #218838;
+}
+
+
+.bookslot-header {
+    margin-bottom: 15px;
 }

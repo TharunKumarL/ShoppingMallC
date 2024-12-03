@@ -11,7 +11,6 @@ const Shop = require('./models/Shop');
 const Deal = require('./models/deal');
 const Event = require('./models/Event');
 const ShopOwner = require('./models/ShopOwner')
-const Reservation = require('./models/reservation.js')
 const bookingSchema = require("./models/bookingSchema.js");
 const Manager=require("./models/manager.js")
 const adminAuth = require('./middleware/adminAuth');
@@ -41,7 +40,7 @@ app.use('/api/admin', adminAuth, verifyAdmin);
 app.use("/sport", SportRoute);
 app.use("/sport", SportRouteUser);
 
-
+`  `
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -749,81 +748,6 @@ app.get('api/deals-expiration-stats', async (req, res) => {
 
 app.use("/sport", SportRoute);
 
-
-const availableTables = [
-  { _id: 1, name: "Table 1", capacity: 4, location: "Patio", isAvailable: true },
-  { _id: 2, name: "Table 2", capacity: 2, location: "Inside", isAvailable: false },
-  { _id: 3, name: "Table 3", capacity: 6, location: "Bar", isAvailable: true },
-  { _id: 4, name: "Table 4", capacity: 8, location: "Patio", isAvailable: true },
-  { _id: 5, name: "Table 5", capacity: 4, location: "Inside", isAvailable: false },
-  { _id: 6, name: "Table 6", capacity: 2, location: "Bar", isAvailable: true },
-  { _id: 7, name: "Table 7", capacity: 10, location: "Patio", isAvailable: true },
-  { _id: 8, name: "Table 8", capacity: 6, location: "Inside", isAvailable: false },
-  { _id: 9, name: "Table 9", capacity: 4, location: "Bar", isAvailable: true },
-  { _id: 10, name: "Table 10", capacity: 8, location: "Patio", isAvailable: true },
-  { _id: 11, name: "Table 11", capacity: 2, location: "Inside", isAvailable: true },
-  { _id: 12, name: "Table 12", capacity: 6, location: "Bar", isAvailable: false }
-];
-
-
-
-app.post('/availability', (req, res) => {
-  const { date } = req.body;
-  // Fetch the available tables based on the date from MongoDB or other database
-
-  res.json({ tables: availableTables });
-});
-app.post("/reservation", function (req, res, next) {
-  const currentDate = new Date().toISOString().split('T')[0];
-
-  // Ensure required fields are provided
-  const { date, table, name, phone, email } = req.body;
-  if (!date || !table || !name || !phone || !email) {
-    return res.status(400).send("All fields are required.");
-  }
-
-  console.log("Processing reservation...");
-
-  const selectedTable = availableTables.find(t => t._id == table);
-  if (!selectedTable) {
-    return res.status(404).send("Table not found.");
-  }
-
-  // Check if the table is available
-  if (!selectedTable.isAvailable) {
-    return res.status(400).send("Table is already reserved.");
-  }
-
-  // Mark the table as unavailable
-  selectedTable.isAvailable = false;
-  // Configure Nodemailer
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-      user: 'tharunkumarlagisetty@gmail.com', // Your email
-      pass: 'bjbt ovza dnuf ayyp', // Your email password
-    },
-  });
-
-  // Email options
-  const mailOptions = {
-    from: 'tharunkumarlagisetty22@gmail.com',
-    to: email,
-    subject: 'Reservation Confirmation',
-    text: `Hello ${name},\n\nYou have successfully booked table ${table} for today, ${currentDate}. Thank you for choosing our restaurant!`,
-  };
-
-  // Send the email
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.error("Error sending email:", err);
-      return res.status(500).send("Failed to send confirmation email");
-    } else {
-      console.log("Email sent:", info.response);
-      return res.status(200).send("Reservation confirmed and email sent");
-    }
-  });
-});
 
 
 

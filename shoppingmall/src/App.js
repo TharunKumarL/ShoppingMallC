@@ -5,9 +5,9 @@ import './App.css';
 import Header from './shoppingFolder/components/Header';
 import Login from './shoppingFolder/components/Login/Login';
 import Signup from './shoppingFolder/components/Signup/Signup';
+import Body from './shoppingFolder/components/Body.jsx';
 import ManagerLogin from './shoppingFolder/components/Login/ManagerLogin.jsx';
 import ShopOwnerLogin from './shoppingFolder/components/Login/ShopOwnerLogin.jsx';
-import Body from './shoppingFolder/components/Body';
 import ShopsList from './shoppingFolder/components/Sholist';
 import Deals from './shoppingFolder/components/Deals';
 import Event from './shoppingFolder/components/Event';
@@ -35,7 +35,6 @@ import ShopOwnerProfile from './shoppingFolder/components/shopowner/ShopOwnerPro
 import Sport_TopBar from './shoppingFolder/components/sports/Sport_TopBar.jsx';
 import Create_Sport from './shoppingFolder/components/sports/Create_Sport.jsx';
 import Show_Sport from './shoppingFolder/components/sports/Show_Sport.jsx';
-import Page from './shoppingFolder/components/restaurant/Page.jsx';
 import FAQ from './shoppingFolder/components/FAQ.jsx';
 import SportDashboard2 from './shoppingFolder/components/sports/SportDashboard2.jsx';
 import AboutUs from './shoppingFolder/components/AboutUs.jsx';
@@ -104,7 +103,7 @@ function App() {
   />} 
 />
           <Route path="/booksports" element={<ProtectedRoute element={<Show_Sport/>}/>}/>
-          <Route path="/bookrestaurant" element={<ProtectedRoute element={<Page/>}/>}/>
+
           <Route path="/admin/dashboard" element={<ProtectedRouteAdmin element={<AdminDashboard />} />} /> 
           <Route path="/admin/dashboard2" element={<ProtectedRouteAdmin element={<AdminDashboard2 />} />} /> 
           <Route path="/admin/add-shop" element={<ProtectedRouteAdmin element={<AddShops />} />} />

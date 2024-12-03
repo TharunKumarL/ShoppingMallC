@@ -13,7 +13,6 @@ const Header = () => {
         <a href="/deals">Deals</a>
         <a href="/event">Events</a>
         <a href="/signup">Sign Up</a>
-        <a href="/mybookings">My Bookings</a>
         <div className='logout-button'>
           <LogoutButton/>
         </div>
