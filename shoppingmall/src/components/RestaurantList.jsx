@@ -52,17 +52,17 @@ function RestaurantList() {
   };
 
   return (
-    <div className="container">
+    <div className="RS-container">
       <div>
         <h1>Today's Offers</h1>
         <InfiniteScroll offers={offers} />
       </div>
-      <h1 className="header">Available Restaurants</h1>
+      <h1 className="RS-header">Available Restaurants</h1>
 
-      <div className="filters-container">
-        <div>
+      <div className="RS-filters-container">
+        <div className="RS-filter-buttons">
           <select
-            className="select"
+            className="RS-select-category"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
@@ -74,7 +74,7 @@ function RestaurantList() {
           </select>
 
           <button
-            className="button"
+            className="RS-button"
             onClick={() => setShowFilters(!showFilters)}
           >
             {showFilters ? "Hide Filters" : "Show Filters"}
@@ -84,7 +84,7 @@ function RestaurantList() {
         {showFilters && (
           <div>
             <select
-              className="select"
+              className="RS-select-filter"
               value={selectedCuisine}
               onChange={(e) => setSelectedCuisine(e.target.value)}
             >
@@ -96,7 +96,7 @@ function RestaurantList() {
             </select>
 
             <select
-              className="select"
+              className="RS-select-filter"
               value={selectedDietary}
               onChange={(e) => setSelectedDietary(e.target.value)}
             >
@@ -108,7 +108,7 @@ function RestaurantList() {
             </select>
 
             <select
-              className="select"
+              className="RS-select-filter"
               value={selectedSeating}
               onChange={(e) => setSelectedSeating(e.target.value)}
             >
@@ -118,46 +118,46 @@ function RestaurantList() {
               <option value="Lawn">Lawn</option>
             </select>
 
-            <button className="button clear-button" onClick={handleClearFilters}>
+            <button className="RS-button RS-clear-button" onClick={handleClearFilters}>
               Clear Filters
             </button>
           </div>
         )}
       </div>
 
-      <div className="grid-container">
+      <div className="RS-grid-container">
         {filteredRestaurants.length > 0 ? (
           filteredRestaurants.map((restaurant) => (
             <Link
               to={`/bookrestaurant/Restaurants/${restaurant._id}`}
               key={restaurant._id}
-              className="card"
+              className="RS-card"
             >
               <img
                 src={restaurant.image}
                 alt={restaurant.name}
-                className="card-image"
+                className="RS-card-image"
               />
-              <div className="card-content">
-                <div className="card-header">
-                  <h2 className="restaurant-name">{restaurant.name}</h2>
+              <div className="RS-card-content">
+                <div className="RS-card-header">
+                  <h2 className="RS-restaurant-name">{restaurant.name}</h2>
                 </div>
-                <div className="tag-container">
-                  <span className="tag cuisine-tag">
+                <div className="RS-tag-container">
+                  <span className="RS-tag RS-cuisine-tag">
                     {restaurant.cuisine}
                   </span>
                   {restaurant.dietary !== "None" && (
-                    <span className="tag dietary-tag">
+                    <span className="RS-tag RS-dietary-tag">
                       {restaurant.dietary}
                     </span>
                   )}
-                  <span className="tag seating-tag">{restaurant.seating}</span>
+                  <span className="RS-tag RS-seating-tag">{restaurant.seating}</span>
                 </div>
               </div>
             </Link>
           ))
         ) : (
-          <div className="no-results">
+          <div className="RS-no-results">
             No restaurants found matching the selected filters.
           </div>
         )}

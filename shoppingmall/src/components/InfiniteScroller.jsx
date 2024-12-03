@@ -3,16 +3,16 @@ import "./css/infinitescroller.css";
 
 const InfiniteScroll = ({ offers }) => {
   return (
-    <div className="scroll-container">
-      <div className="scroll-content">
+    <div className="RS-scroll-container">
+      <div className="RS-scroll-content">
         {/* Render offers twice to simulate infinite scrolling */}
         {offers.map((offer, index) => (
-          <span key={`offer-${index}`} className="offer-item">
+          <span key={`offer-${index}`} className="RS-offer-item">
             {offer}
           </span>
         ))}
         {offers.map((offer, index) => (
-          <span key={`offer-duplicate-${index}`} className="offer-item">
+          <span key={`offer-duplicate-${index}`} className="RS-offer-item">
             {offer}
           </span>
         ))}

@@ -1,17 +1,9 @@
 :root {
-    --bg-color: #ffffff;
+    --bg-color: #ffefbc;
     --text-color: #000000;
     --scroll-bg-color: #942121;
     --scroll-border-color: #ddd;
     --scroll-text-color: #ffffff;
-}
-
-[data-theme="dark"] {
-    --bg-color: #121212;
-    --text-color: #e0e0e0;
-    --scroll-bg-color: #333333;
-    --scroll-border-color: #555555;
-    --scroll-text-color: #f9f9f9;
 }
 
 body {
@@ -21,7 +13,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.scroll-container {
+.RS-scroll-container {
     overflow: hidden;
     white-space: nowrap;
     width: 100%;
@@ -31,12 +23,12 @@ body {
     padding: 10px 0;
 }
 
-.scroll-content {
+.RS-scroll-content {
     display: inline-flex;
     animation: scroll-left 20s linear infinite;
 }
 
-.offer-item {
+.RS-offer-item {
     margin: 0 20px;
     font-size: 1.2em;
     color: var(--scroll-text-color);

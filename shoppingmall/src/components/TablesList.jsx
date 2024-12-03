@@ -34,44 +34,37 @@ function TableList() {
   };
 
   if (loading) {
-    return <div className="table-container">Loading details...</div>;
+    return <div className="RS-table-container">Loading details...</div>;
   }
 
   if (!hotelDetails) {
-    return <div className="table-container">Error loading hotel details.</div>;
+    return <div className="RS-table-container">Error loading hotel details.</div>;
   }
 
   return (
-    <div className="table-container">
+    <div className="RS-table-container">
       {/* Hotel details */}
-      <h1 className="header">{hotelDetails.name}</h1>
+      <h1 className="RS-header">{hotelDetails.name}</h1>
       <p>{hotelDetails.description}</p>
       <p><strong>Cuisine:</strong> {hotelDetails.cuisine}</p>
       <p><strong>Dietary Options:</strong> {hotelDetails.dietary}</p>
       <p><strong>Seating Type:</strong> {hotelDetails.seating}</p>
-      {hotelDetails.menuImage && (
-        <img
-          src={hotelDetails.menuImage}
-          alt={`${hotelDetails.name} menu`}
-          className="menu-image"
-        />
-      )}
-
+      
       {/* Tables information */}
       {tables.length > 0 ? (
-        <div className="table-card-container">
+        <div className="RS-table-card-container">
           {tables.map((table, index) => (
             <div
               key={table._id}
-              className={`table-card ${table.isAvailable ? 'available-card' : 'occupied-card'}`}
+              className={`RS-table-card ${table.isAvailable ? 'RS-available-card' : 'RS-occupied-card'}`}
               onClick={() => handleTableClick(table)}
             >
-              <div className="table-info">
+              <div className="RS-table-info">
                 <strong>Table {index + 1}</strong>
               </div>
-              <div className="table-info">Seats: {table.capacity}</div>
-              <div className="table-info">
-                <span className={`table-status ${table.isAvailable ? 'status-available' : 'status-occupied'}`}>
+              <div className="RS-table-info">Seats: {table.capacity}</div>
+              <div className="RS-table-info">
+                <span className={`RS-table-status ${table.isAvailable ? 'RS-status-available' : 'RS-status-occupied'}`}>
                   {table.isAvailable ? 'Available' : 'Occupied'}
                 </span>
               </div>
@@ -79,11 +72,11 @@ function TableList() {
           ))}
         </div>
       ) : (
-        <div className="no-tables">No tables available for this hotel.</div>
+        <div className="RS-no-tables">No tables available for this hotel.</div>
       )}
 
       {/* Back to Restaurants */}
-      <Link to="/bookrestaurant/restaurants" className="back-link">
+      <Link to="/bookrestaurant/restaurants" className="RS-back-link">
         Back to Restaurants
       </Link>
     </div>

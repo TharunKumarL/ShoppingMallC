@@ -54,7 +54,7 @@ const Body = () => {
         <div className={`booking-options ${isDarkMode ? 'dark' : 'light'}`}>
           <div className={`restaurant-booking ${isDarkMode ? 'dark' : 'light'}`}>
             <h3>Book a Restaurant</h3>
-            <p>Find and reserve a table at your favorite restaurant in our mall.</p>
+            <p>Find and reserve a table at your favorite restaurant.</p>
             <button 
               className={`book-now-btn ${isDarkMode ? 'dark' : 'light'}`} 
               onClick={() => navigate('/bookrestaurant')}

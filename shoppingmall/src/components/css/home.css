@@ -1,11 +1,13 @@
 /* Light Mode Styles */
+/* #F3B105 #FFEFBC */
 body {
   background-color: #fff;
   color: #000;
   transition: background-color 0.3s, color 0.3s;
 }
 
-.home-container {
+.RS-home-container {
+  background: linear-gradient(135deg, #74ebd5, #9face6);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,19 +18,19 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-h1 {
+.RS-h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   color: #333;
 }
 
-p {
+.RS-p {
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
   color: #666;
 }
 
-.browse-link {
+.RS-browse-link {
   text-decoration: none;
   color: white;
   background-color: #007bff;
@@ -38,33 +40,6 @@ p {
   transition: background-color 0.3s;
 }
 
-.browse-link:hover {
+.RS-browse-link:hover {
   background-color: #0056b3;
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #121212;
-  color: #e0e0e0;
-}
-
-body.dark-mode .home-container {
-  background-color: #333;
-}
-
-body.dark-mode h1 {
-  color: #e0e0e0;
-}
-
-body.dark-mode p {
-  color: #ccc;
-}
-
-body.dark-mode .browse-link {
-  background-color: #90caf9;
-  color: #121212;
-}
-
-body.dark-mode .browse-link:hover {
-  background-color: #42a5f5;
 }
