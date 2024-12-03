@@ -181,7 +181,7 @@ body.dark-mode {
   padding-top: 100px;
   text-align: center;
   border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px #ff1a6d;
 }
 h2{
   color:#c90818
