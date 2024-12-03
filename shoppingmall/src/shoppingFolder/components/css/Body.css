@@ -280,11 +280,15 @@ h2{
   color: #c308c9;
   font-size: 2.2rem;
   margin-bottom: 20px;
+  padding-left: 40%;
+  padding-bottom: 2%;
 }
 .wow-heading.dark {
   color: #c90818;
   font-size: 2.2rem;
   margin-bottom: 20px;
+  padding-left: 40%;
+  padding-bottom: 2%;
 }
 
 /* Dark/Light Mode Toggle Button */
