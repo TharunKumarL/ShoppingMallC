@@ -60,7 +60,7 @@ body.dark-mode {
   background-color: #f0f0f0;
   height: 100vh;
   border-top: 2px solid #e0e0e0;
-  margin-bottom: 200px;
+  margin-bottom: 0px;
   color: #333;
 }
 .mall-body.dark{
@@ -81,7 +81,7 @@ body.dark-mode {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  margin-bottom: 150px;
+  margin-bottom: 5%;
 }
 
 /* Individual Navigation Link */
@@ -172,9 +172,8 @@ body.dark-mode {
 /* Booking Section Styles */
 .booking-section{
   width: 80%;
-
-  padding: 40px 20px;
-  padding-top: 100px;
+  padding-top: 5%;
+  padding-bottom: 5%;
   text-align: center;
   border-radius: 20px;
   box-shadow: 0 8px 20px #ff1a6d;
@@ -186,8 +185,8 @@ h2{
   width: 80%;
   background: none;
   /* background-color: #1e1e1e; Dark background for booking section */
-  padding: 40px 20px;
-  padding-top: 100px;
+  padding-top: 5%;
+  padding-bottom: 5%;
   text-align: center;
   border-radius: 20px;
   box-shadow: 0 8px 20px #c90818;
@@ -222,6 +221,8 @@ h2{
   border-radius: 10px;
   background-color: #B6EBD3; /* Dark background for booking cards */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-left:3% ;
+  margin-right: 3%;
 }
 .restaurant-booking.dark,
 .movie-booking.dark{
@@ -231,7 +232,9 @@ h2{
   border-radius: 10px;
   background-color: #333; /* Dark background for booking cards */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color:#e0e0e0
+  color:#e0e0e0;
+  margin-left:3% ;
+  margin-right: 3%;
 }
 .restaurant-booking:hover,
 .movie-booking:hover {
@@ -250,6 +253,8 @@ h2{
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left:3% ;
+  margin-right: 3%;
 }
 .book-now-btn.dark{
   padding: 10px 20px;
@@ -262,6 +267,8 @@ h2{
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left:3% ;
+  margin-right: 3%;
 }
 
 .book-now-btn:hover {
