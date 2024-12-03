@@ -4,6 +4,7 @@ const bookingSchema=require("../models/bookingSchema.js");
 const UserSchema = require("../models/UserSchema.js");
 const fetchUserDetails = require('../shoppingFolder/components/UserDetails/fetchUserDetails.jsx');
 const mongoose = require("mongoose");
+const userwallet = require("../models/userwallet.js");
 
 
 
@@ -175,25 +176,71 @@ router.get('/slots/:id', async (req, res) => {
  
 
 // MARK: Transaction
+// router.put('/booking/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const { is_booked } = req.body; 
+
+//     const session = mongoose.startSession();
+
+//     try { 
+//         (await session).startTransaction();
+//         const updatedBooking = await bookingSchema.findByIdAndUpdate(
+//             id,
+//             { is_booked: is_booked },
+//             { new: true }
+//         );
+
+//         const userId = fetchUserDetails(req);   
+//         const updatedUser = await UserSchema.findByIdAndUpdate(
+//             userId,
+//             { $push: { sport_bookings: id } },
+//             { new: true }
+//         );
+
+//         if (!updatedUser) {
+//             console.log('User not found');
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         res.status(200).json({ updatedBooking, updatedUser }); 
+//         (await session).endSession();
+
+//     } catch (error) {
+//         console.error("Error updating booking:", error);
+//         res.status(500).send("Server Error");
+//     }
+// });
+
+
 router.put('/booking/:id', async (req, res) => {
-    const { id } = req.params;
-    const { is_booked } = req.body; 
+    const { id } = req.params;           // The booking ID
+    const { is_booked } = req.body;      // The booking status (true/false)
 
-    const session = mongoose.startSession();
+    const session = await mongoose.startSession(); // Start session
 
-    try { 
-        (await session).startTransaction();
+    try {
+        // Start transaction
+        session.startTransaction();
+
+        // Update the booking status
         const updatedBooking = await bookingSchema.findByIdAndUpdate(
             id,
             { is_booked: is_booked },
-            { new: true }
+            { new: true, session }
         );
 
-        const userId = fetchUserDetails(req);   
+        if (!updatedBooking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        // Fetch user ID from the request (assuming fetchUserDetails is a function you have)
+        const userId = fetchUserDetails(req); 
+
+        // Update the user document (push the booking ID into the sports_bookings field)
         const updatedUser = await UserSchema.findByIdAndUpdate(
             userId,
             { $push: { sport_bookings: id } },
-            { new: true }
+            { new: true, session }
         );
 
         if (!updatedUser) {
@@ -201,14 +248,40 @@ router.put('/booking/:id', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json({ updatedBooking, updatedUser }); 
-        (await session).endSession();
+        // Check if userwallet exists
+        let userWallet = await userwallet.findOne({ Uid: userId }).session(session);
+
+        if (!userWallet) {
+            // If no userwallet, create a new one
+            userWallet = new userwallet({
+                Uid: userId,  // Link to the user
+                wallet_money: 10000,  // Initial wallet balance (you can change this if needed)
+                sports_bookings: []  // Start with an empty sports_bookings array
+            });
+
+            await userWallet.save({ session });
+        }
+
+        // Now update the userwallet
+        userWallet.sports_bookings.push(id); // Add the booking ID to the sports_bookings array
+        userWallet.wallet_money += 1000; // You can change this based on your business logic (e.g., increment wallet money)
+        await userWallet.save({ session });
+
+        // Commit the transaction
+        await session.commitTransaction();
+        res.status(200).json({ updatedBooking, updatedUser, updatedUserWallet: userWallet });
 
     } catch (error) {
+        // Rollback the transaction in case of error
+        await session.abortTransaction();
         console.error("Error updating booking:", error);
         res.status(500).send("Server Error");
+    } finally {
+        // End the session
+        session.endSession();
     }
 });
+
 
 
 

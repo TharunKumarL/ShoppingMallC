@@ -6,7 +6,7 @@ import BookSlot from "./Booking_Sport"; // Import the BookSlot component
 
 const Show_Sport = ({ isOwner }) => {
     const get_data_url = "http://localhost:5000/sport/owner/get";
-    const delete_data_url = "http://localhost:5000/sport/owner/delete/"; 
+    const delete_data_url = "http://localhost:5000/sport/owner/delete/";
     const update_data_url = "http://localhost:5000/sport/owner/update/";
 
     const [data, setData] = useState([]);
@@ -19,7 +19,7 @@ const Show_Sport = ({ isOwner }) => {
 
     const handlePopupClick = (e) => {
         e.stopPropagation(); // Prevent closing popup when clicking inside
-    }; 
+    };
 
 
     useEffect(() => {
@@ -52,19 +52,19 @@ const Show_Sport = ({ isOwner }) => {
                     console.log(err);
                 });
         }
-    }; 
+    };
 
 
 
     const handleUpdate = (id) => {
         // Find the existing item data
         const itemToUpdate = data.find(item => item._id === id);
-        
+
         if (!itemToUpdate) {
             alert("Item not found");
             return;
         }
-    
+
         fetch(`${update_data_url}${id}`, {
             method: "PUT",
             headers: {
@@ -80,21 +80,21 @@ const Show_Sport = ({ isOwner }) => {
                 date: itemToUpdate.date
             })
         })
-        .then((res) => {
-            if (res.ok) {
-                // Update local state with new data
-                setData(data.map(item => 
-                    item._id === id ? itemToUpdate : item
-                ));
-                alert("Item updated successfully.");
-            } else {
-                alert("Failed to update the item.");
-            }
-        })
-        .catch((err) => {
-            console.log("Error has occurred", err);
-            alert("Unable to update");
-        });
+            .then((res) => {
+                if (res.ok) {
+                    // Update local state with new data
+                    setData(data.map(item =>
+                        item._id === id ? itemToUpdate : item
+                    ));
+                    alert("Item updated successfully.");
+                } else {
+                    alert("Failed to update the item.");
+                }
+            })
+            .catch((err) => {
+                console.log("Error has occurred", err);
+                alert("Unable to update");
+            });
     };
 
     return (
@@ -113,15 +113,16 @@ const Show_Sport = ({ isOwner }) => {
                                 <button onClick={(e) => { e.stopPropagation(); handleDelete(item._id); }}>
                                     <span className="material-symbols-outlined">delete</span>
                                 </button>
-                            )} 
+                            )}
 
                             {isOwner && (
-                                <button onClick={(e) => {e.stopPropagation(); handleUpdate(item._id)}}> <span className="material-symbols-outlined"> edit</span> </button>
+                                <button onClick={(e) => { e.stopPropagation(); handleUpdate(item._id) }}> <span className="material-symbols-outlined"> edit</span> </button>
                             )}
 
                             {/* Bottom Section for Label, Price, and Matter Box */}
                             <div className="sport-item-info">
                                 <p className="sport-item-label">{item.label}</p>
+                                <hr />
                                 <div className="price-and-matter">
                                     <p className="price">Price: {item.cost}</p>
                                 </div>
@@ -131,39 +132,38 @@ const Show_Sport = ({ isOwner }) => {
                             {selectedSport === item._id && (
                                 <div
                                     className="popup-box"
-                                    onClick={handleBoxClick} // Close popup on outside click
+                                    onClick={() => setSelectedSport(null)} // Close popup on outside click
                                 >
-                                    <div className="popup-content" onClick={handlePopupClick}>
+                                    <div
+                                        className="popup-content"
+                                        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                                    >
                                         <div className="matter-details">
                                             <div>
-                                        {/* Sport Details */}
-                                        <h2>{item.label}</h2>
-                                        <p>{item.body}</p>
-                                        <p className="bold"> Address: {item.address}</p>
-                                        </div> 
-                                            
-                                
+                                                {/* Sport Details */}
+                                                <h2>{item.label}</h2>
+                                                <p>{item.body}</p>
+                                                <p className="bold"> Address: {item.address}</p>
+                                            </div>
 
-                                        <div>
-                                        {/* Close Button */}
-                                
-                                        <button
-                                            className="close-popup-btn material-symbols-outlined"
-                                            onClick={() => setSelectedSport(null)}
-                                        >
-                                            Close
-                                        </button>
-                                        
-                               
-                                        </div>
+                                            <div>
+                                                {/* Close Button */}
+                                                <button
+                                                    className="close-popup-btn material-symbols-outlined"
+                                                    onClick={() => setSelectedSport(null)}
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
                                         </div>
 
-                                        {/* BookSlot Component */} 
-                                        <hr></hr>
+                                        {/* BookSlot Component */}
+                                        <hr />
                                         <BookSlot sportId={item._id} />
                                     </div>
                                 </div>
                             )}
+
                         </div>
                     ))}
             </div>

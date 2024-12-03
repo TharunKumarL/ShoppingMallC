@@ -55,27 +55,6 @@ const BookSlot = ({ sportId }) => {
             if (!bookingResponse.ok) {
                 throw new Error(`HTTP error! status: ${bookingResponse.status}`);
             }
-    
-            // After successful booking, trigger wallet creation/update
-            const email = sessionStorage.getItem("email"); // Assuming email is stored in sessionStorage
-            const walletResponse = await fetch(`http://localhost:${PORT}/create_user_wallet`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    email: email,
-                    wallet_money: 100, // Example value to update/add wallet money
-                    sports_bookings: [selectedSlot], // Add the booked slot to wallet
-                }),
-            });
-    
-            if (!walletResponse.ok) {
-                throw new Error(`HTTP error! status: ${walletResponse.status}`);
-            }
-    
-            // Update slots after booking
             setSlotsByDate((prev) =>
                 Object.fromEntries(
                     Object.entries(prev).map(([date, slots]) => [

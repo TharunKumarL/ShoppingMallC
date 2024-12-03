@@ -1,31 +1,25 @@
-const { type } = require("os");
-const User = require("./UserSchema"); 
-const sports = require("./sportSchema");
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-
-const userwallet = new mongoose.Schema({
+const userwalletSchema = new Schema({
     Uid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        ref: 'User',  // Reference to the User model
     },
     wallet_money: {
         type: Number, 
         required: true, 
         default: 0,
-        min: 0 ,
+        min: 0,
         max: 100000,
-    },  
-    sports_bookings: {
-        type: [mongoose.Schema.Types.ObjectId], 
-        ref: sports,
-        required:false,
-    } ,
-},  {
-    timeseries: true
-}
-);
+    },
+    sports_bookings: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'sports',  // Reference to the sports model
+        required: false,
+    }],
+}, {
+    timestamps: true,
+});
 
-
-
-module.exports = mongoose.model('userwallet', userwallet);
+module.exports = mongoose.model('userwallet', userwalletSchema);
