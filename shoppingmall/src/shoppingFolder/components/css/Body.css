@@ -1,113 +1,332 @@
+/* General Body Styles */
+body {
+ /* Light theme background */
+  color: #000000; /* Light theme text color */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light Mode Styles */
+body.light-mode {
+  color: #000000;
+/* Dark mode background image */
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 0px;
+  border-bottom:0px ;
+}
+
+.mall-body.light {
+  color: #000000; /* Dark text for contrast */
+  transition: background-color 0.3s, color 0.3s;
+  background-color: #121212;
+  background-image: url('../../../../public/freepik-export-20241203145913WWne.jpeg'); 
+  background-size: cover;
+  background-position: center;
+  color: #e0e0e0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Glowing shadow for depth */
+  margin-bottom: 0px;
+  border-bottom:0px ;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  color: #ffffff;
+  background-color: #121212;
+  background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg'); /* Dark mode background image */
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 0px;
+  border-bottom: 0px;
+}
+
+/* Dark Mode Container */
+.mall-body.dark {
+  background-color: #121212;
+  background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg'); 
+  background-size: cover;
+  background-position: center;
+  color: #e0e0e0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Glowing shadow for depth */
+  margin-bottom: 0px;
+  border-bottom: 0px;
+}
+
+/* Mall Body Layout */
 .mall-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 200px;
-    background-color: #f0f0f0;
-    height: 100vh;
-    border-top: 2px solid #e0e0e0;
-    margin-bottom:200px;
-    color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 200px;
+  background-color: #f0f0f0;
+  height: 100vh;
+  border-top: 2px solid #e0e0e0;
+  margin-bottom: 200px;
+  color: #333;
+}
+.mall-body.dark{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 200px;
+  background-color: #1e1e1e; /* Dark background for dark mode */
+  height: 100vh;
+  margin-bottom: 200px;
+  border-top: 2px solid #c90818; /* Pink border for dark mode */
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Navigation Links Row */
+.navigation-row {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 150px;
+}
+
+/* Individual Navigation Link */
+.section-link {
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  h3{
+    color: #000000;
   }
+}
+.section-link.dark{
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #c90818; /* Border color for sections */
+}
+.section-link a {
+  text-decoration: none;
+  color: black;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.section-link.dark a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* Hover Effect for Navigation Links */
+.section-link:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  /* background-color: rgba(255, 255, 255, 0.2); */
+}
+
+.home {
+  background-color: rgba(255, 229, 229, 0.8);
+}
+
+.shops {
+  background-color: rgba(229, 255, 229, 0.8);
+}
+
+.deals {
+  background-color: rgba(229, 243, 255, 0.8);
+}
+
+.events {
+  background-color: rgba(255, 229, 255, 0.8);
+}
+/* Specific Background Colors for Each Section */
+.home.dark{
+  background-color: rgba(255, 0, 0, 0.1); /* Light red for home section */
+}
+
+.shops.dark{
+  background-color: rgba(0, 255, 0, 0.1); /* Light green for shops section */
+}
+
+.deals.dark{
+  background-color: rgba(0, 0, 255, 0.1); /* Light blue for deals section */
+}
+
+.events.dark{
+  background-color: rgba(255, 0, 255, 0.1); /* Light purple for events section */
+}
+
+/* Booking Section Styles */
+.booking-section{
+  width: 80%;
+
+  padding: 40px 20px;
+  padding-top: 100px;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+h2{
+  color:#c90818
+}
+.booking-section.dark{
+  width: 80%;
+  background: none;
+  /* background-color: #1e1e1e; Dark background for booking section */
+  padding: 40px 20px;
+  padding-top: 100px;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px #c90818;
+}
+.booking-options {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  color:#ff1a6d;
   
-  /* Row for navigation links */
-  .navigation-row {
-    display: flex;
-    justify-content: space-around; /* Ensures even space between items */
-    width: 100%; /* Span the whole width */
-    margin-bottom: 150px; /* Adds space between navigation and bookings */
-  }
+}
+.booking-options.dark{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  color:#c90818;
   
-  .section-link {
-    padding: 30px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-align: center;
-    width: 150px;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .section-link a {
-    text-decoration: none;
-    color: #333;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
-  
-  .section-link:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .home {
-    background-color: rgba(255, 229, 229, 0.8);
-  }
-  
-  .shops {
-    background-color: rgba(229, 255, 229, 0.8);
-  }
-  
-  .deals {
-    background-color: rgba(229, 243, 255, 0.8);
-  }
-  
-  .events {
-    background-color: rgba(255, 229, 255, 0.8);
-  }
-  
-  /* Booking section */
-  .booking-section {
-    width: 80%; 
-    background-color: white;
-    padding: 40px 20px;
-    padding-top: 100px;
-    text-align: center;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  .booking-options {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
-  .restaurant-booking, .movie-booking {
-    width: 300px;
-    padding: 20px;
-    border: 2px solid #f0f0f0;
-    border-radius: 10px;
-    background-color: #fafafa;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .restaurant-booking:hover, .movie-booking:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .book-now-btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: white;
-    background-color: #ff9800;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .book-now-btn:hover {
-    background-color: #e68900;
-  }
-  
-  .wow-heading {
-    font-size: 2.2rem;
-    margin-bottom: 20px;
-  }
+}
+/* Booking Options Layout */
+.booking-options.dark {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+/* Individual Booking Cards */
+.restaurant-booking,
+.movie-booking {
+  width: 300px;
+  padding: 20px;
+  /* border: 2px solid #c90818; Glowing border for booking cards */
+  border-radius: 10px;
+  background-color: #B6EBD3; /* Dark background for booking cards */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.restaurant-booking.dark,
+.movie-booking.dark{
+  width: 300px;
+  padding: 20px;
+  border: 2px solid #c90818; /* Glowing border for booking cards */
+  border-radius: 10px;
+  background-color: #333; /* Dark background for booking cards */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color:#e0e0e0
+}
+.restaurant-booking:hover,
+.movie-booking:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Book Now Button */
+.book-now-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #ff1a6d; /* Glowing pink for the button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.book-now-btn.dark{
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #c90818;;
+  background-color: #c90818; /* Glowing pink for the button */
+  color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-now-btn:hover {
+  background-color: #ff1a6d; /* Lighter pink on hover */
+}
+
+/* Heading for the Booking Section */
+.wow-heading {
+  color: #c308c9;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+.wow-heading.dark {
+  color: #c90818;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+/* Dark/Light Mode Toggle Button */
+button.mode-toggle{
+  margin-top: 20px;
+  background-color: transparent;
+  color: #ff1a6d; /* Glowing pink color for the toggle */
+  padding: 10px 10px;
+  border: 2px solid #ff1a6d;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 1000;
+  font-size: 24px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+button.mode-toggle.dark{
+  margin-top: 20px;
+  background-color: transparent;
+  color: #c90818;; /* Glowing pink color for the toggle */
+  padding: 10px 10px;
+  border: 2px solid #c90818;;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 1000;
+  font-size: 24px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover Effect for Toggle Button */
+button.mode-toggle:hover {
+  background-color: rgba(255, 64, 129, 0.2); /* Glowing pink effect on hover */
+}
+
+/* Change Button Color for Dark Mode */
+body.dark-mode button.mode-toggle {
+  color: #ffffff;
+  border-color: #ffffff;
+}

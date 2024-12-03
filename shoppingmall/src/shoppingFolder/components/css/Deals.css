@@ -15,6 +15,7 @@
   width: 100%;            /* Full width of the container */
   max-width: 500px;      /* Set a max width for the card */
   text-align: center;
+  margin-bottom: 600px;
 }
 
 .deal-image {
