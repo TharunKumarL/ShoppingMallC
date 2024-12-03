@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../../../models/UserSchema");
+const User = require("../models/UserSchema");
 
 // Endpoint to get user details
-app.post("/get_user_details", async (req, res) => {
+router.post("/get_user_details", async (req, res) => {
     const { email } = req.body; // Get email from the request body
     try {
         const user = await User.findOne({ email: email }); // Assuming you use mongoose
