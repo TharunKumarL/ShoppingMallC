@@ -13,6 +13,7 @@ const Event = require('./models/Event');
 const ShopOwner = require('./models/ShopOwner')
 const bookingSchema = require("./models/bookingSchema.js");
 const Manager=require("./models/manager.js")
+const Feedback=require("./models/FeedBackSchema.js")
 const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
@@ -755,6 +756,29 @@ app.get('api/deals-expiration-stats', async (req, res) => {
 });
 
 app.use("/sport", SportRoute);
+
+app.post('/api/feedback', async (req, res) => {
+  const { username, rating, message } = req.body;
+  if (!username || !rating || !message) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    const feedback = new Feedback({
+      username, // Ensure username is provided
+      rating,
+      message
+    });
+
+    await feedback.save();
+
+    res.status(201).json({ message: 'Feedback submitted successfully' });
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 

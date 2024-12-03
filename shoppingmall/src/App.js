@@ -39,7 +39,7 @@ import FAQ from './shoppingFolder/components/FAQ.jsx';
 import SportDashboard2 from './shoppingFolder/components/sports/SportDashboard2.jsx';
 import AboutUs from './shoppingFolder/components/AboutUs.jsx';
 import StickyHeader from "./shoppingFolder/components/Feedback/header.js";
-import FeedbackForm from './shoppingFolder/components/Feedback/form.js';
+import Feedback from './shoppingFolder/components/Feedback.jsx';
 import Submissions from './shoppingFolder/components/Feedback/submissions.js'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import './App.css'; 
@@ -142,7 +142,7 @@ function App() {
           <Route path="/FAQ" element={<ProtectedRoute element={<FAQ />} />} />
           <Route path='/AboutUs' element = {<ProtectedRoute element={<AboutUs/>}/>}/>
           <Route path='/user/wallet' element = {<ProtectedRoute element={<UserWallet/>}/>}/>
-          <Route path="/feedback" element={<FeedbackForm/>}/>
+          <Route path="/feedback" element={<Feedback/>}/>
           <Route path="/submissions" element={<Submissions />} />
           <Route path="/submission/:id" element={<Submissions />} />
           <Route
