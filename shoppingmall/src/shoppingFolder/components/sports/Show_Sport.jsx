@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../../../App.css";
 import "../css/Show_Sport.css";
 import BookSlot from "./Booking_Sport"; // Import the BookSlot component
-import { json } from "react-router-dom";
 
 
 const Show_Sport = ({ isOwner }) => {

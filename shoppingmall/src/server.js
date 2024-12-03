@@ -18,7 +18,8 @@ const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
-const authenticateToken = require("../src/middleware/authenticationToken.js");
+const authenticateToken = require("../src/middleware/authenticationToken.js"); 
+const UserDetails = require("./Routes/UserDetails.js");
 
 
 require('dotenv').config();
@@ -41,8 +42,9 @@ app.use('/api/admin', adminAuth, verifyAdmin);
 //Routes //Sport
 app.use("/sport", SportRoute);
 app.use("/sport", SportRouteUser);
+app.use("/", UserDetails);
 
-`  `
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -78,10 +80,11 @@ app.post('/api/signup', async (req, res) => {
 });
 
 
-
+let z="";
 // Login endpoint
 app.post('/api/login',  async (req, res) => {
   const { email, password } = req.body;
+
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
@@ -109,7 +112,7 @@ app.post('/api/login',  async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-
+    z=email;
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -123,7 +126,16 @@ app.post('/api/login',  async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
+}); 
+
+
+// MARK:User-Details
+app.get("/user_get_mail", async (req, res) => { 
+  console.log(`User E-mail address at-backend is: ${z}`); 
+
+  res.status(200).json({ mail: z }); // Return as JSON object
 });
+
 
 app.post('/api/manager-login', async (req, res) => {
   const { email, password } = req.body;
@@ -161,6 +173,8 @@ app.post('/api/manager-login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 let x=''
 app.post('/api/shopowner-login', async (req, res) => {
   const { email, password } = req.body;

@@ -16,7 +16,8 @@
 
 /* Popup Box */
 .popup-box {
-    position: fixed;
+    position: relative;
+    margin-left: 50%;
     top: 0;
     left: 0;
     width: 50px;
@@ -33,7 +34,8 @@
 /* Popup Content */
 .popup-content {
     position: fixed;
-    margin-left: 40%; /* This makes positioning child elements like the button easier */
+    margin-left: 40%; /* This makes positioning child elements like the button easier */ 
+    width: fit-content;
     padding: 20px;
     background-color: whitesmoke;
     border-radius: 13px;

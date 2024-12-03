@@ -1,7 +1,7 @@
 /* Container styles */
 .bookslot-container {
     padding: 20px;
-    width: 100px;
+    margin-left: 50vw;
     margin: auto;
     font-family: Arial, sans-serif;
 }

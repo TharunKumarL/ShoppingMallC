@@ -1,9 +1,9 @@
 const { type } = require("os");
 const User = require("./UserSchema"); 
 const sports = require("./sportSchema");
+const mongoose=require('mongoose');
 
 
-const mongoose=require('mongoose')
 const userwallet = new mongoose.Schema({
     Uid: {
         type: mongoose.Schema.Types.ObjectId,
