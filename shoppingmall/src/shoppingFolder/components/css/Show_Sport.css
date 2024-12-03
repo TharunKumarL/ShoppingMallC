@@ -19,7 +19,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 50px;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
@@ -34,7 +34,6 @@
 .popup-content {
     position: relative; /* This makes positioning child elements like the button easier */
     padding: 20px;
-    width: fit-content;
     background-color: whitesmoke;
     border-radius: 13px;
   }

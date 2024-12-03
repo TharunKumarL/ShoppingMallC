@@ -3,6 +3,7 @@ const sportSchema=require("../models/sportSchema.js");
 const bookingSchema=require("../models/bookingSchema.js");
 const UserSchema = require("../models/UserSchema.js");
 const fetchUserDetails = require('../shoppingFolder/components/UserDetails/fetchUserDetails.jsx');
+const mongoose = require("mongoose");
 
 
 
@@ -171,12 +172,17 @@ router.get('/slots/:id', async (req, res) => {
         res.status(500).json({ message: "Failed to fetch slots", error: error.message });
     }
 });
+ 
 
+// MARK: Transaction
 router.put('/booking/:id', async (req, res) => {
     const { id } = req.params;
-    const { is_booked } = req.body;
+    const { is_booked } = req.body; 
 
-    try {
+    const session = mongoose.startSession();
+
+    try { 
+        (await session).startTransaction();
         const updatedBooking = await bookingSchema.findByIdAndUpdate(
             id,
             { is_booked: is_booked },
@@ -195,7 +201,8 @@ router.put('/booking/:id', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json({ updatedBooking, updatedUser });
+        res.status(200).json({ updatedBooking, updatedUser }); 
+        (await session).endSession();
 
     } catch (error) {
         console.error("Error updating booking:", error);

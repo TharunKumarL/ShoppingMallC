@@ -25,4 +25,6 @@ const bookingSchema = new mongoose.Schema({
 }
 );
 
+
+
 module.exports = mongoose.model('sportbookings', bookingSchema);

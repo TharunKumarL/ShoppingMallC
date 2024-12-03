@@ -1,6 +1,7 @@
 const Router=require('express');
 const sportSchema = require("../models/sportSchema.js");
-const bookingSchema = require("../models/bookingSchema.js");
+const bookingSchema = require("../models/bookingSchema.js"); 
+
 
 
 const router = Router();  
@@ -21,9 +22,11 @@ router.get("/user/get", async (req, res) => {
 
 // -> For Booking the slot (Common for user and owner)
 router.get('/user/booking/:id', async (req, res) => {
-    const { id } = req.params; // Assuming 'id' is the booking ID or foreign key
+    const { id } = req.params; // Assuming 'id' is the booking ID or foreign key 
 
-    try {
+    try { 
+
+        
         // Fetch bookings based on the id
         const bookings = await bookingSchema.find({ sport_foreignkey: id }); // Use the appropriate field to filter
         
