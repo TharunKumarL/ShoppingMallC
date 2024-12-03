@@ -159,7 +159,7 @@ app.post('/api/manager-login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-x=''
+let x=''
 app.post('/api/shopowner-login', async (req, res) => {
   const { email, password } = req.body;
   x=email
