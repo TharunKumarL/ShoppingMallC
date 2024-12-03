@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate,useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate,useLocation , Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react';
 
 import './App.css';
@@ -74,6 +74,11 @@ const ProtectedRoutesports = ({ element }) => {
   return element;
 
 };
+const ProtectedRouteTheatre=({element})=>{
+  const token = sessionStorage.getItem('token');
+  const section= JSON.parse(localStorage.getItem('user'))?.section;
+  return element;
+}
 function App() {
   return (
     <GoogleOAuthProvider clientId="788124072442-ljpciau2bbh6spf8os3fbvq05t040guc.apps.googleusercontent.com">
@@ -137,6 +142,10 @@ function App() {
           <Route path="/feedback" element={<FeedbackForm/>}/>
           <Route path="/submissions" element={<Submissions />} />
           <Route path="/submission/:id" element={<Submissions />} />
+          <Route
+  path="/theatre/manager"
+  element={<div><h1>Welcome Theatre Manager</h1><Link to="http://localhost:3001/admin">Go to DashBoard</Link></div>}
+/>
     
         </Routes>
 

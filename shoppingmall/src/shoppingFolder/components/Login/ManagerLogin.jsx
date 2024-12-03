@@ -35,7 +35,11 @@ const ManagerLogin = () => {
           navigate('/sport/owner'); // Redirect to sports section
         } else if (section === 'restaurant') {
           navigate('/restaurant/manager'); // Redirect to restaurant section
-        } else {
+        }
+        else if (section === 'theatre') {
+          navigate('/theatre/manager'); // Redirect to restaurant section
+        }
+         else {
           navigate('/'); // Default redirect
         }
       } else {
