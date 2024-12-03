@@ -34,7 +34,7 @@ body.light-mode {
 body.dark-mode {
   color: #ffffff;
   background-color: #121212;
-  background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg'); /* Dark mode background image */
+  /* background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg'); Dark mode background image */
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
@@ -74,7 +74,7 @@ body.dark-mode {
   padding-top: 200px;
   background-color: #1e1e1e; /* Dark background for dark mode */
   height: 100vh;
-  margin-bottom: 200px;
+  margin-bottom:0px;
   border-top: 2px solid #c90818; /* Pink border for dark mode */
   color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
