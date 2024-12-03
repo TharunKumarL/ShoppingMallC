@@ -1,0 +1,43 @@
+.user-wallet-container {
+    padding: 30px;
+    max-height: 100vh;
+}
+
+
+div h2 { 
+    display: flex; 
+    text-align: left;
+    color: green;
+}
+
+div h2 p { 
+    color: green;
+}
+
+/* Ensure the wallet amount aligns to the right */
+.wallet-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.wallet-details-heading {
+    color: green; 
+    font-weight: bold;
+    margin-top: 13px;
+}
+
+.wallet-amount {
+    color: green;
+    font-weight: bold;
+}
+
+.user-wallet-box {
+    padding-top: 30px; 
+    font-weight: 3px;
+    font-size: 15px;
+} 
+
+/* User bookings */ 
+.user-bookings {
+    padding-top: 52px;
+}

@@ -42,7 +42,10 @@ import StickyHeader from "./shoppingFolder/components/Feedback/header.js";
 import FeedbackForm from './shoppingFolder/components/Feedback/form.js';
 import Submissions from './shoppingFolder/components/Feedback/submissions.js'
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import './App.css';
+import './App.css'; 
+
+//User wallet 
+import UserWallet from './shoppingFolder/components/Userwallet/UserWallet.jsx';
 
 // Component to check if user is authenticated
 const ProtectedRoute = ({ element }) => {
@@ -138,7 +141,7 @@ function App() {
           <Route path='/sport/owner/create' element={<ProtectedRoutesports element={<Create_Sport />} />} />
           <Route path="/FAQ" element={<ProtectedRoute element={<FAQ />} />} />
           <Route path='/AboutUs' element = {<ProtectedRoute element={<AboutUs/>}/>}/>
-
+          <Route path='/user/wallet' element = {<ProtectedRoute element={<UserWallet/>}/>}/>
           <Route path="/feedback" element={<FeedbackForm/>}/>
           <Route path="/submissions" element={<Submissions />} />
           <Route path="/submission/:id" element={<Submissions />} />

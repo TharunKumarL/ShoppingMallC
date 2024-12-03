@@ -1,7 +1,8 @@
 import React from 'react';
 import '../components/css/Header.css';  // Import the CSS file
 import LogoutButton from './Logout/Logout';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; 
+import UserWallet from './Userwallet/UserWallet';
 
 const Header = () => {
   return (
@@ -18,8 +19,11 @@ const Header = () => {
         </div>
 
       </nav>
-      <div className="search-bar">
-      </div>
+
+      <a href="/user/wallet">
+      MyArea
+      </a>
+      
     </header>
   );
 };
