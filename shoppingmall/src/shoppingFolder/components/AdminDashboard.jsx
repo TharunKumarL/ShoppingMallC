@@ -90,6 +90,12 @@ return (
                 <p>View the list of all sections in the mall management system.</p>
               <button className="manage-now-btn" onClick={() => navigate('/admin/add-manager')}> Manage Now </button>
           </div>
+           {/* View FeedBacks */}
+           <div className="management-box add-manager">
+              <h3>View FeedBacks</h3>
+                <p>View the list of all FeedBacks.</p>
+              <button className="manage-now-btn" onClick={() => navigate('/admin/viewFeedBack')}> Manage Now </button>
+          </div>
         </div>
       </div>
     </div>

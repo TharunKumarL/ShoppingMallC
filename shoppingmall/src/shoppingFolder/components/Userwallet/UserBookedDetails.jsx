@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Box, Typography, List, ListItem, CircularProgress } from '@mui/material';
+import { Button, Modal, Box, List, ListItem, CircularProgress } from '@mui/material';
+import Typography from '@mui/material/Typography';
+
 import "../css/UserWallet.css"; // Import the CSS file
 
 const BookingDetails = ({ userId }) => {

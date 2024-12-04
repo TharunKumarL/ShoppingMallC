@@ -41,6 +41,7 @@ import AboutUs from './shoppingFolder/components/AboutUs.jsx';
 import StickyHeader from "./shoppingFolder/components/Feedback/header.js";
 import Feedback from './shoppingFolder/components/Feedback.jsx';
 import Submissions from './shoppingFolder/components/Feedback/submissions.js'
+import ViewFeedback from './shoppingFolder/components/Admin/ViewFeedback.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import './App.css'; 
 import ResAdminDashboard from './components/Dashboard/Restaurant_AdminDashboard';
@@ -139,6 +140,7 @@ function App() {
           <Route path="/admin/view-shops" element={<ProtectedRouteAdmin element={<ViewShops/>} />} />
           <Route path="/admin/view-shopowners" element={<ProtectedRouteAdmin element={<ViewShopOwners />} />} />
           <Route path="/admin/add-manager" element={<ProtectedRouteAdmin element={<AddManagers/>}/>} />
+          <Route path="/admin/viewFeedback" element={<ProtectedRouteAdmin element={<ViewFeedback/>}/>} />
           <Route path="/shopowner/dashboard" element={<ShopOwnerDashboard />}/>
           <Route path="/shopowner/view-deals" element={<Deals />}/>
           <Route path="/shopowner/add-deals" element={<AddDeals />}/>

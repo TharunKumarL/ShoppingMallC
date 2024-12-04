@@ -795,6 +795,16 @@ app.post('/api/feedback', async (req, res) => {
   }
 });
 
+app.get("/api/feedbacks", async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find().sort({ date: -1 }); // Sort by latest
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    console.error("Error fetching feedbacks:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 // Table Schema
 const tableSchema = new mongoose.Schema({
