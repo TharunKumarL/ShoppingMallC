@@ -64,14 +64,11 @@ const UserWallet = () => {
                 </div>
 
                 <div className="user-bookings">
-                    Bookings
-                    <hr /> 
-                    {details ? (
-                        <h2><BookingDetails/></h2> // Safely access `details.name`
-                    ) : (
-                        <p>Loading user details...</p>
-                    )}
-                </div>
+    <h3>Your Bookings</h3>
+    <hr />
+    <BookingDetails email={email} /> {/* Pass email to BookingDetails */}
+</div>
+
             </div>
         </div>
     );

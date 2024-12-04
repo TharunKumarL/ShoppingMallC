@@ -20,9 +20,8 @@ const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
 const authenticateToken = require("../src/middleware/authenticationToken.js"); 
 const UserDetails = require("./Routes/UserDetails.js"); 
-const UserSchema = require("./models/UserSchema.js");  
-
-
+const UserSchema = require("./models/UserSchema.js"); 
+const UserWallet=require("./models/userwallet.js")
 
 require('dotenv').config();
 
@@ -1011,7 +1010,22 @@ async function sendBookingConfirmationEmail(to, bookingDetails) {
     console.error('Error sending email:', error);
   }
 }
+app.get("/get_all_bookings", async (req, res) => {
+  try {
+      // Fetch all bookings from the database
+      const bookings = await UserWallet.find();
 
+      if (!bookings || bookings.length === 0) {
+          return res.status(404).json({ message: "No bookings found." });
+      }
+
+      // Send the bookings as the response
+      res.status(200).json(bookings);
+  } catch (error) {
+      console.error("Error fetching all bookings:", error);
+      res.status(500).json({ message: "Error fetching bookings." });
+  }
+});
 
 
 // Start server

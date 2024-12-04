@@ -1,132 +1,77 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Modal, Box, List, ListItem, CircularProgress } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import React, { useState, useEffect } from "react";
 
-import "../css/UserWallet.css"; // Import the CSS file
+const BookingDetails = () => {
+    const [bookings, setBookings] = useState([]); // Store bookings
+    const [filteredBookings, setFilteredBookings] = useState([]); // Store filtered bookings
+    const [loading, setLoading] = useState(true); // Loading state
+    const [email, setEmail] = useState(null); // Logged-in user's email
 
-const BookingDetails = ({ userId }) => {
-    const [openUserModal, setOpenUserModal] = useState(false);
-    const [openBookingModal, setOpenBookingModal] = useState(false);
-    const [openWalletModal, setOpenWalletModal] = useState(false);
-    const [userDetails, setUserDetails] = useState(null);
-    const [bookings, setBookings] = useState([]);
-    const [userWallet, setUserWallet] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    // Fetch the booking details on component mount
     useEffect(() => {
-        const fetchBookingDetails = async () => {
-            setLoading(true);
-            setError(null);
+        const fetchEmailAndBookings = async () => {
             try {
-                const response = await fetch(`/booking-details/${userId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch booking details');
+                // Step 1: Fetch email from /user_get_mail
+                const emailResponse = await fetch("http://localhost:5000/user_get_mail");
+                if (!emailResponse.ok) {
+                    throw new Error(`Error fetching email: ${emailResponse.statusText}`);
                 }
-                const data = await response.json();
-                setUserDetails(data.userDetails);
-                setBookings(data.bookings);
-                setUserWallet(data.userWallet);
+
+                const emailData = await emailResponse.json(); // Get email as JSON
+                const userEmail = emailData.mail; // Extract email
+                setEmail(userEmail); // Update state
+
+                // Step 2: Fetch all bookings
+                const bookingsResponse = await fetch("http://localhost:5000/get_all_bookings", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!bookingsResponse.ok) {
+                    throw new Error(`Error fetching bookings: ${bookingsResponse.statusText}`);
+                }
+
+                const allBookings = await bookingsResponse.json(); // Parse bookings
+                setBookings(allBookings); // Store all bookings
+
+                // Step 3: Filter bookings matching the user's email
+                const userBookings = allBookings.filter(
+                    (booking) => booking.email === userEmail
+                );
+                setFilteredBookings(userBookings); // Update filtered bookings
             } catch (error) {
-                setError(error.message);
+                console.error("Error fetching email or bookings:", error);
             } finally {
-                setLoading(false);
+                setLoading(false); // Stop loading spinner
             }
         };
 
-        fetchBookingDetails();
-    }, [userId]);
-
-    const handleModalClose = () => {
-        setOpenUserModal(false);
-        setOpenBookingModal(false);
-        setOpenWalletModal(false);
-    };
+        fetchEmailAndBookings(); // Call the function
+    }, []); // Empty dependency array ensures this runs only once
 
     return (
-        <div>
-            <Button variant="contained" color="secondary" onClick={() => setOpenBookingModal(true)} className="modal-button">
-                Show Bookings
-            </Button>
-            {/* User Details Modal */}
-            <Modal open={openUserModal} onClose={handleModalClose}>
-                <Box className="modal-box">
-                    {loading ? (
-                        <div className="loading">
-                            <CircularProgress />
-                        </div>
-                    ) : error ? (
-                        <Typography className="error-message">{error}</Typography>
-                    ) : userDetails ? (
-                        <div>
-                            <Typography className="modal-header">User Details</Typography>
-                            <Typography className="typography-text">Name: {userDetails.name}</Typography>
-                            <Typography className="typography-text">Email: {userDetails.email}</Typography>
-                            {/* Add more user details here */}
-                        </div>
-                    ) : (
-                        <Typography>No user details found</Typography>
-                    )}
-                </Box>
-            </Modal>
-
-            {/* Booking Details Modal */}
-            <Modal open={openBookingModal} onClose={handleModalClose}>
-                <Box className="modal-box">
-                    {loading ? (
-                        <div className="loading">
-                            <CircularProgress />
-                        </div>
-                    ) : error ? (
-                        <Typography className="error-message">{error}</Typography>
-                    ) : bookings.length > 0 ? (
-                        <div>
-                            <Typography className="modal-header">Bookings</Typography>
-                            <List className="booking-list">
-                                {bookings.map((booking) => (
-                                    <ListItem key={booking._id} className="booking-list-item">
-                                        <Typography>
-                                            <strong>Booking ID:</strong> {booking._id}
-                                        </Typography>
-                                        <Typography>
-                                            <strong>Sport:</strong> {booking.sport_foreignkey ? booking.sport_foreignkey.name : 'Unknown'}
-                                        </Typography>
-                                        <Typography className="booking-item-status">
-                                            Status: {booking.is_booked ? 'Booked' : 'Not Booked'}
-                                        </Typography>
-                                        {/* Add more booking details here */}
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </div>
-                    ) : (
-                        <Typography>No bookings found</Typography>
-                    )}
-                </Box>
-            </Modal>
-
-            {/* User Wallet Modal */}
-            <Modal open={openWalletModal} onClose={handleModalClose}>
-                <Box className="modal-box">
-                    {loading ? (
-                        <div className="loading">
-                            <CircularProgress />
-                        </div>
-                    ) : error ? (
-                        <Typography className="error-message">{error}</Typography>
-                    ) : userWallet ? (
-                        <div>
-                            <Typography className="modal-header">User Wallet</Typography>
-                            <Typography className="typography-text">Wallet ID: {userWallet._id}</Typography>
-                            <Typography className="typography-text">Sports Bookings: {userWallet.sports_bookings.length > 0 ? userWallet.sports_bookings.join(', ') : 'No bookings'}</Typography>
-                            {/* Add more wallet details here */}
-                        </div>
-                    ) : (
-                        <Typography>No wallet details found</Typography>
-                    )}
-                </Box>
-            </Modal>
+        <div className="booking-details-container">
+            <h3>My Bookings</h3>
+            {loading ? (
+                <p>Loading bookings...</p>
+            ) : filteredBookings.length > 0 ? (
+                filteredBookings.map((booking, index) => (
+                    <div key={index} className="booking-item">
+                        <h4>Booking {index + 1}</h4>
+                        <p><strong>Email:</strong> {booking.email}</p>
+                        <p><strong>Date:</strong> {new Date(booking.createdAt).toLocaleString()}</p>
+                        <p><strong>Sports Bookings:</strong></p>
+                        <ul>
+                            {booking.sports_bookings.map((sport, i) => (
+                                <li key={i}>{sport}</li>
+                            ))}
+                        </ul>
+                        <hr />
+                    </div>
+                ))
+            ) : (
+                <p>No bookings found for your email.</p>
+            )}
         </div>
     );
 };
