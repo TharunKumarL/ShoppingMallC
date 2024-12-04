@@ -180,7 +180,7 @@ router.get('/slots/:id', async (req, res) => {
 
 router.put('/booking/:id', async (req, res) => {
     const { id } = req.params;           // The booking ID
-    const { is_booked } = req.body;      // The booking status (true/false)
+    const { is_booked, email } = req.body;     // The booking status (true/false)
 
     const session = await mongoose.startSession(); // Start session
 
@@ -220,7 +220,8 @@ router.put('/booking/:id', async (req, res) => {
         if (!userWallet) {
             // If no userwallet, create a new one
             userWallet = new userwallet({
-                Uid: userId,  // Link to the user 
+                Uid: userId,  // Link to the user  
+                email: email,
                 sports_bookings: []  // Start with an empty sports_bookings array
             });
 

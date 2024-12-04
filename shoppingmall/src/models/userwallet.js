@@ -7,6 +7,10 @@ const userwalletSchema = new Schema({
     Uid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: User,  // Reference to the User model
+    }, 
+    email: {
+        type: String, 
+        required: true,
     },
     sports_bookings: [{
         type: mongoose.Schema.Types.ObjectId,

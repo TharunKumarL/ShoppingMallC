@@ -6,7 +6,8 @@ const PORT = 5000;
 const BookSlot = ({ sportId }) => {
     const [slotsByDate, setSlotsByDate] = useState({});
     const [expandedDate, setExpandedDate] = useState(null); // Tracks the expanded date
-    const [selectedSlot, setSelectedSlot] = useState(null);
+    const [selectedSlot, setSelectedSlot] = useState(null); 
+    const [email, setEmail] = useState(null);
 
     useEffect(() => {
         const fetchAvailableSlots = async () => {
@@ -15,7 +16,17 @@ const BookSlot = ({ sportId }) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
+                const data = await response.json(); 
+
+
+                const email = await fetch("http://localhost:5000/user_get_mail") 
+                if (!email.ok) {
+                    throw new Error(`Error fetching email: ${email.statusText}`);
+                }
+
+                const emailData = await email.json(); // Get email as JSON
+                const userEmail = emailData.mail; // Extract `mail`
+                setEmail(userEmail); // Update state
 
                 // Group slots by date
                 const groupedSlots = data.reduce((acc, slot) => {
@@ -49,7 +60,7 @@ const BookSlot = ({ sportId }) => {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ is_booked: true }),
+                body: JSON.stringify({ is_booked: true, email:email }), // Passing the email to this route
             });
     
             if (!bookingResponse.ok) {
