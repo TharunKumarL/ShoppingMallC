@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
+} from 'recharts'; 
+
+import "../css/ShopOwnerDashboard.css";
 
 const SportDashboard2 = () => {
   const navigate = useNavigate();
@@ -10,8 +12,10 @@ const SportDashboard2 = () => {
     SportbookingTrue: 0,
     SportbookingFalse: 0
   });
+  const [allBookings, setAllBookings] = useState([]); // Store all bookings
 
   useEffect(() => {
+    // Fetch booking stats
     fetch('http://localhost:5000/stats')
       .then((res) => {
         if (!res.ok) {
@@ -28,6 +32,22 @@ const SportDashboard2 = () => {
       })
       .catch((err) => {
         console.error('Error:', err);
+      });
+
+    // Fetch all bookings
+    fetch('http://localhost:5000/get_all_bookings')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('Fetched bookings:', data);
+        setAllBookings(data); // Store all bookings
+      })
+      .catch((err) => {
+        console.error('Error fetching all bookings:', err);
       });
   }, [navigate]);
 
@@ -60,6 +80,38 @@ const SportDashboard2 = () => {
             <Legend />
           </PieChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="all-bookings-container">
+        <h3>All Bookings</h3>
+        {allBookings.length > 0 ? (
+          <table className="bookings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Email</th>
+                <th>Sports Bookings</th>
+                <th>Booking Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allBookings.map((booking, index) => (
+                <tr key={booking._id}>
+                  <td>{index + 1}</td>
+                  <td>{booking.email}</td>
+                  <td>
+                    {booking.sports_bookings.map((sport, i) => (
+                      <span key={i}>{sport}{i < booking.sports_bookings.length - 1 ? ', ' : ''}</span>
+                    ))}
+                  </td>
+                  <td>{new Date(booking.createdAt).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No bookings found.</p>
+        )}
       </div>
     </div>
   );

@@ -115,9 +115,6 @@ const Show_Sport = ({ isOwner }) => {
                                 </button>
                             )}
 
-                            {isOwner && (
-                                <button onClick={(e) => { e.stopPropagation(); handleUpdate(item._id) }}> <span className="material-symbols-outlined"> edit</span> </button>
-                            )}
 
                             {/* Bottom Section for Label, Price, and Matter Box */}
                             <div className="sport-item-info">
