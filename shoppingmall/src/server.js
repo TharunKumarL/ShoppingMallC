@@ -53,7 +53,11 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Database connected successfully'))
 .catch((error) => console.error('Database connection error:', error));
 
-
+/**this is tharun frin=hh sirjkznkyak9jmlm
+ * 
+ * inr isk[]-in
+ * tharun kumar lagisettu eoju morininh bursh chaeyak=li mbajsund cjaduvukova;o 
+ */
 app.post('/api/signup', async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -980,7 +984,9 @@ async function sendBookingConfirmationEmail(to, bookingDetails) {
       pass: 'your-password'
     }
   });
-
+/* for i in range(1,23):
+print ("Hello World")
+*/
   const mailOptions = {
     from: 'your-email@gmail.com',
     to: to,

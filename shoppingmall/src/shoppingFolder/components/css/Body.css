@@ -3,11 +3,13 @@ body {
  /* Light theme background */
   color: #000000; /* Light theme text color */
   transition: background-color 0.3s, color 0.3s;
+  /* background-image: url('../../../../public/freepik-export-20241203145913WWne.jpeg');  */
 }
 
 /* Light Mode Styles */
 body.light-mode {
   color: #000000;
+  /* background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg');  */
 /* Dark mode background image */
   background-size: cover;
   background-position: center center;
@@ -33,9 +35,9 @@ body.light-mode {
 /* Dark Mode Styles */
 body.dark-mode {
   color: #ffffff;
-  background-color: #121212;
-  /* background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg'); Dark mode background image */
-  background-size: cover;
+  /* background-color: #121212; */
+
+  /* background-image: url('../../../../public/red-light-round-podium-black-background-mock-up.jpg'); */
   background-position: center center;
   background-attachment: fixed;
   transition: background-color 0.3s, color 0.3s;
@@ -293,7 +295,7 @@ h2{
 
 /* Dark/Light Mode Toggle Button */
 button.mode-toggle{
-  margin-top: 20px;
+  margin-top: 70px;
   background-color: transparent;
   color: #ff1a6d; /* Glowing pink color for the toggle */
   padding: 10px 10px;
@@ -310,7 +312,7 @@ button.mode-toggle{
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 button.mode-toggle.dark{
-  margin-top: 20px;
+  margin-top: 70px;
   background-color: transparent;
   color: #c90818;; /* Glowing pink color for the toggle */
   padding: 10px 10px;
