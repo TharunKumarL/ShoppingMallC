@@ -109,3 +109,46 @@ button {
     margin-top: 10px;
 }
 
+.booking-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between cards */
+    padding: 20px;
+    max-width: 500px;  /* Set max-width to make the cards compact */
+    margin-left: 20px;  /* Align the container to the left with a margin */
+}
+
+.booking-item {
+    background-color: #f0f0f0; /* Default background */
+    padding: 20px;
+    border-radius: 10px;  /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+    cursor: pointer;
+}
+
+.booking-item:hover {
+    background-color: #e0e0e0;  /* Background color change on hover */
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;  /* Darker blue on hover */
+}
+
+hr {
+    margin-top: 10px;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+

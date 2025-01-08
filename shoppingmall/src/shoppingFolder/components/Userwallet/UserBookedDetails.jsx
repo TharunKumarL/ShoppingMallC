@@ -1,76 +1,89 @@
 import React, { useState, useEffect } from "react";
 
 const BookingDetails = () => {
-    const [bookings, setBookings] = useState([]); // Store bookings
-    const [filteredBookings, setFilteredBookings] = useState([]); // Store filtered bookings
+    const [bookings, setBookings] = useState([]); // Store user's bookings
     const [loading, setLoading] = useState(true); // Loading state
     const [email, setEmail] = useState(null); // Logged-in user's email
 
     useEffect(() => {
-        const fetchEmailAndBookings = async () => {
+        const fetchData = async () => {
             try {
-                // Step 1: Fetch email from /user_get_mail
+                // Fetch logged-in user's email
                 const emailResponse = await fetch("http://localhost:5000/user_get_mail");
-                if (!emailResponse.ok) {
-                    throw new Error(`Error fetching email: ${emailResponse.statusText}`);
-                }
+                if (!emailResponse.ok) throw new Error("Failed to fetch email.");
+                const emailData = await emailResponse.json();
+                const userEmail = emailData.mail;
+                setEmail(userEmail);
 
-                const emailData = await emailResponse.json(); // Get email as JSON
-                const userEmail = emailData.mail; // Extract email
-                setEmail(userEmail); // Update state
-
-                // Step 2: Fetch all bookings
-                const bookingsResponse = await fetch("http://localhost:5000/get_all_bookings", {
-                    method: "GET",
+                // Fetch user bookings using the email
+                const bookingsResponse = await fetch("http://localhost:5000/get_user_bookings", {
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    body: JSON.stringify({ email: userEmail }),
                 });
 
-                if (!bookingsResponse.ok) {
-                    throw new Error(`Error fetching bookings: ${bookingsResponse.statusText}`);
-                }
-
-                const allBookings = await bookingsResponse.json(); // Parse bookings
-                setBookings(allBookings); // Store all bookings
-
-                // Step 3: Filter bookings matching the user's email
-                const userBookings = allBookings.filter(
-                    (booking) => booking.email === userEmail
-                );
-                setFilteredBookings(userBookings); // Update filtered bookings
+                if (!bookingsResponse.ok) throw new Error("Failed to fetch bookings.");
+                const bookingsData = await bookingsResponse.json();
+                setBookings(bookingsData.bookings);
             } catch (error) {
-                console.error("Error fetching email or bookings:", error);
+                console.error("Error fetching data:", error);
             } finally {
-                setLoading(false); // Stop loading spinner
+                setLoading(false);
             }
         };
 
-        fetchEmailAndBookings(); // Call the function
-    }, []); // Empty dependency array ensures this runs only once
+        fetchData();
+    }, []);
+
+    const downloadDetails = (booking) => {
+        const bookingDetails = `
+        Booking Details:
+        -----------------
+        Label: ${booking.label}
+        Address: ${booking.address}
+        Cost: ₹${booking.cost}
+        Date of Booking: ${new Date(booking.date).toLocaleDateString()}  // The date the booking was made
+        Slot: ${booking.slot}  // The slot time
+        Contact Email: ${booking.contact_mail}
+        User Email: ${email}  // The logged-in user's email
+        Slot Timing: ${booking.slot}  // The slot time (booking's actual slot)
+        `;
+        const blob = new Blob([bookingDetails], { type: "text/plain" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `booking-${booking._id}.txt`;
+        link.click();
+    };
 
     return (
         <div className="booking-details-container">
             <h3>My Bookings</h3>
             {loading ? (
                 <p>Loading bookings...</p>
-            ) : filteredBookings.length > 0 ? (
-                filteredBookings.map((booking, index) => (
+            ) : bookings.length > 0 ? (
+                bookings.map((booking, index) => (
                     <div key={index} className="booking-item">
                         <h4>Booking {index + 1}</h4>
-                        <p><strong>Email:</strong> {booking.email}</p>
-                        <p><strong>Date:</strong> {new Date(booking.createdAt).toLocaleString()}</p>
-                        <p><strong>Sports Bookings:</strong></p>
-                        <ul>
-                            {booking.sports_bookings.map((sport, i) => (
-                                <li key={i}>{sport}</li>
-                            ))}
-                        </ul>
+                        <p>
+                            <strong>Label:</strong> {booking.label}
+                        </p>
+                        <p>
+                            <strong>Date of Booking:</strong> {new Date(booking.date).toLocaleDateString()}
+                        </p>
+                        <p>
+                            <strong>Slot:</strong> {booking.slot}
+                        </p>
+                        <p>
+                            <strong>Address:</strong> {booking.address}
+                        </p>
+                        <button onClick={() => downloadDetails(booking)}>Download Details</button>
                         <hr />
                     </div>
                 ))
             ) : (
-                <p>No bookings found for your email.</p>
+                <p>No bookings found for your account.</p>
             )}
         </div>
     );

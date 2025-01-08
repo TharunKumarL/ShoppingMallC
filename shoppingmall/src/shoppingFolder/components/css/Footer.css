@@ -1,12 +1,29 @@
+/* Ensure the page stretches to full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Flexbox layout for the entire page */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* Main content area (everything except footer) */
+.main-content {
+  flex-grow: 1; /* This will take the available space above the footer */
+}
 
 /* Footer Styles */
 .footer {
   background-color: #111;
   color: #fff;
   padding: 2% 0;
-  margin-top:0%; /* This ensures the footer stays at the bottom */
   text-align: center;
   width: 100%;
+  margin-top: auto; /* Ensures footer sticks at the bottom */
 }
 
 .footer-content {
