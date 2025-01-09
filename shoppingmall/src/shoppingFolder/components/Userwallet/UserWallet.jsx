@@ -64,7 +64,7 @@ const UserWallet = () => {
                 </div>
 
                 <div className="user-bookings">
-    <h3>Your Bookings</h3>
+    <h3>My Bookings</h3>
     <hr />
     <BookingDetails email={email} /> {/* Pass email to BookingDetails */}
 </div>

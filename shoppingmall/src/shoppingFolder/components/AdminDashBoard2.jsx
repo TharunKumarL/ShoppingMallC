@@ -6,6 +6,8 @@ import {
   PieChart, Pie, Cell
 } from 'recharts'; // Import recharts components
 
+import Revenue from './Revenue/Revenue';
+
 const AdminDashboard2 = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
@@ -140,6 +142,8 @@ const AdminDashboard2 = () => {
           
         </div>
       </div>
+
+      <Revenue/>
     </div>
   );
 };

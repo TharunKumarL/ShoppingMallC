@@ -67,7 +67,6 @@ const BookingDetails = () => {
 
     return (
         <div className="booking-details-container">
-            <h3>My Bookings</h3>
 
             {loading ? (
                 <p>Loading bookings...</p>
@@ -75,7 +74,7 @@ const BookingDetails = () => {
                 <>
                     {/* User Bookings Section */}
                     <div>
-                        <h4>User Bookings</h4>
+                    <h4>Sport</h4>
                         {userBookings.length > 0 ? (
                             userBookings.map((booking, index) => (
                                 <div key={index} className="ticket-container">
@@ -106,7 +105,7 @@ const BookingDetails = () => {
 
                     {/* Restaurant Bookings Section */}
                     <div>
-                        <h4>Restaurant Bookings</h4>
+                        <h4>Restaurant</h4>
                         {restaurantBookings.length > 0 ? (
                             restaurantBookings.map((booking, index) => (
                                 <div key={index} className="ticket-container">

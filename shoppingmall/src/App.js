@@ -57,6 +57,8 @@ import ResBookingConfirmation from './components/BookingConfirmation';
 //User wallet 
 import UserWallet from './shoppingFolder/components/Userwallet/UserWallet.jsx';
 
+
+
 // Component to check if user is authenticated
 const ProtectedRoute = ({ element }) => {
   const token = sessionStorage.getItem('token');
@@ -65,6 +67,7 @@ const ProtectedRoute = ({ element }) => {
   }
   return element;
 };
+
 const ProtectedRouteAdmin = ({ element }) => {
   const token = sessionStorage.getItem('token');
   const userRole = JSON.parse(localStorage.getItem('user'))?.role; // Assuming user data is stored in localStorage
@@ -73,6 +76,7 @@ const ProtectedRouteAdmin = ({ element }) => {
   }
   return element;
 };
+
 const ProtectedRouteshopowner = ({ element }) => {
   const token = sessionStorage.getItem('token');
   const userRole = JSON.parse(localStorage.getItem('user'))?.role; // Assuming user data is stored in localStorage
@@ -81,38 +85,51 @@ const ProtectedRouteshopowner = ({ element }) => {
   }
   return element;
 };
+
 const ProtectedRoutesports = ({ element }) => {
   const token = sessionStorage.getItem('token');
   const userRole = JSON.parse(localStorage.getItem('user'))?.role; // Assuming user data is stored in localStorage
-  return element;
-
+  return element; // No restriction for sports role
 };
-const ProtectedRouteTheatre=({element})=>{
+
+const ProtectedRouteTheatre = ({ element }) => {
   const token = sessionStorage.getItem('token');
-  const section= JSON.parse(localStorage.getItem('user'))?.section;
-  return element;
-}
+  const section = JSON.parse(localStorage.getItem('user'))?.section;
+  return element; // No restriction for theatre section
+};
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+
   return (
-    // <GoogleOAuthProvider clientId="788124072442-ljpciau2bbh6spf8os3fbvq05t040guc.apps.googleusercontent.com">
     <Router>
       <div>
-      <Header /> 
-      
-        <SomeShops/>
+        <Header />
+        <SomeShops />
         <Routes>
-        <Route path="/bookrestaurant/" element={<ResHome />} />
-          <Route path="/bookrestaurant/admin-dashboard" element={<ResAdminDashboard />} />
-          <Route path="/bookrestaurant/owner-dashboard" element={<ResOwnerDashboard />} />
-          <Route path="/bookrestaurant/customer-dashboard" element={<ResCustomerDashboard />} />
+          <Route path="/bookrestaurant/" element={<ResHome />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/bookrestaurant/admin-dashboard"
+            element={<ProtectedRouteAdmin element={<ResAdminDashboard />} />}
+          />
+          <Route
+            path="/bookrestaurant/owner-dashboard"
+            element={<ProtectedRouteshopowner element={<ResOwnerDashboard />} />}
+          />
+          <Route
+            path="/bookrestaurant/customer-dashboard"
+            element={<ProtectedRoute element={<ResCustomerDashboard />} />}
+          />
           <Route path="/bookrestaurant/restaurants" element={<Restaurants darkMode={darkMode} />} />
           <Route path="/bookrestaurant/restaurants/:hotelId" element={<ResTableList />} />
           <Route path="/bookrestaurant/restaurants/:hotelId/tables/:tableId" element={<ResBookingPage />} />
           <Route path="/bookrestaurant/confirmation" element={<ResBookingConfirmation />} />
-          <Route path="/login" element={<Login />}/>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/manager-login" element={<ManagerLogin />} />
+
+          {/* Non-protected Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />          <Route path="/manager-login" element={<ManagerLogin />} />
           <Route path="/shopowner-login" element={<ShopOwnerLogin/>}/>
           {/* Protect the home page ("/") and other pages that require authentication */}
           <Route path="/shoplist" element={<ProtectedRoute element={<ShopsList />} />} />

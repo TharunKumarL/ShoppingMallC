@@ -1,20 +1,54 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-// import './login.css'; // Import the CSS file
+import { AuthContext } from '../context/AuthContext'; // Assuming this is your Auth context
+import { useNavigate } from 'react-router-dom'; // For redirect after login
 import './css/login.css';
 
 function Login() {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);  // For updating the context after successful login
+  const navigate = useNavigate();  // Hook for navigation after login
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const role = document.querySelector('select[name="role"]').value;
-    login(credentials, role);
+    const role = document.querySelector('select[name="role"]').value; // Get the selected role
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...credentials, role }), // Include role in the request body
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const { token } = data;
+        localStorage.setItem('authToken', token);  // Store token in localStorage
+        login(token);  // Update global context with token (if using context for auth state)
+        
+        // Redirect based on role
+        if (role === 'admin') {
+          navigate('/admin-dashboard');  // Redirect to the admin dashboard
+        } else if (role === 'owner') {
+          navigate('/owner-dashboard');  // Redirect to the owner dashboard
+        } else if (role === 'customer') {
+          navigate('/customer-dashboard');  // Redirect to the customer dashboard
+        } else {
+          navigate('/');  // Default redirect if no role matched
+        }
+      } else {
+        alert(data.error);  // Show error message from server
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('Login failed');  // Handle error gracefully
+    }
   };
 
   return (
@@ -43,15 +77,13 @@ function Login() {
         </div>
         <div className="input-group">
           <label htmlFor="role">Role</label>
-          <select name="role" onChange={handleChange}>
+          <select name="role" onChange={handleChange} required>
             <option value="customer">Customer</option>
             <option value="owner">Restaurant Owner</option>
             <option value="admin">Admin</option>
           </select>
         </div>
         <button type="submit" className="submit-btn">Login</button>
-        {/* Add error message handling if needed */}
-        {/* <div className="error-message">{errorMessage}</div> */}
       </form>
     </div>
   );

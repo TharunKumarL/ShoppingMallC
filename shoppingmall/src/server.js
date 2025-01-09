@@ -54,11 +54,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Database connected successfully'))
 .catch((error) => console.error('Database connection error:', error));
 
-/**this is tharun frin=hh sirjkznkyak9jmlm
- * 
- * inr isk[]-in
- * tharun kumar lagisettu eoju morininh bursh chaeyak=li mbajsund cjaduvukova;o 
- */
+
 app.post('/api/signup', async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -74,65 +70,69 @@ app.post('/api/signup', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword, role });
-    console.log('User object:', newUser);  // Log user object
-
     await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
 
+    res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    console.error('Error during signup:', error);  // Log the complete error
+    console.error('Error during signup:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
 
 let z="";
-// Login endpoint
-app.post('/api/login',  async (req, res) => {
-  const { email, password } = req.body;
 
+// Login endpoint
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
 
   try {
-    // Check for admin credentials
     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-      console.log("Admin Login successfully")
       const token = jwt.sign(
-        { userId: 'admin', role: 'admin' }, // Use a special identifier for admin
+        { userId: 'admin', role: 'admin' },
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
       );
       return res.status(200).json({ token });
     }
 
-    // Check for regular user credentials
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
+    z = email;
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    z=email;
+
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    console.log(`Token details: ${token}`);
-
     res.status(200).json({ token });
-
   } catch (error) {
+    console.error('Error during login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}); 
+});
+
+
+
+// Protected route example
+app.get('/api/protected-route', authenticateToken, (req, res) => {
+  res.json({ message: 'You have access to this protected route!', user: req.user });
+});
+
+
 
 
 // MARK:User-Details
