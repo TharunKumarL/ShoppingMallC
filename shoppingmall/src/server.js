@@ -22,6 +22,7 @@ const authenticateToken = require("../src/middleware/authenticationToken.js");
 const UserDetails = require("./Routes/UserDetails.js"); 
 const UserSchema = require("./models/UserSchema.js"); 
 const UserWallet=require("./models/userwallet.js")
+const Booking = require('../models/bookingrestaurant.js');
 
 require('dotenv').config();
 
@@ -931,38 +932,172 @@ app.get('/api/hotels/:hotelId', async (req, res) => {
   }
 });
 
+// // POST: Book a table
+// app.post('/api/book-table', async (req, res) => {
+//   const { tableId, name, phone, email } = req.body;
+
+//   try {
+//     const table = await Table.findById(tableId);
+//     if (!table) {
+//       return res.status(404).json({ message: 'Table not found' });
+//     }
+
+//     if (!table.isAvailable) {
+//       return res.status(400).json({ message: 'Table is already booked.' });
+//     }
+
+//     table.isAvailable = false;
+//     table.bookingDetails = { name, phone, email };
+//     await table.save();
+
+//     const bookingId = Date.now().toString() + Math.random().toString().slice(2);
+
+//     const bookingDetails = {
+//       name,
+//       tableNumber: table.tableNumber,
+//       capacity: table.capacity,
+//       location: table.location,
+//       bookingDate: new Date().toISOString(),
+//       bookingTime: new Date().toLocaleTimeString(),
+//       bookingId,
+//     };
+
+//     sendBookingConfirmationEmail(email, bookingDetails);
+
+//     res.status(200).json({
+//       message: 'Table booked successfully.',
+//       bookingId,
+//       ...bookingDetails,
+//     });
+//   } catch (err) {
+//     console.error('Error booking table:', err);
+//     res.status(500).json({ message: 'Server error.' });
+//   }
+// });
+
+// async function sendBookingConfirmationEmail(to, bookingDetails) {
+//   const transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 587,
+//     secure: false, // or 'STARTTLS'
+//     auth: {
+//       user: 'your-email@gmail.com',
+//       pass: 'your-password'
+//     }
+//   });
+// /* for i in range(1,23):
+// print ("Hello World")
+// */
+//   const mailOptions = {
+//     from: 'your-email@gmail.com',
+//     to: to,
+//     subject: 'Booking Confirmation at Kula',
+//     html: `
+//       <h2>Booking Confirmation</h2>
+//       <p>Dear ${bookingDetails.name},</p>
+//       <p>We are pleased to confirm your booking at Kula:</p>
+//       <ul>
+//         <li><strong>Table Number:</strong> ${bookingDetails.tableNumber}</li>
+//         <li><strong>Capacity:</strong> ${bookingDetails.capacity}</li>
+//         <li><strong>Location:</strong> ${bookingDetails.location}</li>
+//         <li><strong>Date:</strong> ${bookingDetails.bookingDate}</li>
+//         <li><strong>Time:</strong> ${bookingDetails.bookingTime}</li>
+//         <li><strong>Booking ID:</strong> ${bookingDetails.bookingId}</li>
+//       </ul>
+
+//       <p>We look forward to serving you!</p>
+//       <p>Best regards,<br>The Kula Team</p>
+//     `,
+//   };
+
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     console.log('Email sent successfully');
+//   } catch (error) {
+//     console.error('Error sending email:', error);
+//   }
+// }
+app.get("/get_all_bookings", async (req, res) => {
+  try {
+      // Fetch all bookings from the database
+      const bookings = await UserWallet.find();
+
+      if (!bookings || bookings.length === 0) {
+          return res.status(404).json({ message: "No bookings found." });
+      }
+
+      // Send the bookings as the response
+      res.status(200).json(bookings);
+  } catch (error) {
+      console.error("Error fetching all bookings:", error);
+      res.status(500).json({ message: "Error fetching bookings." });
+  }
+});
+app.get('/get_restaurant_bookings', async (req, res) => {
+  try {
+    // Fetch all restaurant bookings from the database
+    const bookings = await Booking.find();  // Adjust this according to your model/schema
+
+    // Check if there are any bookings
+    if (!bookings || bookings.length === 0) {
+      return res.status(404).json({ message: 'No restaurant bookings found.' });
+    }
+
+    // Respond with the bookings in JSON format
+    res.status(200).json({
+      bookings: bookings,
+    });
+  } catch (error) {
+    console.error('Error fetching restaurant bookings:', error);
+    res.status(500).json({ message: 'Server error while fetching restaurant bookings.' });
+  }
+});
 // POST: Book a table
 app.post('/api/book-table', async (req, res) => {
   const { tableId, name, phone, email } = req.body;
 
   try {
+    // Find the table by its ID
     const table = await Table.findById(tableId);
     if (!table) {
       return res.status(404).json({ message: 'Table not found' });
     }
 
+    // Check if the table is available
     if (!table.isAvailable) {
       return res.status(400).json({ message: 'Table is already booked.' });
     }
 
+    // Mark the table as unavailable and store the booking details in the table
     table.isAvailable = false;
     table.bookingDetails = { name, phone, email };
     await table.save();
 
+    // Create a unique booking ID
     const bookingId = Date.now().toString() + Math.random().toString().slice(2);
 
+    // Booking details to be saved in the bookingsrestaurant collection
     const bookingDetails = {
+      bookingId,
+      tableId,
       name,
+      phone,
+      email,
       tableNumber: table.tableNumber,
       capacity: table.capacity,
       location: table.location,
       bookingDate: new Date().toISOString(),
       bookingTime: new Date().toLocaleTimeString(),
-      bookingId,
     };
 
+    // Save the booking details in the bookingsrestaurant model
+    const newBooking = new Booking(bookingDetails);
+    await newBooking.save();
+
+    // Send a booking confirmation email to the user
     sendBookingConfirmationEmail(email, bookingDetails);
 
+    // Respond with the booking details
     res.status(200).json({
       message: 'Table booked successfully.',
       bookingId,
@@ -974,6 +1109,7 @@ app.post('/api/book-table', async (req, res) => {
   }
 });
 
+// Function to send a booking confirmation email
 async function sendBookingConfirmationEmail(to, bookingDetails) {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -984,9 +1120,7 @@ async function sendBookingConfirmationEmail(to, bookingDetails) {
       pass: 'your-password'
     }
   });
-/* for i in range(1,23):
-print ("Hello World")
-*/
+
   const mailOptions = {
     from: 'your-email@gmail.com',
     to: to,
@@ -1016,22 +1150,8 @@ print ("Hello World")
     console.error('Error sending email:', error);
   }
 }
-app.get("/get_all_bookings", async (req, res) => {
-  try {
-      // Fetch all bookings from the database
-      const bookings = await UserWallet.find();
 
-      if (!bookings || bookings.length === 0) {
-          return res.status(404).json({ message: "No bookings found." });
-      }
 
-      // Send the bookings as the response
-      res.status(200).json(bookings);
-  } catch (error) {
-      console.error("Error fetching all bookings:", error);
-      res.status(500).json({ message: "Error fetching bookings." });
-  }
-});
 
 
 // Start server

@@ -22,8 +22,8 @@ html, body {
   color: #fff;
   padding: 2% 0;
   text-align: center;
-  width: 100%;
-  margin-top: auto; /* Ensures footer sticks at the bottom */
+  width: 100%;/* Ensures footer sticks at the bottom */
+  margin-top: 230px;
 }
 
 .footer-content {

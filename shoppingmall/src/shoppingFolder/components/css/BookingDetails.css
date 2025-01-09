@@ -1,0 +1,61 @@
+.ticket-container {
+    position: relative;
+    margin: 20px 0;
+}
+
+.ticket {
+    position: relative;
+    background: linear-gradient(135deg, #d2b48c, #b39268); /* Ticket color */
+    padding: 20px;
+    width: 400px;
+    color: #2e2e2e;
+    text-align: left;
+    border: 2px dashed #8b4513;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.ticket h4 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.ticket p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+.download-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #8b4513;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+}
+
+.download-button:hover {
+    background: #5a3310;
+}
+
+/* Diagonal ID styling */
+.ticket::before {
+    content: attr(data-id); /* Dynamically insert the booking ID */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg); /* Center and rotate */
+    font-size: 5em; /* Large font size for background effect */
+    color: rgba(0, 0, 0, 0.1); /* Subtle, blurred black text */
+    z-index: 0; /* Place it in the background */
+    white-space: nowrap;
+    pointer-events: none; /* Ensure it's non-interactive */
+}

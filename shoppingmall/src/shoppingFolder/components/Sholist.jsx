@@ -31,7 +31,6 @@ function ShopsList() {
       <h1>Stores & Restaurants</h1>
       {shops.map((shop) => (
         <div key={shop._id} className="shop-item">
-          <img src={mall} alt={shop.name} className="shop-image" />
           <div className="shop-info">
             <h2>{shop.name}</h2>
             <p>{shop.location}</p>
