@@ -23,7 +23,7 @@ html, body {
   padding: 2% 0;
   text-align: center;
   width: 100%;/* Ensures footer sticks at the bottom */
-  margin-top: 230px;
+  margin-top: 0px;
 }
 
 .footer-content {

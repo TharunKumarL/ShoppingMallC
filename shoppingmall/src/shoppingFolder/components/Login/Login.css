@@ -3,12 +3,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding-top: 40px;
   }
   
   .wrapper {
     width: 100%;
-    max-width: 470px;
+    /* max-width: 470px; */
     background: #fff;
     padding: 50px 60px;
     text-align: center;
