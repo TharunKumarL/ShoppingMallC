@@ -1,7 +1,6 @@
 .user-wallet-container {
     padding: 30px;
     padding-bottom: 600px;
-    max-height: 100vh;
 }
 
 
@@ -40,7 +39,9 @@ div h2 p {
 
 /* User bookings */ 
 .user-bookings {
-    padding-top: 52px;
+    padding: 52px;
+    height: 400px;
+    padding-bottom: 52px;
 }
 
 

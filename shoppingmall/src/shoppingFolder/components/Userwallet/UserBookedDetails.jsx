@@ -67,74 +67,64 @@ const BookingDetails = () => {
 
     return (
         <div className="booking-details-container">
+
             {loading ? (
                 <p>Loading bookings...</p>
             ) : (
                 <>
                     {/* User Bookings Section */}
                     <div>
-                        <h4>Sport</h4>
-                        {userBookings.length > 0 ? (
-                            userBookings.map((booking, index) => (
-                                <div key={index} className="ticket-container">
-                                    <div className="ticket">
-                                        <h4>{booking.label}</h4>
-                                        <p>
-                                            <strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}
-                                        </p>
-                                        <p>
-                                            <strong>Slot:</strong> {booking.slot}
-                                        </p>
-                                        <p>
-                                            <strong>Address:</strong> {booking.address}
-                                        </p>
-                                        <p>
-                                            <strong>Cost:</strong> ₹{booking.cost}
-                                        </p>
-                                        <button onClick={() => downloadDetails(booking)} className="download-button">
-                                            Download Ticket
-                                        </button>
+                        <h4>Sport Bookings</h4>
+                        <div className="booking-list">
+                            {userBookings.length > 0 ? (
+                                userBookings.map((booking, index) => (
+                                    <div key={index} className="ticket-container">
+                                        <div className="ticket">
+                                            <h4>{booking.label}</h4>
+                                            <p><strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}</p>
+                                            <p><strong>Slot:</strong> {booking.slot}</p>
+                                            <p><strong>Address:</strong> {booking.address}</p>
+                                            <p><strong>Cost:</strong> ₹{booking.cost}</p>
+                                            <button onClick={() => downloadDetails(booking)} className="download-button">
+                                                Download Ticket
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No user bookings found.</p>
-                        )}
+                                ))
+                            ) : (
+                                <p>No user bookings found.</p>
+                            )}
+                        </div>
                     </div>
 
                     {/* Restaurant Bookings Section */}
-                    <h4>Restaurant</h4>
-                    <div className="restaurantBookings">
-                        {restaurantBookings.length > 0 ? (
-                            restaurantBookings.map((booking, index) => (
-                                <div key={index} className="ticket-container">
-                                    <div className="ticket">
-                                        <h4>{booking.label}</h4>
-                                        <p>
-                                            <strong>Date:</strong> {new Date(booking.createdAt).toLocaleDateString()}
-                                        </p>
-                                        <p>
-                                            <strong>Name:</strong> {booking.name}
-                                        </p>
-                                        <p>
-                                            <strong>Phone:</strong> {booking.phone}
-                                        </p>
-                                        <p>
-                                            <strong>TableId:</strong> {booking.tableId}
-                                        </p>
-                                        <button onClick={() => downloadDetails(booking)} className="download-button">
-                                            Download Ticket
-                                        </button>
+                    <div>
+                        <h4>Restaurant Bookings</h4>
+                        <div className="booking-list">
+                            {restaurantBookings.length > 0 ? (
+                                restaurantBookings.map((booking, index) => (
+                                    <div key={index} className="ticket-container">
+                                        <div className="ticket" data-id={booking.tableId || booking._id}>
+                                            <h4>{booking.label}</h4>
+                                            <p><strong>Date:</strong> {new Date(booking.createdAt).toLocaleDateString()}</p>
+                                            <p><strong>Name:</strong> {booking.name}</p>
+                                            <p><strong>Phone:</strong> {booking.phone}</p>
+                                            <p><strong>TableId:</strong> {booking.tableId}</p>
+                                            <button onClick={() => downloadDetails(booking)} className="download-button">
+                                                Download Ticket
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            ))
+                        ))
                         ) : (
-                            <p>No restaurant bookings found.</p>
-                        )}
+                        <p>No restaurant bookings found.</p>
+                            )}
                     </div>
-                </>
-            )}
-        </div>
+                </div>
+        </>
+    )
+}
+        </div >
     );
 };
 
