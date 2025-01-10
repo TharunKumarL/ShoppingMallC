@@ -1,5 +1,5 @@
-import { useState, useEffect }from "react";
-import "../css/UserWallet.css"; 
+import { useState, useEffect } from "react";
+import "../css/UserWallet.css";
 import BookingDetails from "../Userwallet/UserBookedDetails";
 
 const UserWallet = () => {
@@ -49,25 +49,25 @@ const UserWallet = () => {
     return (
         <div>
             <div className="user-wallet-container">
-            {details ? (
-                        <h2>Hello {details.name}, look at your profile</h2> // Safely access `details.name`
-                    ) : (
-                        <p>Loading user details...</p>
-                    )}
+                {details ? (
+                    <h2>Hello {details.name}, look at your profile</h2> // Safely access `details.name`
+                ) : (
+                    <p>Loading user details...</p>
+                )}
                 <div className="user-wallet-box">
                     <div className="wallet-details">
                         <p className="wallet-details-heading">Your details</p>
                     </div>
-                    <hr /> 
-                    
+                    <hr />
+
                     <h3>Email: {email ? email : "Loading email..."}</h3>
                 </div>
 
                 <div className="user-bookings">
-    <h3>My Bookings</h3>
-    <hr />
-    <BookingDetails email={email} /> {/* Pass email to BookingDetails */}
-</div>
+                    <h3>My Bookings</h3>
+                    <hr />
+                    <BookingDetails email={email} /> {/* Pass email to BookingDetails */}
+                </div>
 
             </div>
         </div>

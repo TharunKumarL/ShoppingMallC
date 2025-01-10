@@ -3,7 +3,19 @@
     margin: 20px 0;
 }
 
+.user-bookings {
+    overflow: hidden;
+    height: 50rem;
+}
+
+.restaurantBookings {
+    justify-content: start;
+    display: flex;
+    flex-direction: row;
+}
+
 .ticket {
+    margin: 20px;
     position: relative;
     background: linear-gradient(135deg, #d2b48c, #b39268); /* Ticket color */
     padding: 20px;
