@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../components/css/AdminDashboard.css';
 import AddShopOwner from './Admin/AddShopOwner';
 import AdminDashboard2 from './AdminDashBoard2';
+import RestroOwnerDashboard from './RestroOwnerDashboard';
 
 const AdminDashboard = () => {
   const navigate = useNavigate(); // Initialize useNavigate for navigation

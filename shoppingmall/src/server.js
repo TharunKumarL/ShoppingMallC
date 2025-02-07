@@ -503,7 +503,42 @@ app.post('/api/admin/shops', async (req, res) => {
   }
 });
 
+const resetTableAvailability = async () => {
+  try {
+    const tables = await Table.find({ isAvailable: false }).populate('currentBooking');
+    
+    for (const table of tables) {
+      // Log booking to history
+      if (table.currentBooking) {
+        await Booking.findByIdAndUpdate(table.currentBooking._id, { $set: { isActive: false } });
+      }
 
+      // Reset table availability
+      table.isAvailable = true;
+      table.currentBooking = null;
+      await table.save();
+    }
+
+    console.log('Table availability reset at midnight');
+  } catch (err) {
+    console.error('Error resetting table availability:', err);
+  }
+};
+
+// Schedule the reset at midnight
+const scheduleMidnightReset = () => {
+  const now = new Date();
+  const nextMidnight = new Date();
+  nextMidnight.setHours(24, 0, 0, 0); // Set to next midnight
+  const timeUntilMidnight = nextMidnight - now;
+
+  setTimeout(() => {
+    resetTableAvailability();
+    scheduleMidnightReset(); // Schedule the next midnight reset
+  }, timeUntilMidnight);
+};
+
+scheduleMidnightReset();
 
 app.get('/stats', async (req, res) => {
   try {
@@ -576,6 +611,7 @@ app.post('/add-shopowners/:shopId', async (req, res) => {
     res.status(500).json({ error: 'Failed to add shop owner' });
   }
 });
+
 // PUT route to update shop owner details
 app.put('/api/shopowners/:id', async (req, res) => {
   const { id } = req.params;
@@ -622,6 +658,7 @@ app.delete('/api/shopowners/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error. Could not delete shop owner.' });
   }
 });
+
 //shopOwner
 app.post('/shopownerlogin', async (req, res) => {
   const { email, password } = req.body;
@@ -661,6 +698,7 @@ app.post('/shopownerlogin', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 app.get('/api/shopowner/profile', async (req, res) => {
   console.log(x)
   try {
@@ -811,24 +849,36 @@ app.get("/api/feedbacks", async (req, res) => {
 
 
 // Table Schema
+// const tableSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   capacity: { type: Number, required: true, min: 1, max: 10 },
+//   location: { type: String, required: true },
+//   isAvailable: { type: Boolean, default: true },
+//   bookingDetails: {
+//       name: { 
+//           type: String, 
+//           required: function () { return !this.isAvailable; } // Required if table is unavailable
+//       },
+//       phone: { 
+//           type: String, 
+//           required: function () { return !this.isAvailable; } // Required if table is unavailable
+//       },
+//       email: { 
+//           type: String, 
+//           required: function () { return !this.isAvailable; } // Required if table is unavailable
+//       },
+//   },
+// });
+
 const tableSchema = new mongoose.Schema({
   name: { type: String, required: true },
   capacity: { type: Number, required: true, min: 1, max: 10 },
   location: { type: String, required: true },
   isAvailable: { type: Boolean, default: true },
-  bookingDetails: {
-      name: { 
-          type: String, 
-          required: function () { return !this.isAvailable; } // Required if table is unavailable
-      },
-      phone: { 
-          type: String, 
-          required: function () { return !this.isAvailable; } // Required if table is unavailable
-      },
-      email: { 
-          type: String, 
-          required: function () { return !this.isAvailable; } // Required if table is unavailable
-      },
+  currentBooking: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Booking',
+    default: null, // Reference to current booking if occupied
   },
 });
 
@@ -1017,6 +1067,7 @@ app.get('/api/hotels/:hotelId', async (req, res) => {
 //     console.error('Error sending email:', error);
 //   }
 // }
+
 app.get("/get_all_bookings", async (req, res) => {
   try {
       // Fetch all bookings from the database
@@ -1052,6 +1103,7 @@ app.get('/get_restaurant_bookings', async (req, res) => {
     res.status(500).json({ message: 'Server error while fetching restaurant bookings.' });
   }
 });
+
 // POST: Book a table
 app.post('/api/book-table', async (req, res) => {
   const { tableId, name, phone, email } = req.body;

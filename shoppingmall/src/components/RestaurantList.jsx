@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroller";
 import "./css/restaurantlist.css";
 
@@ -18,7 +18,11 @@ function RestaurantList() {
     "20% cashback on prepaid orders!",
   ];
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Fetch restaurants from the backend on component mount
   useEffect(() => {
