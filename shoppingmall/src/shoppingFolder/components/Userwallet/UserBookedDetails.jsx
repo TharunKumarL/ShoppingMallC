@@ -65,6 +65,23 @@ const BookingDetails = () => {
         link.click();
     };
 
+    const downloadDetailsR = (booking) => {
+        const bookingDetails = `
+        Booking Details:
+        -----------------
+        Name: ${booking.name}
+        TableID: ${booking.tableId}
+        Email: ₹${booking.email}
+        Date of Booking: ${new Date(booking.createdAt).toLocaleDateString()}
+        Mobile: ${booking.phone}
+        `;
+        const blob = new Blob([bookingDetails], { type: "text/plain" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `booking-${booking._id}.txt`;
+        link.click();
+    };
+
     return (
         <div className="booking-details-container">
 
@@ -110,7 +127,7 @@ const BookingDetails = () => {
                                             <p><strong>Name:</strong> {booking.name}</p>
                                             <p><strong>Phone:</strong> {booking.phone}</p>
                                             <p><strong>TableId:</strong> {booking.tableId}</p>
-                                            <button onClick={() => downloadDetails(booking)} className="download-button">
+                                            <button onClick={() => downloadDetailsR(booking)} className="download-button">
                                                 Download Ticket
                                             </button>
                                         </div>

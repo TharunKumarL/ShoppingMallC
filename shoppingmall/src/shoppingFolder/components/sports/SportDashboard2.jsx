@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer
-} from 'recharts'; 
+} from 'recharts';
 
 import "../css/ShopOwnerDashboard.css";
 
@@ -82,9 +82,9 @@ const SportDashboard2 = () => {
         </ResponsiveContainer>
       </div>
 
-      <div className="all-bookings-container">
-        <h3>All Bookings</h3>
-        {allBookings.length > 0 ? (
+      <div className="container">
+        <h3 className="title">All Bookings</h3>
+        <div className="table-container">
           <table className="bookings-table">
             <thead>
               <tr>
@@ -101,7 +101,9 @@ const SportDashboard2 = () => {
                   <td>{booking.email}</td>
                   <td>
                     {booking.sports_bookings.map((sport, i) => (
-                      <span key={i}>{sport}{i < booking.sports_bookings.length - 1 ? ', ' : ''}</span>
+                      <span key={i} className="sport-tag">
+                        {sport}
+                      </span>
                     ))}
                   </td>
                   <td>{new Date(booking.createdAt).toLocaleString()}</td>
@@ -109,9 +111,7 @@ const SportDashboard2 = () => {
               ))}
             </tbody>
           </table>
-        ) : (
-          <p>No bookings found.</p>
-        )}
+        </div>
       </div>
     </div>
   );
