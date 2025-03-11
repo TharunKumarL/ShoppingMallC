@@ -7,30 +7,28 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState(null); // New state for image
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Name validation
     if (name.trim().length < 3) {
       newErrors.name = 'Name must be at least 3 characters long.';
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       newErrors.email = 'Please enter a valid email address.';
     }
 
-    // Password validation
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
-      newErrors.password = 'Password must be at least 8 characters long, with one uppercase letter, one lowercase letter, one number, and one special character.';
+      newErrors.password =
+        'Password must be at least 8 characters long, with one uppercase letter, one lowercase letter, one number, and one special character.';
     }
 
-    // Confirm password validation
     if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match.';
     }
@@ -46,13 +44,18 @@ const Signup = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    if (image) {
+      formData.append('image', image); // Append the image file
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
+        body: formData, // Use FormData for file uploads
       });
 
       if (response.ok) {
@@ -75,62 +78,74 @@ const Signup = () => {
     <div className="Signup">
       <div className="wrapper">
         <h1>Signup</h1>
-          <form onSubmit={handleSignup}>
-            <div className="input-group">
-              <div className="input-box">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-                <i className="bx bxs-user"></i>
-                {errors.name && <p className="error">{errors.name}</p>}
-              </div>
-
-              <div className="input-box">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <i className="bx bxs-envelope"></i>
-                {errors.email && <p className="error">{errors.email}</p>}
-              </div>
-
-              <div className="input-box">
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <i className="bx bxs-lock-alt"></i>
-                {errors.password && <p className="error">{errors.password}</p>}
-              </div>
-
-              <div className="input-box">
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-                <i className="bx bxs-lock-alt"></i>
-                {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-              </div>
-              <button type="submit" className="signupButton">Sign Up</button>
+        <form onSubmit={handleSignup} encType="multipart/form-data">
+          <div className="input-group">
+            <div className="input-box">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+              {errors.name && <p className="error">{errors.name}</p>}
             </div>
-          </form>
+
+            <div className="input-box">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              {errors.email && <p className="error">{errors.email}</p>}
+            </div>
+
+            <div className="input-box">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              {errors.password && <p className="error">{errors.password}</p>}
+            </div>
+
+            <div className="input-box">
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              {errors.confirmPassword && (
+                <p className="error">{errors.confirmPassword}</p>
+              )}
+            </div>
+
+            {/* Image Upload Field */}
+            <div className="input-box">
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files[0])}
+                required
+              />
+            </div>
+
+            <button type="submit" className="signupButton">
+              Sign Up
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

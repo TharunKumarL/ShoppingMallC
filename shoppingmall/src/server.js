@@ -23,6 +23,10 @@ const UserDetails = require("./Routes/UserDetails.js");
 const UserSchema = require("./models/UserSchema.js"); 
 const UserWallet=require("./models/userwallet.js")
 const Booking = require('../models/bookingrestaurant.js');
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
 
 require('dotenv').config();
 
@@ -41,7 +45,8 @@ app.use(bodyParser.json());
 app.use('/api/admin', adminAuth, verifyAdmin);
 
 
-//Routes //Sport
+//Routes Level Middleware
+//Sport
 app.use("/sport", SportRoute);
 app.use("/sport", SportRouteUser);
 app.use("/", UserDetails);
@@ -54,8 +59,70 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Database connected successfully'))
 .catch((error) => console.error('Database connection error:', error));
 
+//Error Level Middleware
+// Sample Route with Error
+app.get('/error', (req, res, next) => {
+  const error = new Error('Oops! Something broke.');
+  next(error); // Pass the error to the error-handling middleware
+});
 
-app.post('/api/signup', async (req, res) => {
+// Error-Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(`Error: ${err.message}`);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+app.get('/notfound', (req, res, next) => {
+  const error = new Error('Resource not found');
+  error.status = 404; // Custom status for specific error types
+  next(error);
+});
+
+// Custom Error-Handling Middleware
+app.use((err, req, res, next) => {
+  if (err.status === 404) {
+      return res.status(404).json({ error: err.message });
+  }
+  res.status(500).json({ error: 'Unexpected error occurred' });
+}); 
+
+//BuiltIn Middleware
+app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//Third Party Middleware
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+
+// Custom Morgan token for timestamp
+morgan.token('timestamp', () => new Date().toISOString());
+
+// Custom log format: [Timestamp] Method URL Status
+app.use(morgan('[:timestamp] :method :url :status', { stream: accessLogStream }));
+
+
+// Ensure 'uploads/users/' folder exists
+const uploadPath = 'uploads/users/';
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
+
+// Multer Storage Configuration
+const storage = multer.diskStorage({
+  destination: uploadPath, 
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+  },
+});
+
+// Multer Middleware
+const upload = multer({ storage });
+
+// Signup Route
+app.post('/api/signup', upload.single('image'), async (req, res) => {
   const { name, email, password, role } = req.body;
 
   if (!name || !email || !password) {
@@ -69,15 +136,29 @@ app.post('/api/signup', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword, role });
+
+    // Check for uploaded image
+    const imagePath = req.file ? `/uploads/users/${req.file.filename}` : null;
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      image: imagePath, // Save image path in the database
+    });
+
     await newUser.save();
 
-    res.status(201).json({ message: 'User created successfully' });
+    res.status(201).json({ message: 'User created successfully', imagePath });
   } catch (error) {
     console.error('Error during signup:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// Serve Uploaded Images
+app.use('/uploads', express.static('uploads'));
 
 
 let z="";

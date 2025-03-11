@@ -50,7 +50,7 @@ function Signup() {
             onChange={handleChange}
             placeholder="Enter your password"
             required
-          />
+          />  
         </div>
         <button type="submit" className="submit-btn">Sign Up</button>
         {/* Add error message handling if needed */}
