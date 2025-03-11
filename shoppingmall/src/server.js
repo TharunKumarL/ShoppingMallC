@@ -59,7 +59,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Database connected successfully'))
 .catch((error) => console.error('Database connection error:', error));
 
-//Error Level Middleware
+//Error Handler Middleware
 // Sample Route with Error
 app.get('/error', (req, res, next) => {
   const error = new Error('Oops! Something broke.');
