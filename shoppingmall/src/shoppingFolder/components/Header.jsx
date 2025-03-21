@@ -1,71 +1,150 @@
-// import React from 'react';
-// import '../components/css/Header.css'; // Import the CSS file
-// import { Link } from 'react-router-dom';
-// import { PiUser } from "react-icons/pi";
-// import { GrLogout } from "react-icons/gr";
-
-// const Header = () => {
-//   // Define the handleLogout function
-//   const handleLogout = () => {
-//     localStorage.removeItem('token');
-//     // Redirect to login page or home page
-//     window.location.href = '/login';
-
-//   };
-
-//   return (
-//     <header className="mall-header">
-//       <div className="logo">Shopping Mall</div>
-//       <nav className="nav-links">
-//         <a href="/">Home</a>
-//         <a href="/shoplist">Shops</a>
-//         <a href="/deals">Deals</a>
-//         <a href="/event">Events</a>
-//         <a href="/signup">Sign Up</a>
-//         {/* Logout Button */}
-//         <div className="logout-button" onClick={handleLogout} style={{ cursor: "pointer" }}>
-//           <GrLogout style={{ fontSize: "24px" }} /> {/* Logout icon */}
-//         </div>
-//       </nav>
-
-//       {/* User Wallet Link */}
-//       <a href="/user/wallet" style={{ marginLeft: '20px' }}>
-//         <PiUser style={{ fontSize: '30px' }} /> {/* Increased size */}
-//       </a>
-//     </header>
-//   );
-// };
-
-// export default Header;
-
-
-import React from 'react';
-import '../components/css/Header.css';  // Import the CSS file
-import LogoutButton from './Logout/Logout';
-import { Link } from 'react-router-dom'; 
-import { PiUser } from "react-icons/pi";
-import UserWallet from './Userwallet/UserWallet';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShoppingBag, User, Search, Menu, X, LogOut } from 'lucide-react';
+import '../components/css/Header.css'; // Adjust the path as necessary
 
 const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrolled]);
+
+  const handleLogout = () => {
+    // Clear the token from storage
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // Redirect to home page
+    navigate('/');
+  };
+
   return (
-    <header className="mall-header">
-      <div className="logo">Shopping Mall</div>
-      <nav className="nav-links">
-        <a href="/">Home</a>
-        <a href="/shoplist">Shops</a>
-        <a href="/deals">Deals</a>
-        <a href="/event">Events</a>
-        <a href="/signup">Sign Up</a>
-        <div className='logout-button'>
-          <LogoutButton/>
+    <header className={`header ${scrolled ? 'scrolled' : ''}`}>
+      <div className="header-container">
+        {/* Logo */}
+        <div className="logo-container">
+          <Link to="/" className="logo-link">
+            <span className="logo">
+              <ShoppingBag className="logo-icon" />
+              <span>MALL</span>
+            </span>
+          </Link>
         </div>
 
-      </nav>
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav">
+          <Link to="/" className="nav-link">
+            <span className="nav-link-text">Home</span>
+          </Link>
+          <Link to="/shoplist" className="nav-link">
+            <span className="nav-link-text">Shops</span>
+          </Link>
+          <Link to="/deals" className="nav-link">
+            <span className="nav-link-text">Deals</span>
+          </Link>
+          <Link to="/event" className="nav-link">
+            <span className="nav-link-text">Events</span>
+          </Link>
+          <Link to="/signup" className="sign-up-btn">
+            Sign Up
+          </Link>
+        </nav>
 
-      <a href="/user/wallet" style={{ marginLeft: '20px' }}>
-          <PiUser style={{ fontSize: '30px' }} /> {/* Increased size */}
-      </a>
-      
+        {/* Right Section */}
+        <div className="header-actions">
+          <button className="icon-button">
+            <Search className="action-icon" />
+          </button>
+          <Link to="/user/wallet" className="icon-button">
+            <User className="action-icon" />
+          </Link>
+          
+          {/* Logout Button */}
+          <button 
+            onClick={handleLogout}
+            className="icon-button logout-button"
+            title="Logout"
+          >
+            <LogOut className="action-icon" />
+          </button>
+          
+          {/* Mobile Menu Button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="mobile-menu-button"
+          >
+            {mobileMenuOpen ? (
+              <X className="menu-icon" />
+            ) : (
+              <Menu className="menu-icon" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu">
+          <nav className="mobile-nav">
+            <Link 
+              to="/" 
+              className="mobile-nav-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span>Home</span>
+            </Link>
+            <Link 
+              to="/shoplist" 
+              className="mobile-nav-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span>Shops</span>
+            </Link>
+            <Link 
+              to="/deals" 
+              className="mobile-nav-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span>Deals</span>
+            </Link>
+            <Link 
+              to="/event" 
+              className="mobile-nav-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span>Events</span>
+            </Link>
+            <Link 
+              to="/signup" 
+              className="mobile-sign-up"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Sign Up
+            </Link>
+            <button 
+              onClick={handleLogout}
+              className="mobile-nav-link logout-mobile"
+            >
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
