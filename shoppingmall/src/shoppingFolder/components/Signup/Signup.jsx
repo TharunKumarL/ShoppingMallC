@@ -143,16 +143,7 @@ const Signup = () => {
               )}
             </div>
 
-            <div className="input-box">
-              <label>Profile Image (Optional)</label>
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files[0])}
-              />
-              {errors.image && <p className="error">{errors.image}</p>}
-            </div>
+
 
             <button type="submit" className="signupButton" disabled={loading}>
               {loading ? "Signing Up..." : "Sign Up"}
