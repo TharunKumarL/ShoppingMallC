@@ -52,7 +52,6 @@ const Create_Sport = () => {
         try {
             // For demonstration purposes (mock API response)
             // In a real app, uncomment the fetch call below
-            /*
             const response = await fetch(submit_url, {
                 method: 'POST',
                 headers: {
@@ -68,8 +67,7 @@ const Create_Sport = () => {
                 const errorData = await response.json();
                 setError(errorData.message || 'Failed to submit');
             }
-            */
-            
+        
             // Mock successful submission for demonstration
             setSuccessMessage("Sport created successfully!");
             
