@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Navigate,useLocation , Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react';
-
-import './App.css';
 import Header from './shoppingFolder/components/Header';
 import Login from './shoppingFolder/components/Login/Login';
 import Signup from './shoppingFolder/components/Signup/Signup';
@@ -43,7 +41,6 @@ import Feedback from './shoppingFolder/components/Feedback.jsx';
 import Submissions from './shoppingFolder/components/Feedback/submissions.js'
 import ViewFeedback from './shoppingFolder/components/Admin/ViewFeedback.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import './App.css'; 
 import ResAdminDashboard from './components/Dashboard/Restaurant_AdminDashboard';
 import ResOwnerDashboard from './components/Dashboard/Restaurant_OwnerDashboard';
 import ResCustomerDashboard from './components/Dashboard/Restaurant_CustomerDashboard';
@@ -105,7 +102,6 @@ function App() {
     <Router>
       <div>
         <Header />
-        <SomeShops />
         <Routes>
           <Route path="/bookrestaurant/" element={<ResHome />} />
 

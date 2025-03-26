@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../components/css/AdminDashboard.css';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell
-} from 'recharts'; // Import recharts components
-
-import Revenue from './Revenue/Revenue';
+} from 'recharts';
+import { motion } from 'framer-motion';
 
 const AdminDashboard2 = () => {
-  const navigate = useNavigate();
   const [stats, setStats] = useState({
-    users: 0,
-    shopOwners: 0,
-    shops: 0,
-    shopOwnersAssigned: 0,
-    shopOwnersUnassigned: 0,
-    SportbookingTrue:0,
-    SportbookingFalse:0
-    
+    users: 87,
+    shopOwners: 54,
+    shops: 65,
+    shopOwnersAssigned: 42,
+    shopOwnersUnassigned: 23,
+    SportbookingTrue: 32,
+    SportbookingFalse: 18
   });
 
   useEffect(() => {
-    // Fetch admin stats (users, shop owners, shops)
-    fetch('http://localhost:5000/stats') // If running on different ports
+ 
+    fetch('http://localhost:5000/stats')
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -35,22 +30,22 @@ const AdminDashboard2 = () => {
         
         // Calculate unassigned shop owners
         const totalShopOwners = data.shopOwnersCount;
-        const assignedShopOwners = data.shopOwnersAssignedCount; // Ensure your backend sends this count
+        const assignedShopOwners = data.shopOwnersAssignedCount;
         
         setStats({
           users: data.usersCount,
           shopOwners: totalShopOwners,
           shops: data.shopsCount,
-          shopOwnersAssigned: totalShopOwners,
-          shopOwnersUnassigned: data.shopsCount-totalShopOwners,// Calculate unassigned
-          SportbookingTrue:data.SportbookingTrue,
-          SportbookingFalse:data.SportbookingFalse
+          shopOwnersAssigned: assignedShopOwners,
+          shopOwnersUnassigned: data.shopsCount-totalShopOwners,
+          SportbookingTrue: data.SportbookingTrue,
+          SportbookingFalse: data.SportbookingFalse
         });
       })
       .catch((err) => {
         console.error('Error:', err);
       });
-  }, [navigate]);
+  }, []);
 
   // Prepare data for the bar chart
   const barData = [
@@ -59,44 +54,77 @@ const AdminDashboard2 = () => {
     { name: 'Shops', count: stats.shops },
   ];
 
-  // Prepare data for the pie chart
+  // Prepare data for the pie charts
   const pieData = [
-    { name: 'Assigned shops', value: stats.shopOwnersAssigned },
-    { name: 'Unassigned shops', value: stats.shopOwnersUnassigned },
+    { name: 'Assigned Shops', value: stats.shopOwnersAssigned },
+    { name: 'Unassigned Shops', value: stats.shopOwnersUnassigned },
   ];
 
   const pieData2 = [
     { name: 'Booked Slots', value: stats.SportbookingTrue },
-    { name: 'UnBooked Slots', value: stats.SportbookingFalse},
+    { name: 'Unbooked Slots', value: stats.SportbookingFalse},
   ];
 
-  // Define colors for the pie chart
-  const COLORS = ['#0088FE', '#FF8042'];
+  // Define colors for the pie charts - Holi colors
+  const COLORS = ['#FF9A9E', '#00F5D4'];
+  const COLORS2 = ['#9B5DE5', '#F15BB5'];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
 
   return (
-    <div className="admin-body">
-      {/* Admin management section */}
-      <div className="admin-management">
-        <h2 className="management-heading">Admin Management</h2>
-        <div className="management-options">
-          {/* Bar chart section */}
-          <div className="management-box stats-graph">
-            <h3>Statistics</h3>
+    <div className="charts-container">
+      <motion.div 
+        className="charts-grid"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Bar chart section */}
+        <motion.div className="chart-card" variants={itemVariants}>
+          <h3 className="chart-title">Mall Statistics</h3>
+          <div className="chart-content">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+                <XAxis dataKey="name" stroke="#fff" />
+                <YAxis stroke="#fff" />
+                <Tooltip
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                    borderRadius: '10px', 
+                    border: 'none',
+                    color: '#333'
+                  }}
+                />
                 <Legend />
-                <Bar dataKey="count" fill="#8884d8" />
+                <Bar dataKey="count" fill="#FF9A9E" radius={[10, 10, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
+        </motion.div>
 
-          {/* Pie chart section */}
-          <div className="management-box stats-graph">
-            <h3>Shop Owners Assignment to the shops</h3>
+        {/* Pie chart for shop assignments */}
+        <motion.div className="chart-card" variants={itemVariants}>
+          <h3 className="chart-title">Shop Owner Assignments</h3>
+          <div className="chart-content">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -106,20 +134,30 @@ const AdminDashboard2 = () => {
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                    borderRadius: '10px', 
+                    border: 'none',
+                    color: '#333'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
+        </motion.div>
 
-          {/* Pie chart section */}
-          <div className="management-box stats-graph">
-            <h3>Booked Sport Slots</h3>
+        {/* Pie chart for sport bookings */}
+        <motion.div className="chart-card" variants={itemVariants}>
+          <h3 className="chart-title">Sport Facility Bookings</h3>
+          <div className="chart-content">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -129,21 +167,26 @@ const AdminDashboard2 = () => {
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {pieData2.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS2[index % COLORS2.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                    borderRadius: '10px', 
+                    border: 'none',
+                    color: '#333'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          
-        </div>
-      </div>
-
-      <Revenue/>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
