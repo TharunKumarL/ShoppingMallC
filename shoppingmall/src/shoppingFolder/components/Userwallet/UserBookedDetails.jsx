@@ -25,17 +25,21 @@ const BookingDetails = () => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ email: userEmail }),
-                });
+                }); 
+                
 
                 if (!userBookingsResponse.ok) throw new Error("Failed to fetch user bookings.");
                 const userBookingsData = await userBookingsResponse.json();
                 setUserBookings(userBookingsData.bookings || []);
 
                 // Fetch restaurant bookings
-                const restaurantBookingsResponse = await fetch("http://localhost:5000/get_restaurant_bookings");
+                const restaurantBookingsResponse = await fetch("http://localhost:5000/get_restaurant_bookings")
+    
+        
                 if (!restaurantBookingsResponse.ok) throw new Error("Failed to fetch restaurant bookings.");
                 const restaurantBookingsData = await restaurantBookingsResponse.json();
-                setRestaurantBookings(restaurantBookingsData.bookings || []);
+                setRestaurantBookings(restaurantBookingsData.bookings || []); 
+                
 
             } catch (error) {
                 console.error("Error fetching data:", error);
