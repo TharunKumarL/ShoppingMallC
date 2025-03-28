@@ -22,10 +22,37 @@ function RestaurantList() {
     "20% cashback on prepaid orders!",
   ];
 
-  // const navigate = useNavigate();
-
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Add color powder animation effects
+    const addColorPowder = () => {
+      const container = document.querySelector('.RS-container');
+      if (container) {
+        const powder = document.createElement('div');
+        powder.className = 'holi-powder';
+        
+        // Random position
+        powder.style.left = `${Math.random() * 100}%`;
+        
+        // Random color
+        const colors = ['#FF9A9E', '#FECDA6', '#A0FFA3', '#D4A5FF', '#9BE8D8', '#FFC0CB', '#FF5E7D', '#FFD166', '#EF476F'];
+        powder.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        container.appendChild(powder);
+        
+        // Remove after animation completes
+        setTimeout(() => {
+          powder.remove();
+        }, 5000);
+      }
+    };
+
+    // Add new color powder every 1.5 seconds
+    const intervalId = setInterval(addColorPowder, 1500);
+    
+    // Cleanup
+    return () => clearInterval(intervalId);
   }, []);
 
   // Fetch restaurants from the backend on component mount
@@ -92,36 +119,45 @@ function RestaurantList() {
 
   if (loading) {
     return (
-      <div className="RS-loading">
+      <div className="RS-loading holi-loading">
         <div className="RS-loading-spinner"></div>
-        <p>Loading restaurants...</p>
+        <p>Loading delicious options...</p>
+        <div className="holi-spinner-decoration"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="RS-error">
+      <div className="RS-error holi-error">
         <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Try Again</button>
+        <button onClick={() => window.location.reload()} className="holi-retry-button">
+          Try Again
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="RS-container">
-      <div className="RS-offers-section">
-        <h1 className="RS-section-title">Today's Special Offers</h1>
+    <div className="RS-container holi-festival-container">
+      {/* Holi decorations */}
+      <div className="holi-decoration top-left"></div>
+      <div className="holi-decoration top-right"></div>
+      <div className="holi-decoration bottom-left"></div>
+      <div className="holi-decoration bottom-right"></div>
+      
+      <div className="RS-offers-section holi-offers">
+        <h1 className="RS-section-title">Festival Special Offers</h1>
         <InfiniteScroll offers={offers} />
       </div>
 
       <div className="RS-main-content">
-        <h1 className="RS-header">Discover Restaurants</h1>
+        <h1 className="RS-header holi-header">Celebrate with Delicious Food</h1>
 
-        <div className="RS-filters-container">
+        <div className="RS-filters-container holi-filters">
           <div className="RS-filter-buttons">
             <select
-              className="RS-select-category"
+              className="RS-select-category holi-select"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
@@ -133,7 +169,7 @@ function RestaurantList() {
             </select>
 
             <button
-              className="RS-button RS-filter-toggle"
+              className="RS-button RS-filter-toggle holi-button"
               onClick={() => setShowFilters(!showFilters)}
             >
               {showFilters ? "− Hide Filters" : "+ Show Filters"}
@@ -141,9 +177,9 @@ function RestaurantList() {
           </div>
 
           {showFilters && (
-            <div className="RS-advanced-filters">
+            <div className="RS-advanced-filters holi-advanced-filters">
               <select
-                className="RS-select-filter"
+                className="RS-select-filter holi-select"
                 value={selectedCuisine}
                 onChange={(e) => setSelectedCuisine(e.target.value)}
               >
@@ -157,7 +193,7 @@ function RestaurantList() {
               </select>
 
               <select
-                className="RS-select-filter"
+                className="RS-select-filter holi-select"
                 value={selectedDietary}
                 onChange={(e) => setSelectedDietary(e.target.value)}
               >
@@ -169,7 +205,7 @@ function RestaurantList() {
               </select>
 
               <select
-                className="RS-select-filter"
+                className="RS-select-filter holi-select"
                 value={selectedSeating}
                 onChange={(e) => setSelectedSeating(e.target.value)}
               >
@@ -180,7 +216,7 @@ function RestaurantList() {
               </select>
 
               <button 
-                className="RS-button RS-clear-button"
+                className="RS-button RS-clear-button holi-clear-button"
                 onClick={handleClearFilters}
               >
                 Clear All Filters
@@ -192,7 +228,8 @@ function RestaurantList() {
         <div className="RS-grid-container">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              <div key={restaurant._id} className="RS-card">
+              <div key={restaurant._id} className="RS-card holi-card">
+                <div className="holi-card-decoration"></div>
                 <div className="RS-card-image-container">
                   <img
                     src={restaurant.image || '/default-restaurant.jpg'}
@@ -208,15 +245,15 @@ function RestaurantList() {
                     <h2 className="RS-restaurant-name">{restaurant.name}</h2>
                   </div>
                   <div className="RS-tag-container">
-                    <span className="RS-tag RS-cuisine-tag">
+                    <span className="RS-tag RS-cuisine-tag holi-tag">
                       <FaUtensils className="RS-tag-icon" /> {restaurant.cuisine}
                     </span>
                     {restaurant.dietary !== "None" && (
-                      <span className="RS-tag RS-dietary-tag">
+                      <span className="RS-tag RS-dietary-tag holi-tag">
                         {restaurant.dietary}
                       </span>
                     )}
-                    <span className="RS-tag RS-seating-tag">
+                    <span className="RS-tag RS-seating-tag holi-tag">
                       <FaChair className="RS-tag-icon" /> {restaurant.seating}
                     </span>
                   </div>
@@ -240,7 +277,7 @@ function RestaurantList() {
                   </div>
                   <Link 
                     to={`/bookrestaurant/restaurants/${restaurant._id}`}
-                    className="RS-book-button"
+                    className="RS-book-button holi-book-button"
                   >
                     Book Now
                   </Link>
@@ -248,7 +285,7 @@ function RestaurantList() {
               </div>
             ))
           ) : (
-            <div className="RS-no-results">
+            <div className="RS-no-results holi-no-results">
               <div className="RS-no-results-content">
                 <span className="RS-no-results-icon">🍽️</span>
                 <h3>No Restaurants Found</h3>

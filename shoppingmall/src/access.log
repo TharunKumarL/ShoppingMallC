@@ -1048,6 +1048,7 @@
 [2025-03-26T10:54:08.240Z] POST /api/login 200
 [2025-03-26T10:54:09.703Z] GET /user_get_mail 304
 [2025-03-26T10:54:09.708Z] GET /user_get_mail 304
+<<<<<<< Updated upstream
 =======
 =======
 >>>>>>> Stashed changes
@@ -1235,4 +1236,26 @@
 [2025-03-28T09:03:41.723Z] GET /api/hotels 304
 [2025-03-28T09:03:41.800Z] GET /api/hotels 304
 =======
+>>>>>>> Stashed changes
+=======
+[2025-03-28T08:59:52.626Z] GET /api/shops 304
+[2025-03-28T08:59:52.786Z] GET /api/shops 304
+[2025-03-28T09:00:06.949Z] GET /api/deals 304
+[2025-03-28T09:00:07.154Z] GET /api/deals 304
+[2025-03-28T09:00:12.483Z] GET /api/events 304
+[2025-03-28T09:00:12.608Z] GET /api/events 304
+[2025-03-28T09:00:26.379Z] GET /api/events 304
+[2025-03-28T09:00:26.480Z] GET /api/events 304
+[2025-03-28T09:00:27.793Z] GET /api/deals 304
+[2025-03-28T09:00:27.892Z] GET /api/deals 304
+[2025-03-28T09:00:29.474Z] GET /api/shops 304
+[2025-03-28T09:00:29.582Z] GET /api/shops 304
+[2025-03-28T09:00:35.632Z] GET /user_get_mail 200
+[2025-03-28T09:00:35.643Z] GET /user_get_mail 304
+[2025-03-28T09:00:46.480Z] GET /api/events 304
+[2025-03-28T09:00:46.650Z] GET /api/events 304
+[2025-03-28T09:00:47.290Z] GET /api/deals 304
+[2025-03-28T09:00:47.499Z] GET /api/deals 304
+[2025-03-28T09:00:47.831Z] GET /api/shops 304
+[2025-03-28T09:00:48.016Z] GET /api/shops 304
 >>>>>>> Stashed changes
