@@ -897,6 +897,7 @@
 [2025-03-26T09:13:47.923Z] GET /stats 304
 [2025-03-26T09:13:48.247Z] GET /stats 304
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [2025-03-26T09:30:56.813Z] POST /api/signup 400
 [2025-03-26T09:31:02.183Z] POST /api/signup 400
 [2025-03-26T09:31:07.054Z] POST /api/signup 201
@@ -1048,6 +1049,8 @@
 [2025-03-26T10:54:09.703Z] GET /user_get_mail 304
 [2025-03-26T10:54:09.708Z] GET /user_get_mail 304
 =======
+=======
+>>>>>>> Stashed changes
 [2025-03-26T09:23:48.458Z] POST /api/login 401
 [2025-03-26T09:23:55.689Z] POST /api/login 401
 [2025-03-26T09:24:02.810Z] POST /api/login 401
@@ -1220,6 +1223,7 @@
 [2025-03-28T08:57:01.780Z] GET / 404
 [2025-03-28T08:57:06.446Z] GET / 404
 [2025-03-28T08:58:15.189Z] POST /api/login 401
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 [2025-03-28T09:02:10.728Z] POST /api/login 401
 [2025-03-28T09:02:18.192Z] POST /api/login 401
@@ -1230,3 +1234,5 @@
 [2025-03-28T09:03:16.244Z] POST /api/login 200
 [2025-03-28T09:03:41.723Z] GET /api/hotels 304
 [2025-03-28T09:03:41.800Z] GET /api/hotels 304
+=======
+>>>>>>> Stashed changes
