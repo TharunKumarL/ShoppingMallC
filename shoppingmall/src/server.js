@@ -928,29 +928,7 @@ app.get("/api/feedback", async (req, res) => {
   }
 });
 
-
 // Table Schema
-// const tableSchema = new mongoose.Schema({
-//   name: { type: String, required: true },
-//   capacity: { type: Number, required: true, min: 1, max: 10 },
-//   location: { type: String, required: true },
-//   isAvailable: { type: Boolean, default: true },
-//   bookingDetails: {
-//       name: { 
-//           type: String, 
-//           required: function () { return !this.isAvailable; } // Required if table is unavailable
-//       },
-//       phone: { 
-//           type: String, 
-//           required: function () { return !this.isAvailable; } // Required if table is unavailable
-//       },
-//       email: { 
-//           type: String, 
-//           required: function () { return !this.isAvailable; } // Required if table is unavailable
-//       },
-//   },
-// });
-
 const tableSchema = new mongoose.Schema({
   name: { type: String, required: true },
   capacity: { type: Number, required: true, min: 1, max: 10 },

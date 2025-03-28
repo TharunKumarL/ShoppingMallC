@@ -215,8 +215,13 @@ function RestaurantList() {
                 <option value="Lawn">Lawn</option>
               </select>
 
+<<<<<<< Updated upstream
               <button 
                 className="RS-button RS-clear-button holi-clear-button"
+=======
+              <button
+                className="RS-button RS-clear-button"
+>>>>>>> Stashed changes
                 onClick={handleClearFilters}
               >
                 Clear All Filters
@@ -266,16 +271,10 @@ function RestaurantList() {
                   <div className="RS-availability-info">
                     <div className="RS-availability-item">
                       <FaClock className="RS-availability-icon" />
-                      {/* <span>10:00 AM - 10:00 PM</span> */}
-                    </div>
-                    <div className="RS-availability-item">
-                      <FaUsers className="RS-availability-icon" />
-                      <span>
-                        {tableAvailability[restaurant._id]?.available || 0} of {tableAvailability[restaurant._id]?.total || 0} tables available
-                      </span>
+                      <span>10:00 AM - 10:00 PM</span>
                     </div>
                   </div>
-                  <Link 
+                  <Link
                     to={`/bookrestaurant/restaurants/${restaurant._id}`}
                     className="RS-book-button holi-book-button"
                   >

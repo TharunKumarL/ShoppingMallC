@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchShops, toggleShopDetails } from  '../../redux/actions/shopActions';
 import { motion, AnimatePresence } from 'framer-motion';
-import '../components/css/Shoplist.css';
+import '../components/css/Sholist.css';
 
 
 
