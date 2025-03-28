@@ -44,7 +44,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import ResAdminDashboard from './components/Dashboard/Restaurant_AdminDashboard';
 import ResOwnerDashboard from './components/Dashboard/Restaurant_OwnerDashboard';
 import ResCustomerDashboard from './components/Dashboard/Restaurant_CustomerDashboard';
-import ResHome from './pages/Home';
+import ResHome from './pages/RestaurantHome';
 import Restaurants from './pages/Restaurants';
 // import ResAuthProvider from './context/AuthContext';
 import ResTableList from './components/TablesList';

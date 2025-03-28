@@ -970,7 +970,25 @@ const hotelSchema = new mongoose.Schema({
   cuisine: { type: String, required: true },
   dietary: { type: String, required: true },
   seating: { type: String, required: true },
-  tables: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Table', default: [] }],
+  image: { type: String, required: true },
+  location: { type: String, required: true },
+  contact: { type: String, required: true },
+  workingHours: {
+    monday: { type: String, required: true },
+    tuesday: { type: String, required: true },
+    wednesday: { type: String, required: true },
+    thursday: { type: String, required: true },
+    friday: { type: String, required: true },
+    saturday: { type: String, required: true },
+    sunday: { type: String, required: true },
+  },
+  owner: {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    contact: { type: String, required: true },
+  },
+  tables: [{ type: mongoose.Schema.Types.ObjectId, ref: "Table", default: [] }],
 });
 
 
@@ -1037,16 +1055,65 @@ app.get('/api/hotels', async (req, res) => {
 });
 
 // POST: Add a new hotel
+// app.post('/api/hotels/admin', async (req, res) => {
+//   try {
+//     const { name, category, cuisine, dietary, seating, image, tables } = req.body;
+//     const newHotel = new Hotel({ name, category, cuisine, dietary, seating, image, tables });
+//     const savedHotel = await newHotel.save();
+//     res.status(201).json(savedHotel);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
 app.post('/api/hotels/admin', async (req, res) => {
   try {
-    const { name, category, cuisine, dietary, seating, image, tables } = req.body;
-    const newHotel = new Hotel({ name, category, cuisine, dietary, seating, image, tables });
+    const {
+      name,
+      category,
+      cuisine,
+      dietary,
+      seating,
+      image,
+      location,
+      contact,
+      workingHours,
+      owner,
+      tables
+    } = req.body;
+
+    // Validate that no required field is missing
+    if (
+      !name || !category || !cuisine || !dietary || !seating ||
+      !image || !location || !contact ||
+      !workingHours || !workingHours.monday || !workingHours.tuesday || !workingHours.wednesday ||
+      !workingHours.thursday || !workingHours.friday || !workingHours.saturday || !workingHours.sunday ||
+      !owner || !owner.name || !owner.email || !owner.password || !owner.contact
+    ) {
+      return res.status(400).json({ error: "All required fields must be provided." });
+    }
+
+    const newHotel = new Hotel({
+      name,
+      category,
+      cuisine,
+      dietary,
+      seating,
+      image,
+      location,
+      contact,
+      workingHours,
+      owner,
+      tables
+    });
+
     const savedHotel = await newHotel.save();
     res.status(201).json(savedHotel);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
 
 app.get('/api/hotels/:hotelId', async (req, res) => {
   const { hotelId } = req.params;
