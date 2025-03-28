@@ -3,7 +3,7 @@
   color: #333;
   padding: 3rem 5% 1rem;
   font-family: 'SF Pro Display', sans-serif;
-  position: relative;
+  position:'absolute';
   overflow: hidden;
 }
 
