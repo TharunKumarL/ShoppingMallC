@@ -24,23 +24,23 @@ function RestaurantList() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     // Add color powder animation effects
     const addColorPowder = () => {
       const container = document.querySelector('.RS-container');
       if (container) {
         const powder = document.createElement('div');
         powder.className = 'holi-powder';
-        
+
         // Random position
         powder.style.left = `${Math.random() * 100}%`;
-        
+
         // Random color
         const colors = ['#FF9A9E', '#FECDA6', '#A0FFA3', '#D4A5FF', '#9BE8D8', '#FFC0CB', '#FF5E7D', '#FFD166', '#EF476F'];
         powder.style.background = colors[Math.floor(Math.random() * colors.length)];
-        
+
         container.appendChild(powder);
-        
+
         // Remove after animation completes
         setTimeout(() => {
           powder.remove();
@@ -50,7 +50,7 @@ function RestaurantList() {
 
     // Add new color powder every 1.5 seconds
     const intervalId = setInterval(addColorPowder, 1500);
-    
+
     // Cleanup
     return () => clearInterval(intervalId);
   }, []);
@@ -145,7 +145,7 @@ function RestaurantList() {
       <div className="holi-decoration top-right"></div>
       <div className="holi-decoration bottom-left"></div>
       <div className="holi-decoration bottom-right"></div>
-      
+
       <div className="RS-offers-section holi-offers">
         <h1 className="RS-section-title">Festival Special Offers</h1>
         <InfiniteScroll offers={offers} />
@@ -215,13 +215,8 @@ function RestaurantList() {
                 <option value="Lawn">Lawn</option>
               </select>
 
-<<<<<<< Updated upstream
-              <button 
-                className="RS-button RS-clear-button holi-clear-button"
-=======
               <button
-                className="RS-button RS-clear-button"
->>>>>>> Stashed changes
+                className="RS-button RS-clear-button holi-clear-button"
                 onClick={handleClearFilters}
               >
                 Clear All Filters

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate,useLocation , Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react';
 import Header from './shoppingFolder/components/Header';
 import Login from './shoppingFolder/components/Login/Login';
@@ -24,6 +24,7 @@ import SomeShops from './shoppingFolder/components/SomeShops.jsx';
 import ShopOwnerDashboard from './shoppingFolder/components/shopowner/dashboard.jsx';
 import Viewdeals from './shoppingFolder/components/shopowner/viewdeals.jsx';
 import AddDeals from './shoppingFolder/components/shopowner/AddDeals.jsx';
+import AddRestaurants from './shoppingFolder/components/restaurant/AddRestaurant.jsx';
 import ViewShopDetails from './shoppingFolder/components/shopowner/ViewShopDetails.jsx';
 import UpdateDeals from './shoppingFolder/components/shopowner/UpdateDeals.jsx';
 import UpdateDealDetail from './shoppingFolder/components/shopowner/UpdateDealDetail.jsx';
@@ -50,7 +51,7 @@ import Restaurants from './pages/Restaurants';
 import ResTableList from './components/TablesList';
 import ResBookingPage from './components/BookingPage';
 import ResBookingConfirmation from './components/BookingConfirmation';
-
+import RestroManager from './shoppingFolder/components/restaurant/RestroManager.jsx';
 //User wallet 
 import UserWallet from './shoppingFolder/components/Userwallet/UserWallet.jsx';
 
@@ -126,68 +127,72 @@ function App() {
           {/* Non-protected Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />          <Route path="/manager-login" element={<ManagerLogin />} />
-          <Route path="/shopowner-login" element={<ShopOwnerLogin/>}/>
+          <Route path="/shopowner-login" element={<ShopOwnerLogin />} />
           {/* Protect the home page ("/") and other pages that require authentication */}
           <Route path="/shoplist" element={<ProtectedRoute element={<ShopsList />} />} />
           <Route path="/deals" element={<ProtectedRoute element={<Deals />} />} />
           <Route path="/event" element={<ProtectedRoute element={<Event />} />} />
-          <Route 
-  path="/" 
-  element={
-    <ProtectedRoute element={
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute element={
 
-       <Body />
+                <Body />
 
-    } 
-  />} 
-/>
-          <Route path="/booksports" element={<ProtectedRoute element={<Show_Sport/>}/>}/>
+              }
+              />}
+          />
+          <Route path="/booksports" element={<ProtectedRoute element={<Show_Sport />} />} />
 
-          <Route path="/admin/dashboard" element={<ProtectedRouteAdmin element={<AdminDashboard />} />} /> 
-          <Route path="/admin/dashboard2" element={<ProtectedRouteAdmin element={<AdminDashboard2 />} />} /> 
+          <Route path="/admin/dashboard" element={<ProtectedRouteAdmin element={<AdminDashboard />} />} />
+          <Route path="/admin/dashboard2" element={<ProtectedRouteAdmin element={<AdminDashboard2 />} />} />
           <Route path="/admin/add-shop" element={<ProtectedRouteAdmin element={<AddShops />} />} />
           <Route path="/admin/update-shop" element={<ProtectedRouteAdmin element={<UpdateShop />} />} />
           <Route path="/admin/add-shopowners" element={<ProtectedRouteAdmin element={<AddShopOwner />} />} />
           <Route path="/admin/update-shopowners" element={<ProtectedRouteAdmin element={<UpdateShopOwner />} />} />
           <Route path="admin/update-shop/:id" element={<ProtectedRouteAdmin element={<UpdateShopDetail />} />} />
-          <Route path="/admin/view-shops" element={<ProtectedRouteAdmin element={<ViewShops/>} />} />
+          <Route path="/admin/view-shops" element={<ProtectedRouteAdmin element={<ViewShops />} />} />
           <Route path="/admin/view-shopowners" element={<ProtectedRouteAdmin element={<ViewShopOwners />} />} />
-          <Route path="/admin/add-manager" element={<ProtectedRouteAdmin element={<AddManagers/>}/>} />
-          <Route path="/admin/viewFeedback" element={<ProtectedRouteAdmin element={<ViewFeedback/>}/>} />
-          <Route path="/shopowner/dashboard" element={<ShopOwnerDashboard />}/>
-          <Route path="/shopowner/view-deals" element={<Deals />}/>
-          <Route path="/shopowner/add-deals" element={<AddDeals />}/>
-          <Route path="/shopowner/view-shop-details" element={<ViewShopDetails />}/>
-          <Route path="/shopowner/update-deals" element={<UpdateDeals/>}/>
-          <Route path="/shopowner/update-deals:id" element={<UpdateDealDetail/>}/>
-          <Route path="/shopowner/profile" element={<ShopOwnerProfile/>}/>
+          <Route path="/admin/add-manager" element={<ProtectedRouteAdmin element={<AddManagers />} />} />
+          <Route path="/admin/viewFeedback" element={<ProtectedRouteAdmin element={<ViewFeedback />} />} />
+          <Route path="/shopowner/dashboard" element={<ShopOwnerDashboard />} />
+          <Route path="/shopowner/view-deals" element={<Deals />} />
+          <Route path="/shopowner/add-deals" element={<AddDeals />} />
+          <Route path="/shopowner/view-shop-details" element={<ViewShopDetails />} />
+          <Route path="/shopowner/update-deals" element={<UpdateDeals />} />
+          <Route path="/shopowner/update-deals:id" element={<UpdateDealDetail />} />
+          <Route path="/shopowner/profile" element={<ShopOwnerProfile />} />
           <Route path='/sport/owner' element={<ProtectedRoutesports element={
-            <><Sport_TopBar isOwner = {true}/><SportDashboard2 isOwner = {true}/><Show_Sport isOwner = {true}/>
-            </>}/>}
-            />
-
-          <Route path='/sport/user'  element={<ProtectedRoute element={
-            <><Sport_TopBar isOwner = {false}/><Show_Sport isOwner = {false}/>
-            </>}/>}
-            />
+            <><Sport_TopBar isOwner={true} /><SportDashboard2 isOwner={true} /><Show_Sport isOwner={true} />
+            </>} />}
+          />
+          <Route path='/restaurant/manager' element={<ProtectedRoute element={
+            <><Sport_TopBar isOwner={true} /><RestroManager isOwner={true} /><Show_Sport isOwner={true} />
+            </>} />}
+          />
+          <Route path="/restaurant/AddRestaurant" element={<AddRestaurants />} />
+          <Route path='/sport/user' element={<ProtectedRoute element={
+            <><Sport_TopBar isOwner={false} /><Show_Sport isOwner={false} />
+            </>} />}
+          />
           <Route path='/sport/owner/create' element={<ProtectedRoutesports element={<Create_Sport />} />} />
           <Route path="/FAQ" element={<ProtectedRoute element={<FAQ />} />} />
-          <Route path='/AboutUs' element = {<ProtectedRoute element={<AboutUs/>}/>}/>
-          <Route path='/user/wallet' element = {<ProtectedRoute element={<UserWallet/>}/>}/>
-          <Route path="/feedback" element={<Feedback/>}/>
+          <Route path='/AboutUs' element={<ProtectedRoute element={<AboutUs />} />} />
+          <Route path='/user/wallet' element={<ProtectedRoute element={<UserWallet />} />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path="/submissions" element={<Submissions />} />
           <Route path="/submission/:id" element={<Submissions />} />
           <Route
-  path="/theatre/manager"
-  element={ <div><h1>Welcome Theatre Manager</h1><Link to="http://localhost:3001/admin">Go to DashBoard</Link></div>}
-/>
-    
+            path="/theatre/manager"
+            element={<div><h1>Welcome Theatre Manager</h1><Link to="http://localhost:3001/admin">Go to DashBoard</Link></div>}
+          />
+
         </Routes>
 
-        
-        <Footer/>
+
+        <Footer />
       </div>
-      
+
     </Router>
     // </GoogleOAuthProvider>
   );
