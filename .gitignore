@@ -1,6 +1,11 @@
 /node_modules/.bin/
 /node_modules
 /shoppingmall/node_modules/
+<<<<<<< Updated upstream
 /shoppingmall/node_modules/.bin/ 
 
 **/node_modules/
+=======
+/shoppingmall/node_modules/.bin/
+/shoppingmall/src/access.log
+>>>>>>> Stashed changes

@@ -29,6 +29,8 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const { type } = require('os');
+const swaggerDocument = require('./RestroSwagger.json');
+const swaggerUi = require('swagger-ui-express');
 
 require('dotenv').config();
 
@@ -44,6 +46,8 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Admin routes (require authentication)
 app.use('/api/admin', adminAuth, verifyAdmin);

@@ -1,0 +1,408 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Hotel & Table Management API",
+        "version": "1.0.0",
+        "description": "API for managing hotels and tables"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000"
+        }
+    ],
+    "paths": {
+        "/api/hotels": {
+            "get": {
+                "summary": "Fetch all hotels",
+                "tags": [
+                    "Hotels"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of all hotels",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Hotel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add a new hotel",
+                "tags": [
+                    "Hotels"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Hotel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hotel created"
+                    }
+                }
+            }
+        },
+        "/api/hotels/{id}": {
+            "get": {
+                "summary": "Get a specific hotel",
+                "tags": [
+                    "Hotels"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hotel found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hotel"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Hotel not found"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a hotel",
+                "tags": [
+                    "Hotels"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HotelUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Hotel updated"
+                    }
+                }
+            }
+        },
+        "/api/hotels/{id}/tables": {
+            "get": {
+                "summary": "Get tables of a hotel (optionally by slot)",
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "slot",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of tables",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Table"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/hotels/{hotelId}/tables": {
+            "post": {
+                "summary": "Add a table to a hotel",
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "name": "hotelId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Table"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Table created"
+                    }
+                }
+            }
+        },
+        "/api/admin/tables/{tableId}": {
+            "put": {
+                "summary": "Update a table",
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TableUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Table updated"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a table",
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Table deleted"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Hotel": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "category",
+                    "cuisine",
+                    "dietary",
+                    "seating",
+                    "image",
+                    "location",
+                    "contact",
+                    "workingHours",
+                    "owner"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "category": {
+                        "type": "string"
+                    },
+                    "cuisine": {
+                        "type": "string"
+                    },
+                    "dietary": {
+                        "type": "string"
+                    },
+                    "seating": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "contact": {
+                        "type": "string"
+                    },
+                    "workingHours": {
+                        "type": "object",
+                        "properties": {
+                            "monday": {
+                                "type": "string"
+                            },
+                            "tuesday": {
+                                "type": "string"
+                            },
+                            "wednesday": {
+                                "type": "string"
+                            },
+                            "thursday": {
+                                "type": "string"
+                            },
+                            "friday": {
+                                "type": "string"
+                            },
+                            "saturday": {
+                                "type": "string"
+                            },
+                            "sunday": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "owner": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "contact": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "tables": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "HotelUpdate": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string"
+                    },
+                    "contact": {
+                        "type": "string"
+                    },
+                    "owner": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "contact": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "Table": {
+                "type": "object",
+                "required": [
+                    "slot",
+                    "name",
+                    "capacity"
+                ],
+                "properties": {
+                    "slot": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10
+                    },
+                    "isAvailable": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "TableUpdate": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10
+                    }
+                }
+            }
+        }
+    }
+}
