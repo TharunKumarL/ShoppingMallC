@@ -1,4 +1,6 @@
 /node_modules/.bin/
-/node_modules/
+/node_modules
 /shoppingmall/node_modules/
-/shoppingmall/node_modules/.bin/
+/shoppingmall/node_modules/.bin/ 
+
+**/node_modules/
