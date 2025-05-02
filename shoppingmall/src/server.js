@@ -8,30 +8,32 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const User = require('./models/UserSchema.js');
 const Shop = require('./models/Shop');
+const Restro = require('./models/Restaurant');
 const Deal = require('./models/deal');
 const Event = require('./models/Event');
 const ShopOwner = require('./models/ShopOwner')
 const bookingSchema = require("./models/bookingSchema.js");
-const Manager=require("./models/manager.js")
-const Feedback=require("./models/FeedBackSchema.js")
+const Manager = require("./models/manager.js")
+const Feedback = require("./models/FeedBackSchema.js")
 const adminAuth = require('./middleware/adminAuth');
 const verifyAdmin = require('./middleware/verifyAdmin.js');
 const SportRoute = require('./Routes/SportRoute.js');
 const SportRouteUser = require("./Routes/SportRouteUser.js");
-const authenticateToken = require("../src/middleware/authenticationToken.js"); 
-const UserDetails = require("./Routes/UserDetails.js"); 
-const UserSchema = require("./models/UserSchema.js"); 
-const UserWallet=require("./models/userwallet.js")
+const authenticateToken = require("../src/middleware/authenticationToken.js");
+const UserDetails = require("./Routes/UserDetails.js");
+const UserSchema = require("./models/UserSchema.js");
+const UserWallet = require("./models/userwallet.js")
 const Booking = require('./models/bookingrestaurant.js');
 const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const { type } = require('os');
 
 require('dotenv').config();
 
 const app = express();
-const app2=express();
+const app2 = express();
 
 const port = 5000;
 
@@ -41,9 +43,10 @@ app.use(cors({
   credentials: true,
 }));
 app.use(bodyParser.json());
-// Admin routes
-app.use('/api/admin', adminAuth, verifyAdmin);
 
+
+// Admin routes (require authentication)
+app.use('/api/admin', adminAuth, verifyAdmin);
 
 //Routes Level Middleware
 //Sport
@@ -56,8 +59,8 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Database connected successfully'))
-.catch((error) => console.error('Database connection error:', error));
+  .then(() => console.log('Database connected successfully'))
+  .catch((error) => console.error('Database connection error:', error));
 
 //Error Handler Middleware
 // Sample Route with Error
@@ -80,10 +83,10 @@ app.get('/notfound', (req, res, next) => {
 // Custom Error-Handling Middleware
 app.use((err, req, res, next) => {
   if (err.status === 404) {
-      return res.status(404).json({ error: err.message });
+    return res.status(404).json({ error: err.message });
   }
   res.status(500).json({ error: 'Unexpected error occurred' });
-}); 
+});
 
 //BuiltIn Middleware
 app.use(express.static('public'));
@@ -111,7 +114,7 @@ if (!fs.existsSync(uploadPath)) {
 
 // Multer Storage Configuration
 const storage = multer.diskStorage({
-  destination: uploadPath, 
+  destination: uploadPath,
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
@@ -161,7 +164,7 @@ app.post('/api/signup', upload.single('image'), async (req, res) => {
 app.use('/uploads', express.static('uploads'));
 
 
-let z="";
+let z = "";
 
 // Login endpoint
 // Login endpoint
@@ -217,8 +220,8 @@ app.get('/api/protected-route', authenticateToken, (req, res) => {
 
 
 // MARK:User-Details
-app.get("/user_get_mail", async (req, res) => { 
-  console.log(`User E-mail address at-backend is: ${z}`); 
+app.get("/user_get_mail", async (req, res) => {
+  console.log(`User E-mail address at-backend is: ${z}`);
 
   res.status(200).json({ mail: z }); // Return as JSON object
 });
@@ -262,10 +265,10 @@ app.post('/api/manager-login', async (req, res) => {
 });
 
 
-let x=''
+let x = ''
 app.post('/api/shopowner-login', async (req, res) => {
   const { email, password } = req.body;
-  x=email
+  x = email
   console.log(x)
   try {
     // Check if the shop owner exists in the database
@@ -423,6 +426,7 @@ app.post("/api/managers", async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 });
+
 app.get('/api/a/shops', async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query; // Pagination parameters
@@ -438,6 +442,7 @@ app.get('/api/a/shops', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch shops' });
   }
 });
+
 app.get('/api/a/shops/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -505,8 +510,8 @@ app.post('/api/admin/shops', async (req, res) => {
   const { name, location, contact, image, workingHours, owner } = req.body;
 
   if (!name || !location || !contact || !owner || !owner.name || !owner.email || !owner.contact) {
-    return res.status(400).json({ 
-      error: 'Name, location, contact, and complete owner details are required' 
+    return res.status(400).json({
+      error: 'Name, location, contact, and complete owner details are required'
     });
   }
 
@@ -541,23 +546,23 @@ app.post('/api/admin/shops', async (req, res) => {
       });
       await shopOwner.save();
     }
-        // Send the password to the shop owner's email
-        const transporter = nodemailer.createTransport({
-          service: 'Gmail', // You can use any email service like Gmail, Outlook, etc.
-          auth: {
-            user: 'tharunkumarlagisetty@gmail.com', // Your email
-            pass: 'bjbt ovza dnuf ayyp',  // Your email password
-          },
-        });
-    
-        const mailOptions = {
-          from: 'tharunkumarlagisetty22@gmail.com',
-          to: owner.email,
-          subject: 'Your Shop Owner Account Password',
-          text: `Hello ${name},\n\nYour account has been created successfully. Here is your password: ${password}\nPlease log in and change your password immediately.\n\nBest regards,\nShopping Mall Admin`,
-        };
-    
-        await transporter.sendMail(mailOptions);
+    // Send the password to the shop owner's email
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail', // You can use any email service like Gmail, Outlook, etc.
+      auth: {
+        user: 'tharunkumarlagisetty@gmail.com', // Your email
+        pass: 'bjbt ovza dnuf ayyp',  // Your email password
+      },
+    });
+
+    const mailOptions = {
+      from: 'tharunkumarlagisetty22@gmail.com',
+      to: owner.email,
+      subject: 'Your Shop Owner Account Password',
+      text: `Hello ${name},\n\nYour account has been created successfully. Here is your password: ${password}\nPlease log in and change your password immediately.\n\nBest regards,\nShopping Mall Admin`,
+    };
+
+    await transporter.sendMail(mailOptions);
 
     // Create the shop
     const newShop = new Shop({
@@ -583,43 +588,6 @@ app.post('/api/admin/shops', async (req, res) => {
     res.status(500).json({ error: 'Failed to add shop: ' + error.message });
   }
 });
-
-const resetTableAvailability = async () => {
-  try {
-    const tables = await Table.find({ isAvailable: false }).populate('currentBooking');
-    
-    for (const table of tables) {
-      // Log booking to history
-      if (table.currentBooking) {
-        await Booking.findByIdAndUpdate(table.currentBooking._id, { $set: { isActive: false } });
-      }
-
-      // Reset table availability
-      table.isAvailable = true;
-      table.currentBooking = null;
-      await table.save();
-    }
-
-    console.log('Table availability reset at midnight');
-  } catch (err) {
-    console.error('Error resetting table availability:', err);
-  }
-};
-
-// Schedule the reset at midnight
-const scheduleMidnightReset = () => {
-  const now = new Date();
-  const nextMidnight = new Date();
-  nextMidnight.setHours(24, 0, 0, 0); // Set to next midnight
-  const timeUntilMidnight = nextMidnight - now;
-
-  setTimeout(() => {
-    resetTableAvailability();
-    scheduleMidnightReset(); // Schedule the next midnight reset
-  }, timeUntilMidnight);
-};
-
-scheduleMidnightReset();
 
 app.get('/stats', async (req, res) => {
   try {
@@ -743,7 +711,7 @@ app.delete('/api/shopowners/:id', async (req, res) => {
 //shopOwner
 app.post('/shopownerlogin', async (req, res) => {
   const { email, password } = req.body;
-  x=email
+  x = email
   console.log(x)
   try {
     // Find the shop owner by email
@@ -771,7 +739,7 @@ app.post('/shopownerlogin', async (req, res) => {
       message: 'Login successful',
       token: token, // Send token if you are using it
       shopOwner: { id: shopOwner._id, email: shopOwner.email }, // Or other required details
-      
+
     });
     // sessionStorage.setItem('shopOwnerId', shopOwner._id);
   } catch (error) {
@@ -783,11 +751,11 @@ app.post('/shopownerlogin', async (req, res) => {
 app.get('/api/shopowner/profile', async (req, res) => {
   console.log(x)
   try {
-    console.log( x);
-    
+    console.log(x);
+
     // Find the shop owner by email
     const shopOwner = await ShopOwner.findOne({ email: x }).select('-password'); // Exclude the password field
-    
+
     if (!shopOwner) {
       return res.status(404).json({ message: 'Shop Owner not found' });
     }
@@ -847,8 +815,8 @@ app.put('/api/deals/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-//adddeals
 
+//add deals
 app.post('/api/add-deal', async (req, res) => {
   const { shop, description, expiration } = req.body;
 
@@ -894,8 +862,6 @@ app.get('api/deals-expiration-stats', async (req, res) => {
   }
 });
 
-
-
 app.post('/api/feedback', async (req, res) => {
   const { username, rating, message } = req.body;
   if (!username || !rating || !message) {
@@ -928,19 +894,6 @@ app.get("/api/feedback", async (req, res) => {
   }
 });
 
-// Table Schema
-const tableSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  capacity: { type: Number, required: true, min: 1, max: 10 },
-  location: { type: String, required: true },
-  isAvailable: { type: Boolean, default: true },
-  currentBooking: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Booking',
-    default: null, // Reference to current booking if occupied
-  },
-});
-
 // Hotel Schema
 const hotelSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -969,59 +922,41 @@ const hotelSchema = new mongoose.Schema({
   tables: [{ type: mongoose.Schema.Types.ObjectId, ref: "Table", default: [] }],
 });
 
+// Table Schema
+const tableSchema = new mongoose.Schema({
+  restaurant: { type: mongoose.Schema.Types.ObjectId, ref: "Hotel", required: true },
+  slot: { type: String, required: true },
+  name: { type: String, required: true },
+  capacity: { type: Number, required: true, min: 1, max: 10 },
+  isAvailable: { type: Boolean, default: true },
+  currentBooking: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Booking',
+    default: null, // Reference to current booking if occupied
+  },
+});
 
 // Models
 const Table = mongoose.model('Table', tableSchema);
 const Hotel = mongoose.model('Hotel', hotelSchema);
 
-// Routes for Tables
-// GET: Fetch all tables
-// GET: Fetch details of a specific table
-app.get('/api/get-table/:tableId', async (req, res) => {
-  const { tableId } = req.params;
+// Table routes are now defined at the top of the file
 
+// Routes for Hotels
+// GET: Fetch tables for a specific hotel and slot
+app.get('/api/hotels/:id/tables', async (req, res) => {
   try {
-      // Find the table by its ID
-      const table = await Table.findById(tableId);
-      if (!table) {
-          return res.status(404).json({ message: 'Table not found' });
-      }
-
-      res.json(table);
-  } catch (err) {
-      console.error('Error fetching table details:', err);
-      res.status(500).json({ message: 'Server error' });
+    const { slot } = req.query;
+    const tables = await Table.find({
+      restaurant: req.params.id,
+      ...(slot && { slot })
+    });
+    res.json(tables);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
-// POST: Add a new table
-// POST: Add a new table and associate it with a hotel
-app.post('/api/tables/admin', async (req, res) => {
-    try {
-      const { name, capacity, location, isAvailable, hotelId } = req.body;
-  
-      // Check if the hotel exists
-      const hotel = await Hotel.findById(hotelId);
-      if (!hotel) {
-        return res.status(404).json({ error: 'Hotel not found' });
-      }
-  
-      // Create a new table
-      const newTable = new Table({ name, capacity, location, isAvailable });
-      const savedTable = await newTable.save();
-  
-      // Add the table's ID to the hotel's tables array
-      hotel.tables.push(savedTable._id);
-      await hotel.save();
-  
-      res.status(201).json({ message: 'Table created and linked to hotel', table: savedTable });
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
-  });
-  
-
-// Routes for Hotels
 // GET: Fetch all hotels
 app.get('/api/hotels', async (req, res) => {
   try {
@@ -1032,19 +967,32 @@ app.get('/api/hotels', async (req, res) => {
   }
 });
 
-// POST: Add a new hotel
-// app.post('/api/hotels/admin', async (req, res) => {
-//   try {
-//     const { name, category, cuisine, dietary, seating, image, tables } = req.body;
-//     const newHotel = new Hotel({ name, category, cuisine, dietary, seating, image, tables });
-//     const savedHotel = await newHotel.save();
-//     res.status(201).json(savedHotel);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// });
+// GET: Fetch a specific hotel
+app.get('/api/hotels/:id', async (req, res) => {
+  const { id } = req.params;
 
-app.post('/api/hotels/admin', async (req, res) => {
+  try {
+    const hotel = await Hotel.findById(id);
+
+    if (!hotel) {
+      return res.status(404).json({ message: 'Restaurant not found.' });
+    }
+
+    res.status(200).json(hotel);
+  } catch (error) {
+    console.error('Error fetching hotel details:', error.message);
+
+    // Handle invalid ObjectId errors
+    if (error.name === 'CastError') {
+      return res.status(400).json({ message: 'Invalid hotel ID.' });
+    }
+
+    res.status(500).json({ message: 'Server error. Could not fetch hotel details.' });
+  }
+});
+
+// POST: Add a new hotel
+app.post('/api/admin/hotels', async (req, res) => {
   try {
     const {
       name,
@@ -1092,245 +1040,326 @@ app.post('/api/hotels/admin', async (req, res) => {
   }
 });
 
+// PUT: Update hotel details
+app.put('/api/admin/hotels/:id', async (req, res) => {
+  const { id } = req.params;
+  const { location, contact, owner } = req.body;
 
-app.get('/api/hotels/:hotelId', async (req, res) => {
-  const { hotelId } = req.params;
   try {
-    // Populate the tables field to include full table details
-    const hotel = await Hotel.findById(hotelId).populate('tables');
+    const hotel = await Hotel.findById(id);
     if (!hotel) {
-      return res.status(404).json({ message: 'Hotel not found' });
+      return res.status(404).json({ error: 'Hotel not found.' });
     }
-    res.json(hotel);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+
+    if (location) hotel.location = location;
+    if (contact) hotel.contact = contact;
+
+    if (owner) {
+      if (owner.name) hotel.owner.name = owner.name;
+      if (owner.email) hotel.owner.email = owner.email;
+      if (owner.contact) hotel.owner.contact = owner.contact;
+      if (owner.password) hotel.owner.password = owner.password;
+    }
+
+    const updatedHotel = await hotel.save();
+    res.status(200).json(updatedHotel);
+  } catch (error) {
+    console.error('Error updating hotel:', error);
+    res.status(500).json({ error: 'Failed to update hotel: ' + error.message });
   }
 });
 
-// // POST: Book a table
-// app.post('/api/book-table', async (req, res) => {
-//   const { tableId, name, phone, email } = req.body;
+// Table Management Route (POST): Add a table to a hotel
+app.post('/api/admin/hotels/:hotelId/tables', async (req, res) => {
+  try {
+    const { slot, name, capacity } = req.body;
+    const hotelId = req.params.hotelId;
 
+    // Validate required fields
+    if (!slot || !name || !capacity) {
+      return res.status(400).json({
+        message: 'Missing required fields. Please provide slot, name, and capacity.'
+      });
+    }
+
+    // Validate capacity is a number between 1 and 10
+    const capacityNum = parseInt(capacity);
+    if (isNaN(capacityNum) || capacityNum < 1 || capacityNum > 10) {
+      return res.status(400).json({
+        message: 'Capacity must be a number between 1 and 10'
+      });
+    }
+
+    // Verify hotel exists
+    const hotel = await Hotel.findById(hotelId);
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+
+    // Create a new table
+    const newTable = new Table({
+      restaurant: hotelId,
+      slot,
+      name,
+      capacity: capacityNum,
+      isAvailable: true
+    });
+
+    const savedTable = await newTable.save();
+
+    // Add the table to the hotel's tables array
+    hotel.tables.push(savedTable._id);
+    await hotel.save();
+
+    return res.status(201).json(savedTable);
+  } catch (error) {
+    console.error('Error creating table:', error);
+    return res.status(500).json({ message: 'Server error while creating table' });
+  }
+});
+
+
+app.put('/api/admin/tables/:tableId', async (req, res) => {
+  try {
+    const { name, capacity } = req.body;
+    const table = await Table.findById(req.params.tableId);
+    
+    if (!table) return res.status(404).json({ message: 'Table not found' });
+    
+    if (name) table.name = name;
+    if (capacity) table.capacity = capacity;
+    
+    await table.save();
+    res.json(table);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.delete('/api/admin/tables/:tableId', async (req, res) => {
+  try {
+    const table = await Table.findById(req.params.tableId);
+    if (!table) return res.status(404).json({ message: 'Table not found' });
+
+    // Remove table reference from hotel
+    await Hotel.findByIdAndUpdate(table.restaurant, {
+      $pull: { tables: table._id }
+    });
+
+    // Delete the table
+    await Table.findByIdAndDelete(req.params.tableId);
+    res.json({ message: 'Table deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+// // Booking Routes
+// // GET: Fetch all user bookings
+// app.get('/api/bookings/users', async (req, res) => {
 //   try {
-//     const table = await Table.findById(tableId);
-//     if (!table) {
-//       return res.status(404).json({ message: 'Table not found' });
+//     const bookings = await UserWallet.find();
+
+//     if (!bookings || bookings.length === 0) {
+//       return res.status(404).json({ message: 'No user bookings found.' });
 //     }
 
-//     if (!table.isAvailable) {
-//       return res.status(400).json({ message: 'Table is already booked.' });
-//     }
-
-//     table.isAvailable = false;
-//     table.bookingDetails = { name, phone, email };
-//     await table.save();
-
-//     const bookingId = Date.now().toString() + Math.random().toString().slice(2);
-
-//     const bookingDetails = {
-//       name,
-//       tableNumber: table.tableNumber,
-//       capacity: table.capacity,
-//       location: table.location,
-//       bookingDate: new Date().toISOString(),
-//       bookingTime: new Date().toLocaleTimeString(),
-//       bookingId,
-//     };
-
-//     sendBookingConfirmationEmail(email, bookingDetails);
-
-//     res.status(200).json({
-//       message: 'Table booked successfully.',
-//       bookingId,
-//       ...bookingDetails,
-//     });
-//   } catch (err) {
-//     console.error('Error booking table:', err);
-//     res.status(500).json({ message: 'Server error.' });
+//     res.status(200).json(bookings);
+//   } catch (error) {
+//     console.error('Error fetching user bookings:', error);
+//     res.status(500).json({ message: 'Server error while fetching user bookings.' });
 //   }
 // });
 
+// // GET: Fetch all restaurant bookings
+// app.get('/api/bookings/restaurants', async (req, res) => {
+//   try {
+//     const bookings = await Booking.find();
+
+//     if (!bookings || bookings.length === 0) {
+//       return res.status(404).json({ message: 'No restaurant bookings found.' });
+//     }
+
+//     res.status(200).json({
+//       bookings: bookings
+//     });
+//   } catch (error) {
+//     console.error('Error fetching restaurant bookings:', error);
+//     res.status(500).json({ message: 'Server error while fetching restaurant bookings.' });
+//   }
+// });
+
+// // POST: Book a table
+// app.post('/api/bookings/tables', async (req, res) => {
+//   const { tableId, name, phone, email } = req.body;
+
+//   // Validate required fields
+//   if (!tableId || !name || !phone || !email) {
+//     return res.status(400).json({ 
+//       error: 'Missing required fields. Please provide tableId, name, phone, and email.' 
+//     });
+//   }
+
+//   // Validate email format
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   if (!emailRegex.test(email)) {
+//     return res.status(400).json({ error: 'Invalid email format.' });
+//   }
+
+//   // Validate phone number (basic validation)
+//   const phoneRegex = /^\d{10}$/;
+//   if (!phoneRegex.test(phone)) {
+//     return res.status(400).json({ error: 'Invalid phone number. Must be 10 digits.' });
+//   }
+
+//   try {
+//     // Find the table by its ID
+//     const table = await Table.findById(tableId);
+//     if (!table) {
+//       return res.status(404).json({ error: 'Table not found.' });
+//     }
+
+//     // Check if the table is available
+//     if (!table.isAvailable) {
+//       return res.status(400).json({ error: 'Table is already booked.' });
+//     }
+
+//     // Create a unique booking ID
+//     const bookingId = Date.now().toString() + Math.random().toString().slice(2);
+
+//     // Prepare booking details
+//     const bookingDetails = {
+//       bookingId,
+//       tableId,
+//       name,
+//       phone,
+//       email,
+//       tableNumber: table.name,
+//       capacity: table.capacity,
+//       restaurant: table.restaurant,
+//       slot: table.slot,
+//       bookingDate: new Date().toISOString(),
+//       bookingTime: new Date().toLocaleTimeString(),
+//       status: 'confirmed'
+//     };
+
+//     // Create and save the booking
+//     const newBooking = new Booking(bookingDetails);
+//     await newBooking.save();
+
+//     // Update table status
+//     table.isAvailable = false;
+//     table.currentBooking = newBooking._id;
+//     await table.save();
+
+//     // Send confirmation email asynchronously
+//     sendBookingConfirmationEmail(email, bookingDetails).catch(error => {
+//       console.error('Error sending confirmation email:', error);
+//     });
+
+//     // Return success response
+//     res.status(201).json({
+//       message: 'Table booked successfully.',
+//       booking: bookingDetails
+//     });
+
+//   } catch (error) {
+//     console.error('Error booking table:', error);
+//     res.status(500).json({ error: 'Failed to book table. Please try again.' });
+//   }
+// });
+
+// // Function to send a booking confirmation email
 // async function sendBookingConfirmationEmail(to, bookingDetails) {
+//   // Create a nodemailer transporter
 //   const transporter = nodemailer.createTransport({
 //     host: 'smtp.gmail.com',
 //     port: 587,
-//     secure: false, // or 'STARTTLS'
+//     secure: false,
 //     auth: {
-//       user: 'your-email@gmail.com',
-//       pass: 'your-password'
+//       user: process.env.EMAIL_USER || 'your-email@gmail.com',
+//       pass: process.env.EMAIL_PASSWORD || 'your-password'
 //     }
 //   });
-// /* for i in range(1,23):
-// print ("Hello World")
-// */
-//   const mailOptions = {
-//     from: 'your-email@gmail.com',
-//     to: to,
-//     subject: 'Booking Confirmation at Kula',
-//     html: `
-//       <h2>Booking Confirmation</h2>
-//       <p>Dear ${bookingDetails.name},</p>
-//       <p>We are pleased to confirm your booking at Kula:</p>
-//       <ul>
-//         <li><strong>Table Number:</strong> ${bookingDetails.tableNumber}</li>
-//         <li><strong>Capacity:</strong> ${bookingDetails.capacity}</li>
-//         <li><strong>Location:</strong> ${bookingDetails.location}</li>
-//         <li><strong>Date:</strong> ${bookingDetails.bookingDate}</li>
-//         <li><strong>Time:</strong> ${bookingDetails.bookingTime}</li>
-//         <li><strong>Booking ID:</strong> ${bookingDetails.bookingId}</li>
-//       </ul>
 
-//       <p>We look forward to serving you!</p>
-//       <p>Best regards,<br>The Kula Team</p>
+//   // Format date and time for display
+//   const bookingDate = new Date(bookingDetails.bookingDate).toLocaleDateString();
+//   const bookingTime = new Date(bookingDetails.bookingTime).toLocaleTimeString();
+
+//   // Prepare email content
+//   const mailOptions = {
+//     from: process.env.EMAIL_USER || 'your-email@gmail.com',
+//     to: to,
+//     subject: `Table Booking Confirmation - ${bookingDetails.bookingId}`,
+//     html: `
+//       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+//         <h2 style="color: #2c3e50;">Booking Confirmation</h2>
+//         <p>Dear ${bookingDetails.name},</p>
+//         <p>Thank you for your booking. Here are your booking details:</p>
+        
+//         <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+//           <h3 style="color: #2c3e50; margin-top: 0;">Booking Information</h3>
+//           <ul style="list-style: none; padding: 0;">
+//             <li><strong>Booking ID:</strong> ${bookingDetails.bookingId}</li>
+//             <li><strong>Table:</strong> ${bookingDetails.tableNumber}</li>
+//             <li><strong>Capacity:</strong> ${bookingDetails.capacity} persons</li>
+//             <li><strong>Restaurant:</strong> ${bookingDetails.restaurant}</li>
+//             <li><strong>Time Slot:</strong> ${bookingDetails.slot}</li>
+//             <li><strong>Date:</strong> ${bookingDate}</li>
+//             <li><strong>Time:</strong> ${bookingTime}</li>
+//           </ul>
+//         </div>
+
+//         <div style="margin: 20px 0;">
+//           <p><strong>Contact Information:</strong></p>
+//           <ul style="list-style: none; padding: 0;">
+//             <li>Name: ${bookingDetails.name}</li>
+//             <li>Phone: ${bookingDetails.phone}</li>
+//             <li>Email: ${bookingDetails.email}</li>
+//           </ul>
+//         </div>
+
+//         <p>We look forward to serving you!</p>
+//         <p>Best regards,<br>The Restaurant Team</p>
+
+//         <div style="font-size: 12px; color: #666; margin-top: 30px;">
+//           <p>If you need to modify or cancel your booking, please contact us as soon as possible.</p>
+//         </div>
+//       </div>
 //     `,
 //   };
 
 //   try {
 //     await transporter.sendMail(mailOptions);
-//     console.log('Email sent successfully');
+//     console.log(`Confirmation email sent to ${to} for booking ${bookingDetails.bookingId}`);
 //   } catch (error) {
-//     console.error('Error sending email:', error);
+//     console.error('Error sending confirmation email:', error);
+//     throw error; // Re-throw to handle in the calling function
 //   }
 // }
 
-app.get("/get_all_bookings", async (req, res) => {
-  try {
-      // Fetch all bookings from the database
-      const bookings = await UserWallet.find();
+// const resetTableAvailability = async () => {
+//   try {
+//     const tables = await Table.find({ isAvailable: false }).populate('currentBooking');
 
-      if (!bookings || bookings.length === 0) {
-          return res.status(404).json({ message: "No bookings found." });
-      }
+//     for (const table of tables) {
+//       // Log booking to history
+//       if (table.currentBooking) {
+//         await Booking.findByIdAndUpdate(table.currentBooking._id, { $set: { isActive: false } });
+//       }
 
-      // Send the bookings as the response
-      res.status(200).json(bookings);
-  } catch (error) {
-      console.error("Error fetching all bookings:", error);
-      res.status(500).json({ message: "Error fetching bookings." });
-  }
-});
-app.get('/get_restaurant_bookings', async (req, res) => {
-  try {
-    // Fetch all restaurant bookings from the database
-    const bookings = await Booking.find();  // Adjust this according to your model/schema
+//       // Reset table availability
+//       table.isAvailable = true;
+//       table.currentBooking = null;
+//       await table.save();
+//     }
 
-    // Check if there are any bookings
-    if (!bookings || bookings.length === 0) {
-      return res.status(404).json({ message: 'No restaurant bookings found.' });
-    }
-
-    // Respond with the bookings in JSON format
-    res.status(200).json({
-      bookings: bookings,
-    });
-  } catch (error) {
-    console.error('Error fetching restaurant bookings:', error);
-    res.status(500).json({ message: 'Server error while fetching restaurant bookings.' });
-  }
-});
-
-// POST: Book a table
-app.post('/api/book-table', async (req, res) => {
-  const { tableId, name, phone, email } = req.body;
-
-  try {
-    // Find the table by its ID
-    const table = await Table.findById(tableId);
-    if (!table) {
-      return res.status(404).json({ message: 'Table not found' });
-    }
-
-    // Check if the table is available
-    if (!table.isAvailable) {
-      return res.status(400).json({ message: 'Table is already booked.' });
-    }
-
-    // Mark the table as unavailable and store the booking details in the table
-    table.isAvailable = false;
-    table.bookingDetails = { name, phone, email };
-    await table.save();
-
-    // Create a unique booking ID
-    const bookingId = Date.now().toString() + Math.random().toString().slice(2);
-
-    // Booking details to be saved in the bookingsrestaurant collection
-    const bookingDetails = {
-      bookingId,
-      tableId,
-      name,
-      phone,
-      email,
-      tableNumber: table.tableNumber,
-      capacity: table.capacity,
-      location: table.location,
-      bookingDate: new Date().toISOString(),
-      bookingTime: new Date().toLocaleTimeString(),
-    };
-
-    // Save the booking details in the bookingsrestaurant model
-    const newBooking = new Booking(bookingDetails);
-    await newBooking.save();
-
-    // Send a booking confirmation email to the user
-    sendBookingConfirmationEmail(email, bookingDetails);
-
-    // Respond with the booking details
-    res.status(200).json({
-      message: 'Table booked successfully.',
-      bookingId,
-      ...bookingDetails,
-    });
-  } catch (err) {
-    console.error('Error booking table:', err);
-    res.status(500).json({ message: 'Server error.' });
-  }
-});
-
-// Function to send a booking confirmation email
-async function sendBookingConfirmationEmail(to, bookingDetails) {
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // or 'STARTTLS'
-    auth: {
-      user: 'your-email@gmail.com',
-      pass: 'your-password'
-    }
-  });
-
-  const mailOptions = {
-    from: 'your-email@gmail.com',
-    to: to,
-    subject: 'Booking Confirmation at Kula',
-    html: `
-      <h2>Booking Confirmation</h2>
-      <p>Dear ${bookingDetails.name},</p>
-      <p>We are pleased to confirm your booking at Kula:</p>
-      <ul>
-        <li><strong>Table Number:</strong> ${bookingDetails.tableNumber}</li>
-        <li><strong>Capacity:</strong> ${bookingDetails.capacity}</li>
-        <li><strong>Location:</strong> ${bookingDetails.location}</li>
-        <li><strong>Date:</strong> ${bookingDetails.bookingDate}</li>
-        <li><strong>Time:</strong> ${bookingDetails.bookingTime}</li>
-        <li><strong>Booking ID:</strong> ${bookingDetails.bookingId}</li>
-      </ul>
-
-      <p>We look forward to serving you!</p>
-      <p>Best regards,<br>The Kula Team</p>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully');
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-}
-
-
-
+//     console.log('Table availability reset at midnight');
+//   } catch (err) {
+//     console.error('Error resetting table availability:', err);
+//   }
+// };
 
 // Start server
 app.listen(port, () => {

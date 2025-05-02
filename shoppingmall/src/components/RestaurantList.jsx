@@ -15,12 +15,12 @@ function RestaurantList() {
   const [error, setError] = useState(null);
   const [tableAvailability, setTableAvailability] = useState({});
 
-  const offers = [
-    "50% off on your first order!",
-    "Buy 1 Get 1 Free on selected items!",
-    "Free delivery for orders above ₹500/-!",
-    "20% cashback on prepaid orders!",
-  ];
+  // const offers = [
+  //   "50% off on your first order!",
+  //   "Buy 1 Get 1 Free on selected items!",
+  //   "Free delivery for orders above ₹500/-!",
+  //   "20% cashback on prepaid orders!",
+  // ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -146,10 +146,10 @@ function RestaurantList() {
       <div className="holi-decoration bottom-left"></div>
       <div className="holi-decoration bottom-right"></div>
 
-      <div className="RS-offers-section holi-offers">
+      {/* <div className="RS-offers-section holi-offers">
         <h1 className="RS-section-title">Festival Special Offers</h1>
         <InfiniteScroll offers={offers} />
-      </div>
+      </div> */}
 
       <div className="RS-main-content">
         <h1 className="RS-header holi-header">Celebrate with Delicious Food</h1>
@@ -172,7 +172,7 @@ function RestaurantList() {
               className="RS-button RS-filter-toggle holi-button"
               onClick={() => setShowFilters(!showFilters)}
             >
-              {showFilters ? "− Hide Filters" : "+ Show Filters"}
+              {showFilters ? "- Hide Filters" : "+ Show Filters"}
             </button>
           </div>
 

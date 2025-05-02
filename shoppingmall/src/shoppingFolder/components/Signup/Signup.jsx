@@ -14,41 +14,47 @@ const Signup = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+  
     if (name.trim().length < 3) {
       newErrors.name = "Name must be at least 3 characters long.";
+      console.log("Validation failed: Name is too short.");
     }
-
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       newErrors.email = "Please enter a valid email address.";
+      console.log("Validation failed: Invalid email format.");
     }
-
+  
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       newErrors.password =
         "Password must be at least 8 characters long, with one uppercase letter, one lowercase letter, one number, and one special character.";
+      console.log("Validation failed: Password does not meet complexity requirements.");
     }
-
+  
     if (password !== confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
+      console.log("Validation failed: Passwords do not match.");
     }
-
+  
     if (image) {
       const validImageTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!validImageTypes.includes(image.type)) {
         newErrors.image = "Only JPG, JPEG, and PNG files are allowed.";
+        console.log("Validation failed: Invalid image type.");
       }
       if (image.size > 5 * 1024 * 1024) {
         newErrors.image = "Image size should be less than 5MB.";
+        console.log("Validation failed: Image size is too large.");
       }
     }
-
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;

@@ -13,6 +13,11 @@ const AddRestaurants = () => {
   const [workingHours, setWorkingHours] = useState({
     monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''
   });
+  // Owner details state
+  const [ownerName, setOwnerName] = useState('');
+  const [ownerEmail, setOwnerEmail] = useState('');
+  const [ownerPassword, setOwnerPassword] = useState('');
+  const [ownerContact, setOwnerContact] = useState('');
   const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
 
@@ -34,6 +39,12 @@ const AddRestaurants = () => {
       }
     });
     
+    // Validate owner fields
+    if (ownerName.trim().length < 3) errors.ownerName = 'Owner name must be at least 3 characters long.';
+    if (!/^\S+@\S+\.\S+$/.test(ownerEmail)) errors.ownerEmail = 'Owner email must be valid.';
+    if (ownerPassword.length < 6) errors.ownerPassword = 'Owner password must be at least 6 characters.';
+    if (!/^\d{10}$/.test(ownerContact)) errors.ownerContact = 'Owner contact must be a valid 10-digit number.';
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -44,18 +55,30 @@ const AddRestaurants = () => {
 
     try {
       const token = sessionStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/restaurants', {
+      const response = await fetch('http://localhost:5000/api/admin/hotels', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ name, category, cuisine, dietary, seating, image, location, contact, workingHours })
+        body: JSON.stringify({
+          name, category, cuisine, dietary, seating, image, location, contact, workingHours,
+          owner: { name: ownerName, email: ownerEmail, password: ownerPassword, contact: ownerContact }
+        })
       });
 
       if (response.ok) {
-        alert('Restaurant added successfully!');
-        navigate('/admin/view-restaurants');
+        alert('Hotel added successfully!');
+        navigate('/admin/dashboard');
       } else {
         const errorData = await response.json();
-        alert(`Failed to add restaurant: ${errorData || 'Unknown error'}`);
+        // Show a readable error message if available
+        let errorMsg = 'Unknown error';
+        if (typeof errorData === 'string') {
+          errorMsg = errorData;
+        } else if (errorData && (errorData.error || errorData.message)) {
+          errorMsg = errorData.error || errorData.message;
+        } else if (errorData) {
+          errorMsg = JSON.stringify(errorData);
+        }
+        alert(`Failed to add hotel: ${errorMsg}`);
       }
     } catch (error) {
       alert('An error occurred while adding the restaurant.');
@@ -82,6 +105,17 @@ const AddRestaurants = () => {
         {formErrors.location && <p className="error">{formErrors.location}</p>}
         <input type="text" placeholder="Contact" value={contact} onChange={(e) => setContact(e.target.value)} required />
         {formErrors.contact && <p className="error">{formErrors.contact}</p>}
+
+        {/* Owner Details Section */}
+        <h2>Owner Details</h2>
+        <input type="text" placeholder="Owner Name" value={ownerName} onChange={(e) => setOwnerName(e.target.value)} required />
+        {formErrors.ownerName && <p className="error">{formErrors.ownerName}</p>}
+        <input type="email" placeholder="Owner Email" value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} required />
+        {formErrors.ownerEmail && <p className="error">{formErrors.ownerEmail}</p>}
+        <input type="password" placeholder="Owner Password" value={ownerPassword} onChange={(e) => setOwnerPassword(e.target.value)} required />
+        {formErrors.ownerPassword && <p className="error">{formErrors.ownerPassword}</p>}
+        <input type="text" placeholder="Owner Contact" value={ownerContact} onChange={(e) => setOwnerContact(e.target.value)} required />
+        {formErrors.ownerContact && <p className="error">{formErrors.ownerContact}</p>}
 
         {Object.keys(workingHours).map((day) => (
           <div key={day}>
